@@ -1,0 +1,315 @@
+{
+  "updatedAt": "2026-01-02T18:08:05.077Z",
+  "createdAt": "2025-12-26T17:45:17.286Z",
+  "id": "IEzzCQJJbiogC2Kr",
+  "name": "send file for whatsapp - endpoint",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "send_file_for_whatsaapp",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -176,
+        -32
+      ],
+      "id": "224a209d-6301-4e09-a5a1-d3df6d079f24",
+      "name": "Webhook",
+      "webhookId": "da2b7507-b3ab-4a5f-ba4f-d615b4eba34c"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"message\": \"{{ $json.body.message }}\",\n  \"remoteJid\": \"{{ $json.body.remoteJid }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n\n  \"evo_api_host\":\"https://evolutionapi.easypanel.frandev.com.ar\",\n  \"evo_api_instance\":\"{{ $json.body.evo_api_instance }}\",\n  \"evo_api_key\": \"{{ $json.body.evo_api_key }}\",\n  \"db_identity_key\": \"{{ $json.body.db_identity_key }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -32,
+        160
+      ],
+      "id": "ec030d75-7353-40b3-965b-89f1058e71c5",
+      "name": "Data nomalize1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize1').item.json.evo_api_host.trim() }}/message/sendText/{{ $('Data nomalize1').item.json.evo_api_instance }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize1').item.json.evo_api_key.trim() }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json; charset=UTF-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Data nomalize1').item.json.remoteJid.split(\"@\")[0] }}"
+            },
+            {
+              "name": "=text",
+              "value": "={{ $json.message }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        176,
+        160
+      ],
+      "id": "cc7cf2ae-ce01-4aa5-a198-059135e20884",
+      "name": "send message3"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "whatsapp_messages",
+          "mode": "list",
+          "cachedResultName": "whatsapp_messages"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "data": "={\n  \"key\": {{ $json.key }},\n  \"pushName\": \"{{ $json.pushName }}\",\n  \"message\": {{ $json.message }},\n  \"contextInfo\": {{ $json.contextInfo }},\n  \"messageType\": {{ $json.messageType }},\n  \"instanceId\": {{ $json.instanceId }},\n  \"source\": {{ $json.source }}\n} ",
+            "db_identity_key": "={{ $('Data nomalize1').item.json.db_identity_key }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "db_identity_key",
+              "displayName": "db_identity_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        384,
+        160
+      ],
+      "id": "60448b90-1d10-4eda-a730-545123a57fdc",
+      "name": "Insert rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "b4afdLbWtbWNdNMp",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "send_message_for_whatsapp",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -240,
+        160
+      ],
+      "id": "8b7f0807-0769-4dee-8740-5e9909bbdd8d",
+      "name": "Webhook1",
+      "webhookId": "2fed1a4c-01ac-4e91-a33a-dfaeb131fbf8",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize1').item.json.evo_api_host.trim() }}/message/sendMedia/{{ $('Data nomalize1').item.json.evo_api_instance }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize1').item.json.evo_api_key }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json; charset=UTF-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $('Data nomalize1').item.json.remoteJid.split('@')[0] }}\",\n  \"mediatype\": \"document\",\n  \"mimetype\": \"{{ $json.mimetype }}\",\n  \"media\": \"{{ $json.b64 }}\",\n  \"fileName\": \"{{ $json.file_name }}\",\n  \"delay\": 123,\n  \"linkPreview\": true,\n  \"mentionsEveryOne\": true\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        304,
+        -48
+      ],
+      "id": "9c379934-636c-434d-a4f3-506993c632e6",
+      "name": "HTTP Request1"
+    }
+  ],
+  "connections": {
+    "Data nomalize1": {
+      "main": [
+        [
+          {
+            "node": "send message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send message3": {
+      "main": [
+        [
+          {
+            "node": "Insert rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Data nomalize1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook1": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.hitofusion.frandev.com.ar",
+            "user-agent": "axios/1.12.0",
+            "content-length": "292",
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "content-type": "application/json",
+            "x-forwarded-for": "172.18.0.1",
+            "x-forwarded-host": "n8n.hitofusion.frandev.com.ar",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "23b292eae554",
+            "x-real-ip": "172.18.0.1"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "message": "hola",
+            "remoteJid": "5491150023292@s.whatsapp.net",
+            "sender": "5491157389737@s.whatsapp.net",
+            "evo_api_host": "https://evolutionapi.easypanel.frandev.com.ar/",
+            "evo_api_instance": "mi_numero_de_hito_agente",
+            "evo_api_key": "679817054255-4166-A114-15DC0737F0C9",
+            "db_identity_key": "postgres"
+          },
+          "webhookUrl": "https://produ-n8n.qojds3.easypanel.host/webhook/send_message_for_whatsapp",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "versionId": "72b64126-bb62-4bd4-85f6-a13fa7f12da2",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2025-12-26T17:45:17.294Z",
+      "createdAt": "2025-12-26T17:45:17.294Z",
+      "role": "workflow:owner",
+      "workflowId": "IEzzCQJJbiogC2Kr",
+      "projectId": "Ts2xaK8jD6HfpDh3"
+    }
+  ],
+  "activeVersion": null,
+  "tags": [
+    {
+      "updatedAt": "2026-01-02T18:06:44.373Z",
+      "createdAt": "2026-01-02T18:06:44.373Z",
+      "id": "j5nYIs86m0bTs5P8",
+      "name": "Endpoint"
+    }
+  ]
+}
