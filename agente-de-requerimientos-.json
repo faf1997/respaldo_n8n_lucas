@@ -1,0 +1,2878 @@
+{
+  "updatedAt": "2026-01-07T13:47:11.050Z",
+  "createdAt": "2025-12-22T18:38:30.372Z",
+  "id": "NFWoraW2iUhGKYcb",
+  "name": "agente de requerimientos",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.guardrailsInput }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "====SYSTEM PROMPT===\nSos un agente especializado en tomar requerimientos, te basas en el documento IEEE 830.\nTu tarea es armar la documentación de requerimientos IEEE 830, xlsx de casos de conversación (el xlsx solo indica cuando enviar el archivo), diagrama de secuencia, diagrama de entidad relación y diagrama de clases con mermaidchart.\n--------------------------------------------------------------------\n==ejemplo de documento IEEE 830==\n1. Introducción\n1.1 Propósito\n\nDefine para qué sirve el documento, a quién está dirigido (clientes, desarrolladores, testers, PM) y qué decisiones se toman con él.\n\n1.2 Alcance\n\nDescribe qué hace el sistema y qué no, objetivos principales, beneficios y una visión general del producto.\n\n1.3 Definiciones, acrónimos y abreviaturas\n\nLista de términos técnicos, siglas y definiciones necesarias para entender el documento sin ambigüedad.\n\n1.4 Referencias\n\nDocumentos relacionados: contratos, normativas, APIs externas, leyes, estándares, manuales, etc.\n\n1.5 Visión general del documento\n\nExplica cómo está organizado el documento y qué se puede encontrar en cada sección.\n\n2. Descripción general\n2.1 Perspectiva del producto\n\nUbica el sistema dentro de su contexto:\n\nSistema nuevo o extensión\n\nIntegraciones\n\nDependencias externas\n\nRelación con otros sistemas\n\n2.2 Funciones del producto\n\nListado a alto nivel de las funcionalidades principales (sin detalle técnico).\n\n2.3 Características de los usuarios\n\nDescribe los tipos de usuarios, roles, nivel técnico y responsabilidades.\n\n2.4 Restricciones\n\nLimitaciones obligatorias:\n\nTecnológicas\n\nLegales\n\nPresupuestarias\n\nDe hardware o software\n\nDe seguridad\n\n2.5 Suposiciones y dependencias\n\nSupuestos asumidos como ciertos y factores externos que afectan el sistema.\n\n3. Requerimientos específicos\n\nEsta es la sección más importante del documento.\n\n3.1 Requerimientos funcionales\n\nDescribe qué debe hacer el sistema:\n\nAcciones\n\nFlujos\n\nValidaciones\n\nRespuestas ante eventos\nDeben ser claros, medibles y verificables.\n\n3.2 Requerimientos no funcionales\n\nDefine cómo debe comportarse el sistema.\n\n3.2.1 Rendimiento\n\nTiempos de respuesta, concurrencia, volumen de datos, throughput.\n\n3.2.2 Seguridad\n\nAutenticación, autorización, encriptación, auditoría, cumplimiento normativo.\n\n3.2.3 Usabilidad\n\nFacilidad de uso, accesibilidad, idiomas, consistencia visual.\n\n3.2.4 Confiabilidad\n\nDisponibilidad, tolerancia a fallos, recuperación ante errores.\n\n3.2.5 Escalabilidad\n\nCapacidad de crecer sin rediseño.\n\n3.2.6 Mantenibilidad\n\nFacilidad de mantenimiento, logging, monitoreo, extensibilidad.\n\n3.3 Interfaces externas\n3.3.1 Interfaces de usuario\n\nPantallas, formularios, reportes, flujos visuales.\n\n3.3.2 Interfaces de hardware\n\nDispositivos externos con los que interactúa el sistema.\n\n3.3.3 Interfaces de software\n\nAPIs, servicios externos, bases de datos, sistemas terceros.\n\n3.3.4 Interfaces de comunicación\n\nProtocolos, formatos de datos, colas, mensajería.\n\n3.4 Requerimientos de datos\n\nModelos de datos, formatos, reglas de validación, persistencia, retención.\n\n3.5 Reglas de negocio\n\nNormas que gobiernan el comportamiento del sistema (cálculos, decisiones, validaciones).\n\n4. Apendices\n4.1 Glosario\n\nDefinición detallada de términos clave del dominio.\n\n4.2 Casos de uso (opcional)\n\nEscenarios detallados de interacción usuario-sistema.\n\n4.3 Diagramas (opcional)\n\nDiagramas UML, BPMN, flujo, arquitectura, ER, etc.\n\n5. Índice\n\nÍndice alfabético o temático para navegación rápida.\n\nNotas importantes (muy usadas en la práctica)\n\nIEEE 830 no obliga a usar todos los puntos.\n\nEs habitual adaptar la estructura según el proyecto.\n\nEl objetivo principal es eliminar ambigüedades.\n\nCada requerimiento debería ser:\n\nClaro\n\nMedible\n\nVerificable\n\nNo contradictorio\n==fin ejemplo de documento IEEE 830==\n\n==ejemplo de diagrama de clases==\nclassDiagram\n        Animal <|-- Duck\n        Animal <|-- Fish\n        Animal <|-- Zebra\n        Animal : +int age\n        Animal : +String gender\n        Animal: +isMammal()\n        Animal: +mate()\n        class Duck {\n          +String beakColor\n          +swim()\n          +quack()\n        }\n        class Fish {\n          -int sizeInFeet\n          -canEat()\n        }\n        class Zebra {\n          +bool is_wild\n          +run()\n        }\n==fin ejemplo de diagrama de clases==\n==ejemplo de diagrama de flujo==\nflowchart TD\n        A([\"Start\"])\n        A --> B{\"Decision\"}\n        B --> C[\"Option A\"]\n        B --> D[\"Option B\"]\n==fin ejemplo de diagrama de flujo==\n==diagrama de entidad relación==\nerDiagram\n  RES_PARTNER {\n    int id PK\n    string name\n    string phone\n    string email\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_STAGE {\n    int id PK\n    string name\n    int sequence\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_TAG {\n    int id PK\n    string name\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_LEAD {\n    int id PK\n    string name\n    int partner_id FK\n    int stage_id FK\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_LEAD_CRM_TAG {\n    int lead_id FK\n    int tag_id FK\n  }\n\n  RES_PARTNER ||--o{ CRM_LEAD : \"partner_id\"\n  CRM_STAGE   ||--o{ CRM_LEAD : \"stage_id\"\n\n  CRM_LEAD ||--o{ CRM_LEAD_CRM_TAG : \"lead_id\"\n  CRM_TAG  ||--o{ CRM_LEAD_CRM_TAG : \"tag_id\"\n==fin del diagrama de entidad relación==\n--------------------------------------------------------------------\nFlujo de trabajo:\npaso 0.\npara poder trabajar debes pedir un nombre de proyecto, y nombre de cliente, o consultar si va a trabajar sobre un proyecto existente\n\npaso 1.\nSolicitas que te den una explicación del requerimiento con todo el detalle posible\n\npaso 2.\nutiliza la estructura del doc IEEE 830 proporcionado para revisar que partes no están bién explicadas, y repasas todo el detalle del requerimiento para hacer todas las preguntas necesarias con el objetivo de generar un requerimiento robusto. Debes preguntar si faltó algo más en la solicitud de los requerimientos.\n\npaso 3.\nGeneras el diagrama de flujo del ejemplo antes mencionado, le provees el contenido al usuario, pides validación, y ajustas todo lo que te indique el usuario.\n\npaso 4.\nLuego de tener el diagrama de flujo validado, generas el diagrama de clases basado en los tipos de campos que hay en odoo 17: (es muy importante que el diagrama de clases esté basado en la estructura de clases de odoo 17, mismos nombres, relaciones, etc)\n  Char\n  Text\n  Html\n  Boolean\n  Integer\n  Float\n  Monetary\n  Date\n  Datetime\n  Selection\n  Binary\n  Image\n  Many2one\n  One2many\n  Many2many\n  Reference\n  Properties\n  Json\n  Serialized\n\nle indicas el diagrama de flujo al usuario, pides validación y ajustas lo que te indique. vuelves a generar el diagrama de clases final y se lo das al usuario.\n\npaso 5.\nLuego de tener el diagrama de clases validado, generas la documentación \n\npaso 6.\nArmá el diagrama de entidad relación y validalo con el cliente.\n\n7. debes indicar con booleano si se debe crear el xlsx de casos de uso. No debes generar ningún contenido mas que indicas \"xlsx\": true or false si corresponde\n\npaso final.\nretorna las respuestas con este formato:\n{\n\"message\": \"respuesta al usuario\",\n\"doc\": \"contenido de la documentación si ya está definida, de lo contrario string vacio (este campo es el del IEEE 830)\",\n\"class_diagram\": \"contenido del diagrama de clases si ya está definido, de lo contrario string vacio\",\n\"flowchart\": \"contenido del diagrama de flujo si ya está definido, de lo contrario string vacio\",\n\"er_diagram\": \"contenido del diagrama de entidad relación, de lo contrario string vacio\",\n\"xlsx\": boolean\n}\n--------------------------------------------------------------------\nReglas generales de comportamiento y procedimiento:\n\n1. No se debe generar los datos en los campos doc, class_diagram, flowchart, er_diagram hasta que los requerimientos queden confirmados.\n2. los campos doc, class_diagram, flowchart, y er_diagram son especificamente para crear los contenidos de los archivos en texto plano, solo generarás el contenido una vez terminado el requerimiento.\n3. El campo doc debe ser en formato markdown del json.\n4. asegurate de validar cada parte del flujo de los requerimientos y de proponer casos que no estén contemplados para robustecer el requerimiento.\n5. Asegurate de proceder paso a paso por cada item del procedimiento marcado, cuando esté definido todo siempre consulta si el usuario necesita agregar algo más o si ya termino.\n6. Los mensajes deben ser breves y formateados para que sean fácil de leer por whatsapp con emojis.\n7. cada item enumerado debe empezar con un salto de línea para que sea fácil de leer.\n8. el campo xlsx del json debe ser un booleano. este indica cuando dar la planilla excel.\n9. el xlsx es una plantilla excel que contiene casos de conversación y es necesario que el usuario complete la planilla para testear los agentes y debe ser un criterio de aceptación en el documento IEEE 830.\n10. asegurate de responder todos los mensajes humanos que no hayas respondido durante las conversaciones, porque sucede que te pueden mandar consultas, instrucciones, modificaciones en mensajes separados.\n--------------------------------------------------------------------\nReglas estrictas de JSON:\n\n1. asegurate de escapar con \\\\ las respuestas del json, es decir que si usaste por ejemplo \\n debería ser \\\\n.\n2. Respondé SIEMPRE con JSON válido\n3. El JSON debe comenzar con { y terminar con }\n4. No devuelvas texto fuera del JSON\n5. Los mensajes en formatos solicitados por el usuario deben enviarse a través del campo message del JSON.\n6. No uses comillas simples en el json\n7. No uses comas finales\n8. No uses NaN, Infinity, undefined\n9. No devuelvas JSON vacío (null, undefined)\n--------------------------------------------------------------------\n===END SYSTEM PROMPT==="
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        688,
+        -32
+      ],
+      "id": "9151826a-82eb-4b0c-a136-044e129928ac",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        592,
+        304
+      ],
+      "id": "17e322c8-22fe-4b68-a7c1-2b1388468869",
+      "name": "DeepSeek Chat Model",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "1WRUh77hDpUB41ry",
+          "name": "DeepSeek fran"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Data nomalize1').item.json.body.data.key.remoteJid }}",
+        "contextWindowLength": 100
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        640,
+        432
+      ],
+      "id": "65271c5d-ae64-44b8-b224-9d56b98db73a",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "b4afdLbWtbWNdNMp",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "203fcfc0-23db-47da-8fac-01db5ed482bc",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -688,
+        16
+      ],
+      "id": "e6880025-305b-4dc5-916b-5ee34720e743",
+      "name": "Webhook",
+      "webhookId": "203fcfc0-23db-47da-8fac-01db5ed482bc"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"remoteJid\": \"{{ $json.body.data.key.remoteJid }}\",\n  \"remoteJidAlt\": \"{{ $json.body.data.key.remoteJidAlt }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n  \"id\": \"{{$json.body.data.key.id}}\",\n  \"evo_api_host\":\"{{ $json.body.server_url }}\",\n  \"evo_api_instance\":\"{{ $json.body.instance }}\",\n  \"evo_api_key\": \"{{ $json.body.apikey }}\",\n  \"body\": {{ $json.body }},\n  \"db_identity_key\": \"postgres\"\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -496,
+        -16
+      ],
+      "id": "85d1496a-90e9-418b-8bc7-72ed9d2b9d18",
+      "name": "Data nomalize1"
+    },
+    {
+      "parameters": {
+        "content": "## Diccionario de variables",
+        "height": 336,
+        "width": 176,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -528,
+        -160
+      ],
+      "typeVersion": 1,
+      "id": "7d5824f6-281c-45bd-bb5d-97586ef822a7",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        -128
+      ],
+      "id": "22f70bc7-7ee7-4133-a083-e68756e851fc",
+      "name": "Date & Time"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "122bfa10-3745-4a0c-9bbd-541c75c4b8f1",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.hitofusion.frandev.com.ar/webhook/redis_endpoint_for_whatsapp",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "db_identity_key",
+              "value": "={{ $json.db_identity_key }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body.toJsonString() }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -224,
+        64
+      ],
+      "id": "7f2819f3-0c9f-4458-8472-1433f727c304",
+      "name": "Redis memory endpoint"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9b961717-a4f1-4848-9a95-07f6a2370c33",
+              "leftValue": "={{ $json.body.should_reply }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        160,
+        0
+      ],
+      "id": "a766d213-5618-4af8-91bc-15d48048b48c",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        336,
+        192
+      ],
+      "id": "8810c3b7-7b4d-49af-89e0-dfd37c74c0ff",
+      "name": "Exit"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n    \"message\": \"\",\n    \"doc\": \"\",\n    \"class_diagram\": \"\",\n    \"flowchart\": \"\",\n    \"xlsx\": false,\n    \"er_diagram\": \"\"\n  }",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1040,
+        240
+      ],
+      "id": "6432ffc7-92e2-4873-9c2b-36779e4e4a5a",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "content": "## {\n##    \"message\": \"\",\n##    \"doc\": \"\",\n##    \"class_diagram\": \"\",\n##    \"flowchart\": \"\",\n##    \"csv\":\"\"\n##  }",
+        "height": 320,
+        "width": 256
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        816,
+        -864
+      ],
+      "typeVersion": 1,
+      "id": "0afee1de-da31-4974-8f8f-ef7a7317b377",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "jsCode": "function b64Encode(text) {\n  if (!text) return \"\";\n\n  const CHARS = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\";\n  const raw = Buffer.from(text, \"utf8\");\n  const out = [];\n\n  for (let i = 0; i < raw.length; i += 3) {\n    const block = raw.subarray(i, i + 3);\n    const n = block.length;\n    const pad = 3 - n;\n\n    const b0 = block[0] ?? 0;\n    const b1 = block[1] ?? 0;\n    const b2 = block[2] ?? 0;\n\n    const num = (b0 << 16) | (b1 << 8) | b2;\n\n    out.push(CHARS[(num >> 18) & 63]);\n    out.push(CHARS[(num >> 12) & 63]);\n    out.push(n > 1 ? CHARS[(num >> 6) & 63] : \"=\");\n    out.push(n > 2 ? CHARS[num & 63] : \"=\");\n  }\n\n  return out.join(\"\");\n}\n\nreturn {\"doc\": {\n  b64: b64Encode($('AI Agent').first().json.output.doc),\n  mimetype: \"text/plain\",\n  file_name: \"requerimientos.md\",\n}};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1968,
+        -624
+      ],
+      "id": "e2b92079-90d3-49b1-8a1c-143097e658a7",
+      "name": "doc1"
+    },
+    {
+      "parameters": {
+        "jsCode": "function b64Encode(text) {\n  if (!text) return \"\";\n\n  const CHARS = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\";\n  const raw = Buffer.from(text, \"utf8\");\n  const out = [];\n\n  for (let i = 0; i < raw.length; i += 3) {\n    const block = raw.subarray(i, i + 3);\n    const n = block.length;\n    const pad = 3 - n;\n\n    const b0 = block[0] ?? 0;\n    const b1 = block[1] ?? 0;\n    const b2 = block[2] ?? 0;\n\n    const num = (b0 << 16) | (b1 << 8) | b2;\n\n    out.push(CHARS[(num >> 18) & 63]);\n    out.push(CHARS[(num >> 12) & 63]);\n    out.push(n > 1 ? CHARS[(num >> 6) & 63] : \"=\");\n    out.push(n > 2 ? CHARS[num & 63] : \"=\");\n  }\n\n  return out.join(\"\");\n}\n\nreturn {\"class_diagram\": {\n  \"b64\": b64Encode($('AI Agent').first().json.output.class_diagram),\n  \"mimetype\": \"text/plain\",\n  \"file_name\": \"diagrama de clases.mmd\",\n}};\n\n\n\n\n\n\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1968,
+        -464
+      ],
+      "id": "f2df0be5-bed4-4316-a9a1-044c38cd8728",
+      "name": "class diagram1"
+    },
+    {
+      "parameters": {
+        "jsCode": "function b64Encode(text) {\n  if (!text) return \"\";\n\n  const CHARS = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\";\n  const raw = Buffer.from(text, \"utf8\");\n  const out = [];\n\n  for (let i = 0; i < raw.length; i += 3) {\n    const block = raw.subarray(i, i + 3);\n    const n = block.length;\n    const pad = 3 - n;\n\n    const b0 = block[0] ?? 0;\n    const b1 = block[1] ?? 0;\n    const b2 = block[2] ?? 0;\n\n    const num = (b0 << 16) | (b1 << 8) | b2;\n\n    out.push(CHARS[(num >> 18) & 63]);\n    out.push(CHARS[(num >> 12) & 63]);\n    out.push(n > 1 ? CHARS[(num >> 6) & 63] : \"=\");\n    out.push(n > 2 ? CHARS[num & 63] : \"=\");\n  }\n\n  return out.join(\"\");\n}\n\nreturn {\"flowchart\": {\n  \"b64\": b64Encode($('AI Agent').first().json.output.flowchart),\n  \"mimetype\": \"text/plain\",\n  \"file_name\": \"diagrama de flujo.mmd\",\n}};\n\n\n\n\n\n\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1968,
+        -304
+      ],
+      "id": "79d1a392-3c89-4129-afd4-4fc22a58ff8f",
+      "name": "flowchart1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        448
+      ],
+      "id": "572ef038-156d-4220-928c-55e2c2583fe3",
+      "name": "DeepSeek Chat Model1",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "1WRUh77hDpUB41ry",
+          "name": "DeepSeek fran"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ddae018d-555d-4e2d-a987-5f64432cd777",
+              "leftValue": "={{ $json.doc.b64 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2256,
+        -624
+      ],
+      "id": "ae6e3a9c-7d98-4d4a-9b58-486fae4363d5",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7313ebd3-1705-4178-a30e-a2b5b92b60da",
+              "leftValue": "={{ $json.class_diagram.b64 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2256,
+        -464
+      ],
+      "id": "3feea3b4-60a6-440f-84e6-49c9d159a24f",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "81e3159a-01ce-4895-88e1-b6ad63782814",
+              "leftValue": "={{ $json.flowchart.b64 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2256,
+        -304
+      ],
+      "id": "484d0a1d-d1b2-4b6d-af14-7231fd57186c",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2598267e-bcb2-4d2f-be7f-6ffd0e88b082",
+              "leftValue": "={{ $json.csv.b64 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2256,
+        -144
+      ],
+      "id": "01ec7af8-919c-4eab-a8d0-36a38f4f55b0",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize1').item.json.evo_api_host.trim() }}/message/sendMedia/{{ $('Data nomalize1').item.json.evo_api_instance }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize1').item.json.evo_api_key }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json; charset=UTF-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $('Data nomalize1').item.json.remoteJid.split('@')[0] }}\",\n  \"mediatype\": \"document\",\n  \"mimetype\": \"{{ $json.doc.mimetype }}\",\n  \"media\": \"{{ $json.doc.b64 }}\",\n  \"fileName\": \"{{ $json.doc.file_name }}\",\n  \"delay\": 123,\n  \"linkPreview\": true,\n  \"mentionsEveryOne\": true\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2720,
+        -640
+      ],
+      "id": "283ecb4e-f13e-4fb2-b292-4bcc0daa0fde",
+      "name": "send doc"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize1').item.json.evo_api_host.trim() }}/message/sendMedia/{{ $('Data nomalize1').item.json.evo_api_instance }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize1').item.json.evo_api_key }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json; charset=UTF-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $('Data nomalize1').item.json.remoteJid.split('@')[0] }}\",\n  \"mediatype\": \"document\",\n  \"mimetype\": \"{{ $json.class_diagram.mimetype }}\",\n  \"media\": \"{{ $json.class_diagram.b64 }}\",\n  \"fileName\": \"{{ $json.class_diagram.file_name }}\",\n  \"delay\": 123,\n  \"linkPreview\": true,\n  \"mentionsEveryOne\": true\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2720,
+        -480
+      ],
+      "id": "83f5a186-fe10-4848-8a5a-60c0ba4fc9b8",
+      "name": "send class diagram"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize1').item.json.evo_api_host.trim() }}/message/sendMedia/{{ $('Data nomalize1').item.json.evo_api_instance }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize1').item.json.evo_api_key }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json; charset=UTF-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $('Data nomalize1').item.json.remoteJid.split('@')[0] }}\",\n  \"mediatype\": \"document\",\n  \"mimetype\": \"{{ $json.flowchart.mimetype }}\",\n  \"media\": \"{{ $json.flowchart.b64 }}\",\n  \"fileName\": \"{{ $json.flowchart.file_name }}\",\n  \"delay\": 123,\n  \"linkPreview\": true,\n  \"mentionsEveryOne\": true\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2720,
+        -320
+      ],
+      "id": "5123d5b9-7b58-4bc8-b946-bef7325ecf05",
+      "name": "send flowchart"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.body.data.message.conversation }}",
+        "guardrails": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.guardrails",
+      "typeVersion": 2,
+      "position": [
+        368,
+        -16
+      ],
+      "id": "60fb008e-4db2-49c0-b654-f8886554b2c7",
+      "name": "Guardrails"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "requirements",
+          "mode": "list",
+          "cachedResultName": "requirements"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "project_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('project_name', ``, 'string') }}",
+            "version": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('version', ``, 'string') }}",
+            "doc": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('doc', ``, 'string') }}",
+            "class_diagram": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('class_diagram', ``, 'string') }}",
+            "flowchart": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('flowchart', ``, 'string') }}",
+            "created_at": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('created_at', ``, 'string') }}",
+            "updated_at": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('updated_at', ``, 'string') }}",
+            "csv": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('csv', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "project_name",
+              "displayName": "project_name",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "version",
+              "displayName": "version",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "doc",
+              "displayName": "doc",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "class_diagram",
+              "displayName": "class_diagram",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "flowchart",
+              "displayName": "flowchart",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "csv",
+              "displayName": "csv",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6,
+      "position": [
+        736,
+        304
+      ],
+      "id": "b4769735-7e20-4f0e-a46b-f323bca1a2a2",
+      "name": "insert data versions in requirements",
+      "credentials": {
+        "postgres": {
+          "id": "b4afdLbWtbWNdNMp",
+          "name": "Postgres account"
+        }
+      },
+      "notes": "este nodo es para insertar datos de versiones en postgres"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "n8n_chat_histories",
+          "mode": "name"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6,
+      "position": [
+        880,
+        240
+      ],
+      "id": "8e483b1e-c9c0-444a-a5a1-cde38562c1c1",
+      "name": "view conversations",
+      "credentials": {
+        "postgres": {
+          "id": "b4afdLbWtbWNdNMp",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "requirements",
+          "mode": "list",
+          "cachedResultName": "requirements"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6,
+      "position": [
+        800,
+        496
+      ],
+      "id": "8600e663-360b-4209-af30-170ff76a0356",
+      "name": "get data on the requirements",
+      "credentials": {
+        "postgres": {
+          "id": "b4afdLbWtbWNdNMp",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"message\": \"{{ $json.chatInput }}\",\n  \"remoteJid\": \"5491150023292@s.whatsapp.net\",\n  \"sender\": \"5491157389737@s.whatsapp.net\",\n  \"evo_api_host\":\"https://evolutionapi.easypanel.frandev.com.ar/\",\n  \"evo_api_instance\":\"mi_numero_de_hito_agente\",\n  \"evo_api_key\": \"679817054255-4166-A114-15DC0737F0C9\",\n  \"db_identity_key\": \"postgres\"\n  \n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2000,
+        672
+      ],
+      "id": "a71b8407-615c-445d-807e-7eca81f6edaa",
+      "name": "Data nomalize"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://n8n.hitofusion.frandev.com.ar/webhook/send_message_for_whatsapp",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"message\": \"{{ $json.message }}\",\n  \"remoteJid\": \"{{ $json.remoteJid }}\",\n  \"sender\": \"{{ $json.sender }}\",\n\n  \"evo_api_host\": \"{{ $json.evo_api_host }}\",\n  \"evo_api_instance\": \"{{ $json.evo_api_instance }}\",\n  \"evo_api_key\": \"{{ $json.evo_api_key }}\",\n\n  \"db_identity_key\": \"{{ $json.db_identity_key }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2256,
+        672
+      ],
+      "id": "f93502b7-3fd0-455d-92b2-f6199a956b2f",
+      "name": "send message3"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        1776,
+        672
+      ],
+      "id": "568aacc9-687a-4d2a-a983-e125f684bac7",
+      "name": "When chat message received",
+      "webhookId": "cc6eb4f7-ed1a-4519-b03f-6e4489e9cf26"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://n8n.hitofusion.frandev.com.ar/webhook/send_message_for_whatsapp",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"message\": {{ $json.output.message.toJsonString() }},\n  \"remoteJid\": {{ $('Data nomalize1').item.json.remoteJid.toJsonString() }},\n  \"sender\": {{ $('Data nomalize1').item.json.sender.toJsonString() }},\n\n  \"evo_api_host\": {{ $('Data nomalize1').item.json.evo_api_host.toJsonString() }},\n  \"evo_api_instance\": {{ $('Data nomalize1').item.json.evo_api_instance.toJsonString() }},\n  \"evo_api_key\": {{ $('Data nomalize1').item.json.evo_api_key.toJsonString() }},\n\n  \"db_identity_key\": {{ $('Data nomalize1').item.json.db_identity_key.toJsonString() }}\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1408,
+        -304
+      ],
+      "id": "13c7af32-4125-4346-b581-e9d80c23c8fa",
+      "name": "send message4"
+    },
+    {
+      "parameters": {
+        "jsCode": "function b64Encode(text) {\n  if (!text) return \"\";\n\n  const CHARS = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\";\n  const raw = Buffer.from(text, \"utf8\");\n  const out = [];\n\n  for (let i = 0; i < raw.length; i += 3) {\n    const block = raw.subarray(i, i + 3);\n    const n = block.length;\n    const pad = 3 - n;\n\n    const b0 = block[0] ?? 0;\n    const b1 = block[1] ?? 0;\n    const b2 = block[2] ?? 0;\n\n    const num = (b0 << 16) | (b1 << 8) | b2;\n\n    out.push(CHARS[(num >> 18) & 63]);\n    out.push(CHARS[(num >> 12) & 63]);\n    out.push(n > 1 ? CHARS[(num >> 6) & 63] : \"=\");\n    out.push(n > 2 ? CHARS[num & 63] : \"=\");\n  }\n\n  return out.join(\"\");\n}\n\nreturn {\"csv\": {\n  \"b64\": b64Encode($('AI Agent').first().json.output.er_diagram),\n  \"mimetype\": \"text/plain\",\n  \"file_name\": \"diagrama de entidad relación.mmd\",\n}};\n\n\n\n\n\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1968,
+        -144
+      ],
+      "id": "3eff1286-15a3-4de5-9e6d-451a25dba3ef",
+      "name": "er_diagram"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize1').item.json.evo_api_host.trim() }}/message/sendMedia/{{ $('Data nomalize1').item.json.evo_api_instance }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize1').item.json.evo_api_key }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json; charset=UTF-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $('Data nomalize1').item.json.remoteJid.split('@')[0] }}\",\n  \"mediatype\": \"document\",\n  \"mimetype\": \"{{ $json.csv.mimetype }}\",\n  \"media\": \"{{ $json.csv.b64 }}\",\n  \"fileName\": \"{{ $json.csv.file_name }}\",\n  \"delay\": 123,\n  \"linkPreview\": true,\n  \"mentionsEveryOne\": true\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2720,
+        -160
+      ],
+      "id": "9cf64fac-71f5-4e8b-8185-430fc22a2f75",
+      "name": "send er_diagram"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "asdas",
+        "options": {
+          "systemMessage": "Necesito que generes un Python dict (NO JSON) con esta estructura exacta para construir un archivo Excel con la librería xlsxwriter:\n\nREGLAS GENERALES\n1) La salida debe ser SOLO código Python (sin markdown, sin explicaciones, sin texto extra).\n2) El dict debe llamarse exactamente: data\n3) Está PROHIBIDO usar null. Si un valor no existe, usar None.\n4) Todas las claves del dict deben ser strings con comillas dobles o simples (consistente).\n5) Mantener el orden lógico: workbook -> sheets -> (name, header_row_index, columns, row_heights, data, notes).\n6) Los textos deben conservar saltos de línea con \\n si el contenido lo incluye.\n7) No inventes columnas ni renombres keys: respetar exactamente los nombres de columnas detectados.\n8) Si hay caracteres especiales (tildes/emoji), mantenerlos tal cual (Unicode).\n\nESQUEMA OBLIGATORIO DEL DICT\ndata = {\n  \"workbook\": {\n    \"sheets\": [\n      {\n        \"name\": <str>,                    # nombre de la hoja\n        \"header_row_index\": <int>,        # índice 0-based donde se escriben los encabezados\n        \"columns\": [\n          {\"key\": <str>, \"width\": <float>}   # una entrada por columna, en el orden original\n        ],\n        \"row_heights\": [\n          {\"row_index\": <int>, \"height\": <float>}  # opcional, sólo si aplica\n        ],\n        \"data\": [\n          { \"<col_key_1>\": <value>, \"<col_key_2>\": <value>, ... }  # una entrada por fila\n        ],\n        \"notes\": [\n          {\"cell\": <str>, \"value\": <str>}  # opcional, ej: {\"cell\": \"A1\", \"value\": \"...\"}\n        ]\n      }\n    ]\n  }\n}\n\nREGLAS DE COLUMNAS\n- \"columns\" define el orden de columnas y el ancho.\n- Cada \"key\" en columns debe existir como clave en cada fila de \"data\" (si no hay valor, poner \"\" o None según corresponda).\n- \"width\" debe ser número (float o int), preferible float.\n\nREGLAS DE FILAS\n- \"header_row_index\" es 0-based.\n- Los \"row_index\" en row_heights también son 0-based (como xlsxwriter).\n- Si no hay datos para row_heights, usar lista vacía [].\n\nREGLAS DE DATA (FILAS)\n- \"data\" debe ser una lista de dicts.\n- Cada dict representa una fila.\n- Si una celda está vacía: usar \"\" (string vacío).\n- Si explícitamente el valor es inexistente: usar None.\n- No mezclar tipos raros: strings para texto, números para números.\n\nREGLAS DE NOTES\n- \"cell\" es estilo A1 (ej: \"A1\").\n- Si no hay notas, usar [].\n\nINPUT\nTe voy a pasar contenido tabular (encabezados + filas) y metadatos (nombre de hoja, header_row_index, anchos de columnas, alturas de filas, notas). Tu tarea es devolver el dict \"data\" cumpliendo TODAS las reglas anteriores.\n\nIMPORTANTE\n- No generes funciones ni imports.\n- No uses json.dumps ni json.loads.\n- Sólo el dict Python: data = {...}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        416,
+        -656
+      ],
+      "id": "2e6c0f50-292f-42c4-9264-72dcd3cfa2b6",
+      "name": "crear archivos excel"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize1').item.json.evo_api_host.trim() }}/message/sendMedia/{{ $('Data nomalize1').item.json.evo_api_instance }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize1').item.json.evo_api_key }}"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json; charset=UTF-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $('Data nomalize1').item.json.remoteJid.split('@')[0] }}\",\n  \"mediatype\": \"document\",\n  \"mimetype\": \"{{ $json.xlsx.mimetype }}\",\n  \"media\": \"{{ $json.xlsx.b64 }}\",\n  \"fileName\": \"{{ $json.xlsx.file_name }}\",\n  \"delay\": 123,\n  \"linkPreview\": true,\n  \"mentionsEveryOne\": true\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2720,
+        0
+      ],
+      "id": "36745feb-b692-4fdf-8d16-fdb427f5eca1",
+      "name": "send xlsx"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"xlsx\": {{ JSON.parse($json.main_result) }} \n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2480,
+        0
+      ],
+      "id": "4524fd0b-6124-4c53-8129-2a8bbef975e3",
+      "name": "format data xlsx"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://produ_python_runner:8000/execute",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "script",
+              "value": "=import base64\nimport json\nfrom io import BytesIO\nimport xlsxwriter\n\n\ndef _a1_to_row_col(a1):\n    a1 = a1.strip().upper()\n    col_part = \"\"\n    row_part = \"\"\n    for ch in a1:\n        if \"A\" <= ch <= \"Z\":\n            col_part += ch\n        elif \"0\" <= ch <= \"9\":\n            row_part += ch\n    col = 0\n    for ch in col_part:\n        col = col * 26 + (ord(ch) - ord(\"A\") + 1)\n    col -= 1\n    row = int(row_part) - 1\n    return row, col\n\n\ndef create_excel_from_json(payload):\n    output = BytesIO()\n    workbook = xlsxwriter.Workbook(output, {\"in_memory\": True})\n\n    sheets = payload.get(\"workbook\", {}).get(\"sheets\", [])\n    for sheet in sheets:\n        sheet_name = sheet.get(\"name\") or \"Sheet1\"\n        worksheet = workbook.add_worksheet(sheet_name)\n\n        header_row_index = sheet.get(\"header_row_index\", 0)\n        columns = sheet.get(\"columns\", [])\n        data_rows = sheet.get(\"data\", [])\n\n        col_keys = [c.get(\"key\") for c in columns if c.get(\"key\") is not None]\n\n        for col_idx, col_def in enumerate(columns):\n            width = col_def.get(\"width\")\n            if isinstance(width, (int, float)):\n                worksheet.set_column(col_idx, col_idx, float(width))\n\n        for rh in sheet.get(\"row_heights\", []):\n            r = rh.get(\"row_index\")\n            h = rh.get(\"height\")\n            if isinstance(r, int) and isinstance(h, (int, float)):\n                worksheet.set_row(r, float(h))\n\n        for col_idx, key in enumerate(col_keys):\n            worksheet.write(header_row_index, col_idx, key)\n\n        start_row = header_row_index + 1\n        for i, row_dict in enumerate(data_rows):\n            r = start_row + i\n            for col_idx, key in enumerate(col_keys):\n                val = \"\"\n                if isinstance(row_dict, dict):\n                    val = row_dict.get(key, \"\")\n                worksheet.write(r, col_idx, val)\n\n        for note in sheet.get(\"notes\", []):\n            cell = note.get(\"cell\")\n            value = note.get(\"value\", \"\")\n            if cell:\n                r, c = _a1_to_row_col(cell)\n                worksheet.write(r, c, value)\n\n    workbook.close()\n    output.seek(0)\n    return base64.b64encode(output.read()).decode(\"utf-8\")\n\ndef main():\n\n    json_data = {\n    \"workbook\": {\n        \"sheets\": [\n            {\n                \"name\": \"Casos\",\n                \"header_row_index\": 2,\n                \"columns\": [\n                    {\n                        \"key\": \"Hilo de conversación\",\n                        \"width\": 30.0,\n                    },\n                    {\n                        \"key\": \"Pregutas\",\n                        \"width\": 13.0,\n                    },\n                    {\n                        \"key\": \"Respuesta esperada\",\n                        \"width\": 41.13,\n                    },\n                    {\n                        \"key\": \"Aclaraciones/Observaciones\",\n                        \"width\": 34.25,\n                    },\n                ],\n                \"row_heights\": [\n                    {\n                        \"row_index\": 3,\n                        \"height\": 41.25,\n                    },\n                ],\n                \"data\": [\n                    {\n                        \"Hilo de conversación\": \"conjunto de preguntas y respuestas para los casos de test\",\n                        \"Pregutas\": \"pregunta del caso de prueba\",\n                        \"Respuesta esperada\": \"Respuesta esperada del agente\",\n                        \"Aclaraciones/Observaciones\": \"Descripciones y detalles a contemplar a modo de guía para tomar el agente en odoo u otro servicio/sistema si corresponde\",\n                    },\n                    {\n                        \"Hilo de conversación\": \"ejemplo 1\",\n                        \"Pregutas\": \"hola, quiero mi estado de cuenta\",\n                        \"Respuesta esperada\": \"¡Hola, María! Claro 🙂\\nTu estado de cuenta es:\\n\\nFactura FA-C 00001-00000412 — $ 52.300 — Vence 25/11/2025 — Pendiente\",\n                        \"Aclaraciones/Observaciones\": None,\n                    },\n                    {\n                        \"Hilo de conversación\": \"ejemplo 1\",\n                        \"Pregutas\": \"Hola. Hay un error, esa deuda de $ 52.300 no corresponde\",\n                        \"Respuesta esperada\": \"Entendido, María. Para ayudarte, ¿podés indicarme el número de factura o algún dato de referencia?\\nAsí lo revisamos y registramos el reclamo.\",\n                        \"Aclaraciones/Observaciones\": \"Debe crearse un ticket/reclamo al responsable (pero el agente no debe solucionar el inconveniete)\",\n                    },\n                    {\n                        \"Hilo de conversación\": \"ejemplo 1\",\n                        \"Pregutas\": \"Es la FA-C 00001-00000412. La pagamos el 11/10/2025\",\n                        \"Respuesta esperada\": \"Gracias por el dato.\\n¿Tenés el comprobante o captura del pago? Si me lo enviás, lo adjunto al reclamo para acelerar la revisión.\",\n                        \"Aclaraciones/Observaciones\": \"Pedir comprobante de pago para adjuntarlo al reclamo.\",\n                    },\n                    {\n                        \"Hilo de conversación\": \"ejemplo 1\",\n                        \"Pregutas\": \"<Envio del archivo>\",\n                        \"Respuesta esperada\": \"Gracias, ya recibí el comprobante.\\nRegistré el reclamo y lo envié al área de cobranzas para revisión.\\nTe aviso apenas tenga una actualización.\",\n                        \"Aclaraciones/Observaciones\": \"El agente debe enviar el archivo y pedir que cobranzas revise el error\",\n                    },\n                ],\n                \"notes\": [\n                    {\n                        \"cell\": \"A1\",\n                        \"value\": \"Video explicativo de como completar la Planilla: https://kommodo.ai/recordings/vrtSXYQX5RQk0FUpwDnJ\",\n                    },\n                ],\n            },\n        ],\n    },\n}\n\n    # Generar el Excel y devolverlo en base64\n    return json.dumps(\n      {\n        \"b64\": create_excel_from_json(json_data),\n        \"mimetype\": \"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\n        \"file_name\": \"casos de prueba.xlsx\"\n      }\n)"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2256,
+        0
+      ],
+      "id": "142335c7-4060-4ec6-8d8a-9ea4e4ba357d",
+      "name": "create xlsx in python3",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "7xRj4yTDXKIaFr6q",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2598267e-bcb2-4d2f-be7f-6ffd0e88b082",
+              "leftValue": "={{ $('AI Agent').item.json.output.xlsx }}",
+              "rightValue": "false",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1968,
+        16
+      ],
+      "id": "36787f32-a38b-4f21-bfb7-765241a85931",
+      "name": "If xlsx"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        864,
+        -432
+      ],
+      "id": "ba251df1-57a3-479c-875e-2c3ec9187aa7",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "O3EWeCOyVZEaoklr",
+          "name": "OpenRouter fran"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Pendientes\n### 1. armar la estructura base de diagrama de clases y de entidad relación para no tener que indicarlo en todos los proyectos.\n\n### 2. hacer que el agente actualice automáticamente el diagrama de clases o el diagrama de entidad relación según los cambios que se pidan, porque están relacionados ambos.\n\n### 3. hacer que pueda leer los archivos .mmd, .docx, .md, y .xlsx para dinamizar el trabajo",
+        "height": 464,
+        "width": 384
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1264,
+        -928
+      ],
+      "typeVersion": 1,
+      "id": "eb9cce4e-8efc-4e56-b691-9eb6fd7d7216",
+      "name": "Sticky Note2"
+    }
+  ],
+  "connections": {
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Data nomalize1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data nomalize1": {
+      "main": [
+        [
+          {
+            "node": "Redis memory endpoint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "send message4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis memory endpoint": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Guardrails",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Exit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "doc1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "class diagram1": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "flowchart1": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Structured Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "send doc",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "send class diagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "send flowchart",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "send er_diagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guardrails": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "insert data versions in requirements": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "view conversations": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get data on the requirements": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data nomalize": {
+      "main": [
+        [
+          {
+            "node": "send message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Data nomalize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "er_diagram": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send message4": {
+      "main": [
+        [
+          {
+            "node": "doc1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "class diagram1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "flowchart1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "If xlsx",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "er_diagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "format data xlsx": {
+      "main": [
+        [
+          {
+            "node": "send xlsx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create xlsx in python3": {
+      "main": [
+        [
+          {
+            "node": "format data xlsx",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If xlsx": {
+      "main": [
+        [
+          {
+            "node": "create xlsx in python3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "timezone": "America/Argentina/Buenos_Aires",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.hitofusion.frandev.com.ar",
+            "user-agent": "axios/1.13.2",
+            "content-length": "1835",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "content-type": "application/json",
+            "x-forwarded-for": "147.93.147.173",
+            "x-forwarded-host": "n8n.hitofusion.frandev.com.ar",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "23b292eae554",
+            "x-real-ip": "147.93.147.173"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "event": "messages.upsert",
+            "instance": "mi_numero_de_hito_agente",
+            "data": {
+              "key": {
+                "remoteJid": "5491150023292@s.whatsapp.net",
+                "remoteJidAlt": "94940336013435@lid",
+                "fromMe": false,
+                "id": "3EB0A100808F6AD9AD04AD",
+                "participant": "",
+                "addressingMode": "pn"
+              },
+              "pushName": "Francisco Fiorentino",
+              "status": "DELIVERY_ACK",
+              "message": {
+                "messageContextInfo": {
+                  "threadId": [],
+                  "deviceListMetadata": {
+                    "senderKeyIndexes": [],
+                    "recipientKeyIndexes": [],
+                    "senderKeyHash": {
+                      "0": 197,
+                      "1": 69,
+                      "2": 165,
+                      "3": 57,
+                      "4": 133,
+                      "5": 75,
+                      "6": 221,
+                      "7": 66,
+                      "8": 97,
+                      "9": 17
+                    },
+                    "senderTimestamp": {
+                      "low": 1767199202,
+                      "high": 0,
+                      "unsigned": true
+                    },
+                    "senderAccountType": 0,
+                    "receiverAccountType": 0,
+                    "recipientKeyHash": {
+                      "0": 188,
+                      "1": 235,
+                      "2": 111,
+                      "3": 132,
+                      "4": 133,
+                      "5": 4,
+                      "6": 52,
+                      "7": 46,
+                      "8": 158,
+                      "9": 7
+                    },
+                    "recipientTimestamp": {
+                      "low": 1767224077,
+                      "high": 0,
+                      "unsigned": true
+                    }
+                  },
+                  "deviceListMetadataVersion": 2,
+                  "messageSecret": {
+                    "0": 165,
+                    "1": 171,
+                    "2": 64,
+                    "3": 196,
+                    "4": 58,
+                    "5": 71,
+                    "6": 173,
+                    "7": 254,
+                    "8": 142,
+                    "9": 78,
+                    "10": 147,
+                    "11": 252,
+                    "12": 105,
+                    "13": 115,
+                    "14": 66,
+                    "15": 226,
+                    "16": 202,
+                    "17": 111,
+                    "18": 196,
+                    "19": 91,
+                    "20": 166,
+                    "21": 149,
+                    "22": 191,
+                    "23": 253,
+                    "24": 162,
+                    "25": 0,
+                    "26": 84,
+                    "27": 39,
+                    "28": 201,
+                    "29": 160,
+                    "30": 87,
+                    "31": 18
+                  },
+                  "limitSharingV2": {
+                    "trigger": 0,
+                    "initiatedByMe": false
+                  }
+                },
+                "conversation": "dame los hitos/objetivos del proyecto"
+              },
+              "contextInfo": {
+                "mentionedJid": [],
+                "groupMentions": [],
+                "statusAttributions": [],
+                "ephemeralSettingTimestamp": {
+                  "low": 1767558652,
+                  "high": 0,
+                  "unsigned": false
+                },
+                "disappearingMode": {
+                  "initiator": 0,
+                  "trigger": 1,
+                  "initiatedByMe": false
+                }
+              },
+              "messageType": "conversation",
+              "messageTimestamp": 1767743231,
+              "instanceId": "56f84f78-0d56-4592-b848-b01b0c254241",
+              "source": "web"
+            },
+            "destination": "https://n8n.hitofusion.frandev.com.ar/webhook/203fcfc0-23db-47da-8fac-01db5ed482bc",
+            "date_time": "2026-01-06T20:47:11.759Z",
+            "sender": "5491157389737@s.whatsapp.net",
+            "server_url": "https://evolutionapi.easypanel.frandev.com.ar",
+            "apikey": "679817054255-4166-A114-15DC0737F0C9"
+          },
+          "webhookUrl": "https://n8n.hitofusion.frandev.com.ar/webhook/203fcfc0-23db-47da-8fac-01db5ed482bc",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "77ecdba3-e329-4e12-b652-9f6bcb7ae4ef",
+  "activeVersionId": "c635c4d5-00cf-4186-99f7-670ca7910a7a",
+  "triggerCount": 2,
+  "shared": [
+    {
+      "updatedAt": "2025-12-22T18:38:30.377Z",
+      "createdAt": "2025-12-22T18:38:30.377Z",
+      "role": "workflow:owner",
+      "workflowId": "NFWoraW2iUhGKYcb",
+      "projectId": "Ts2xaK8jD6HfpDh3"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-01-06T15:24:48.000Z",
+    "createdAt": "2026-01-06T15:24:44.952Z",
+    "versionId": "c635c4d5-00cf-4186-99f7-670ca7910a7a",
+    "workflowId": "NFWoraW2iUhGKYcb",
+    "nodes": [
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "={{ $json.guardrailsInput }}",
+          "hasOutputParser": true,
+          "options": {
+            "systemMessage": "====SYSTEM PROMPT===\nSos un agente especializado en tomar requerimientos, te basas en el documento IEEE 830.\nTu tarea es armar la documentación de requerimientos IEEE 830, xlsx de casos de conversación (el xlsx solo indica cuando enviar el archivo), diagrama de secuencia, diagrama de entidad relación y diagrama de clases con mermaidchart.\n\n==ejemplo de documento IEEE 830==\n1. Introducción\n1.1 Propósito\n\nDefine para qué sirve el documento, a quién está dirigido (clientes, desarrolladores, testers, PM) y qué decisiones se toman con él.\n\n1.2 Alcance\n\nDescribe qué hace el sistema y qué no, objetivos principales, beneficios y una visión general del producto.\n\n1.3 Definiciones, acrónimos y abreviaturas\n\nLista de términos técnicos, siglas y definiciones necesarias para entender el documento sin ambigüedad.\n\n1.4 Referencias\n\nDocumentos relacionados: contratos, normativas, APIs externas, leyes, estándares, manuales, etc.\n\n1.5 Visión general del documento\n\nExplica cómo está organizado el documento y qué se puede encontrar en cada sección.\n\n2. Descripción general\n2.1 Perspectiva del producto\n\nUbica el sistema dentro de su contexto:\n\nSistema nuevo o extensión\n\nIntegraciones\n\nDependencias externas\n\nRelación con otros sistemas\n\n2.2 Funciones del producto\n\nListado a alto nivel de las funcionalidades principales (sin detalle técnico).\n\n2.3 Características de los usuarios\n\nDescribe los tipos de usuarios, roles, nivel técnico y responsabilidades.\n\n2.4 Restricciones\n\nLimitaciones obligatorias:\n\nTecnológicas\n\nLegales\n\nPresupuestarias\n\nDe hardware o software\n\nDe seguridad\n\n2.5 Suposiciones y dependencias\n\nSupuestos asumidos como ciertos y factores externos que afectan el sistema.\n\n3. Requerimientos específicos\n\nEsta es la sección más importante del documento.\n\n3.1 Requerimientos funcionales\n\nDescribe qué debe hacer el sistema:\n\nAcciones\n\nFlujos\n\nValidaciones\n\nRespuestas ante eventos\nDeben ser claros, medibles y verificables.\n\n3.2 Requerimientos no funcionales\n\nDefine cómo debe comportarse el sistema.\n\n3.2.1 Rendimiento\n\nTiempos de respuesta, concurrencia, volumen de datos, throughput.\n\n3.2.2 Seguridad\n\nAutenticación, autorización, encriptación, auditoría, cumplimiento normativo.\n\n3.2.3 Usabilidad\n\nFacilidad de uso, accesibilidad, idiomas, consistencia visual.\n\n3.2.4 Confiabilidad\n\nDisponibilidad, tolerancia a fallos, recuperación ante errores.\n\n3.2.5 Escalabilidad\n\nCapacidad de crecer sin rediseño.\n\n3.2.6 Mantenibilidad\n\nFacilidad de mantenimiento, logging, monitoreo, extensibilidad.\n\n3.3 Interfaces externas\n3.3.1 Interfaces de usuario\n\nPantallas, formularios, reportes, flujos visuales.\n\n3.3.2 Interfaces de hardware\n\nDispositivos externos con los que interactúa el sistema.\n\n3.3.3 Interfaces de software\n\nAPIs, servicios externos, bases de datos, sistemas terceros.\n\n3.3.4 Interfaces de comunicación\n\nProtocolos, formatos de datos, colas, mensajería.\n\n3.4 Requerimientos de datos\n\nModelos de datos, formatos, reglas de validación, persistencia, retención.\n\n3.5 Reglas de negocio\n\nNormas que gobiernan el comportamiento del sistema (cálculos, decisiones, validaciones).\n\n4. Apendices\n4.1 Glosario\n\nDefinición detallada de términos clave del dominio.\n\n4.2 Casos de uso (opcional)\n\nEscenarios detallados de interacción usuario-sistema.\n\n4.3 Diagramas (opcional)\n\nDiagramas UML, BPMN, flujo, arquitectura, ER, etc.\n\n5. Índice\n\nÍndice alfabético o temático para navegación rápida.\n\nNotas importantes (muy usadas en la práctica)\n\nIEEE 830 no obliga a usar todos los puntos.\n\nEs habitual adaptar la estructura según el proyecto.\n\nEl objetivo principal es eliminar ambigüedades.\n\nCada requerimiento debería ser:\n\nClaro\n\nMedible\n\nVerificable\n\nNo contradictorio\n==fin ejemplo de documento IEEE 830==\n\n==ejemplo de diagrama de clases==\nclassDiagram\n        Animal <|-- Duck\n        Animal <|-- Fish\n        Animal <|-- Zebra\n        Animal : +int age\n        Animal : +String gender\n        Animal: +isMammal()\n        Animal: +mate()\n        class Duck {\n          +String beakColor\n          +swim()\n          +quack()\n        }\n        class Fish {\n          -int sizeInFeet\n          -canEat()\n        }\n        class Zebra {\n          +bool is_wild\n          +run()\n        }\n==fin ejemplo de diagrama de clases==\n==ejemplo de diagrama de flujo==\nflowchart TD\n        A([\"Start\"])\n        A --> B{\"Decision\"}\n        B --> C[\"Option A\"]\n        B --> D[\"Option B\"]\n==fin ejemplo de diagrama de flujo==\n==diagrama de entidad relación==\nerDiagram\n  RES_PARTNER {\n    int id PK\n    string name\n    string phone\n    string email\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_STAGE {\n    int id PK\n    string name\n    int sequence\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_TAG {\n    int id PK\n    string name\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_LEAD {\n    int id PK\n    string name\n    int partner_id FK\n    int stage_id FK\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_LEAD_CRM_TAG {\n    int lead_id FK\n    int tag_id FK\n  }\n\n  RES_PARTNER ||--o{ CRM_LEAD : \"partner_id\"\n  CRM_STAGE   ||--o{ CRM_LEAD : \"stage_id\"\n\n  CRM_LEAD ||--o{ CRM_LEAD_CRM_TAG : \"lead_id\"\n  CRM_TAG  ||--o{ CRM_LEAD_CRM_TAG : \"tag_id\"\n==fin del diagrama de entidad relación==\n\nFlujo de trabajo:\npaso 0.\npara poder trabajar debes pedir un nombre de proyecto, y nombre de cliente, o consultar si va a trabajar sobre un proyecto existente\n\npaso 1.\nSolicitas que te den una explicación del requerimiento con todo el detalle posible\n\npaso 2.\nutiliza la estructura del doc IEEE 830 proporcionado para revisar que partes no están bién explicadas, y repasas todo el detalle del requerimiento para hacer todas las preguntas necesarias con el objetivo de generar un requerimiento robusto. Debes preguntar si faltó algo más en la solicitud de los requerimientos.\n\npaso 3.\nGeneras el diagrama de flujo del ejemplo antes mencionado, le provees el contenido al usuario, pides validación, y ajustas todo lo que te indique el usuario.\n\npaso 4.\nLuego de tener el diagrama de flujo validado, generas el diagrama de clases basado en los tipos de campos que hay en odoo 17: (es muy importante que el diagrama de clases esté basado en la estructura de clases de odoo 17, mismos nombres, relaciones, etc)\n  Char\n  Text\n  Html\n  Boolean\n  Integer\n  Float\n  Monetary\n  Date\n  Datetime\n  Selection\n  Binary\n  Image\n  Many2one\n  One2many\n  Many2many\n  Reference\n  Properties\n  Json\n  Serialized\n\nle indicas el diagrama de flujo al usuario, pides validación y ajustas lo que te indique. vuelves a generar el diagrama de clases final y se lo das al usuario.\n\npaso 5.\nLuego de tener el diagrama de clases validado, generas la documentación \n\npaso 6.\nArmá el diagrama de entidad relación y validalo con el cliente.\n\n7. debes indicar con booleano si se debe crear el xlsx de casos de uso. No debes generar ningún contenido mas que indicas \"xlsx\": true or false si corresponde\n\npaso final.\nretorna las respuestas con este formato:\n{\n\"message\": \"respuesta al usuario\",\n\"doc\": \"contenido de la documentación si ya está definida, de lo contrario string vacio (este campo es el del IEEE 830)\",\n\"class_diagram\": \"contenido del diagrama de clases si ya está definido, de lo contrario string vacio\",\n\"flowchart\": \"contenido del diagrama de flujo si ya está definido, de lo contrario string vacio\",\n\"er_diagram\": \"contenido del diagrama de entidad relación, de lo contrario string vacio\",\n\"xlsx\": boolean\n}\n\n\nReglas:\n1. No se debe generar los datos en los campos doc, class_diagram, flowchart, er_diagram hasta que los requerimientos queden confirmados.\n2. los campos doc, class_diagram, flowchart, y er_diagram son especificamente para crear los contenidos de los archivos en texto plano, solo generarás el contenido una vez terminado el requerimiento.\n3. El campo doc debe ser en formato markdown del json.\n4. asegurate de validar cada parte del flujo de los requerimientos y de proponer casos que no estén contemplados para robustecer el requerimiento.\n5. Asegurate de proceder paso a paso por cada item del procedimiento marcado, cuando esté definido todo siempre consulta si el usuario necesita agregar algo más o si ya termino.\n6. Los mensajes deben ser breves y formateados para que sean fácil de leer por whatsapp con emojis.\n7. cada item enumerado debe empezar con un salto de línea para que sea fácil de leer.\n8. el campo xlsx del json debe ser un booleano. este indica cuando dar la planilla excel.\n9. el xlsx es una plantilla excel que contiene casos de conversación y es necesario que el usuario complete la planilla para testear los agentes.\n\n===END SYSTEM PROMPT==="
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3,
+        "position": [
+          688,
+          -32
+        ],
+        "id": "9151826a-82eb-4b0c-a136-044e129928ac",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+        "typeVersion": 1,
+        "position": [
+          592,
+          304
+        ],
+        "id": "17e322c8-22fe-4b68-a7c1-2b1388468869",
+        "name": "DeepSeek Chat Model",
+        "credentials": {
+          "deepSeekApi": {
+            "id": "1WRUh77hDpUB41ry",
+            "name": "DeepSeek fran"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $('Data nomalize1').item.json.body.data.key.remoteJid }}",
+          "contextWindowLength": 100
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+        "typeVersion": 1.3,
+        "position": [
+          640,
+          432
+        ],
+        "id": "65271c5d-ae64-44b8-b224-9d56b98db73a",
+        "name": "Postgres Chat Memory",
+        "credentials": {
+          "postgres": {
+            "id": "b4afdLbWtbWNdNMp",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "203fcfc0-23db-47da-8fac-01db5ed482bc",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -688,
+          16
+        ],
+        "id": "e6880025-305b-4dc5-916b-5ee34720e743",
+        "name": "Webhook",
+        "webhookId": "203fcfc0-23db-47da-8fac-01db5ed482bc"
+      },
+      {
+        "parameters": {
+          "mode": "raw",
+          "jsonOutput": "={\n  \"remoteJid\": \"{{ $json.body.data.key.remoteJid }}\",\n  \"remoteJidAlt\": \"{{ $json.body.data.key.remoteJidAlt }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n  \"id\": \"{{$json.body.data.key.id}}\",\n  \"evo_api_host\":\"{{ $json.body.server_url }}\",\n  \"evo_api_instance\":\"{{ $json.body.instance }}\",\n  \"evo_api_key\": \"{{ $json.body.apikey }}\",\n  \"body\": {{ $json.body }},\n  \"db_identity_key\": \"postgres\"\n}\n ",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -496,
+          -16
+        ],
+        "id": "85d1496a-90e9-418b-8bc7-72ed9d2b9d18",
+        "name": "Data nomalize1"
+      },
+      {
+        "parameters": {
+          "content": "## Diccionario de variables",
+          "height": 336,
+          "width": 176,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -528,
+          -160
+        ],
+        "typeVersion": 1,
+        "id": "7d5824f6-281c-45bd-bb5d-97586ef822a7",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dateTime",
+        "typeVersion": 2,
+        "position": [
+          -224,
+          -128
+        ],
+        "id": "22f70bc7-7ee7-4133-a083-e68756e851fc",
+        "name": "Date & Time"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -16,
+          0
+        ],
+        "id": "122bfa10-3745-4a0c-9bbd-541c75c4b8f1",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://n8n.hitofusion.frandev.com.ar/webhook/redis_endpoint_for_whatsapp",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "db_identity_key",
+                "value": "={{ $json.db_identity_key }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json.body.toJsonString() }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -224,
+          64
+        ],
+        "id": "7f2819f3-0c9f-4458-8472-1433f727c304",
+        "name": "Redis memory endpoint"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "9b961717-a4f1-4848-9a95-07f6a2370c33",
+                "leftValue": "={{ $json.body.should_reply }}",
+                "rightValue": false,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          160,
+          0
+        ],
+        "id": "a766d213-5618-4af8-91bc-15d48048b48c",
+        "name": "If"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          336,
+          192
+        ],
+        "id": "8810c3b7-7b4d-49af-89e0-dfd37c74c0ff",
+        "name": "Exit"
+      },
+      {
+        "parameters": {
+          "jsonSchemaExample": "{\n    \"message\": \"\",\n    \"doc\": \"\",\n    \"class_diagram\": \"\",\n    \"flowchart\": \"\",\n    \"xlsx\": false,\n    \"er_diagram\": \"\"\n  }",
+          "autoFix": true
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.3,
+        "position": [
+          1040,
+          240
+        ],
+        "id": "6432ffc7-92e2-4873-9c2b-36779e4e4a5a",
+        "name": "Structured Output Parser"
+      },
+      {
+        "parameters": {
+          "content": "## {\n##    \"message\": \"\",\n##    \"doc\": \"\",\n##    \"class_diagram\": \"\",\n##    \"flowchart\": \"\",\n##    \"csv\":\"\"\n##  }",
+          "height": 320,
+          "width": 256
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          816,
+          -864
+        ],
+        "typeVersion": 1,
+        "id": "0afee1de-da31-4974-8f8f-ef7a7317b377",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "jsCode": "function b64Encode(text) {\n  if (!text) return \"\";\n\n  const CHARS = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\";\n  const raw = Buffer.from(text, \"utf8\");\n  const out = [];\n\n  for (let i = 0; i < raw.length; i += 3) {\n    const block = raw.subarray(i, i + 3);\n    const n = block.length;\n    const pad = 3 - n;\n\n    const b0 = block[0] ?? 0;\n    const b1 = block[1] ?? 0;\n    const b2 = block[2] ?? 0;\n\n    const num = (b0 << 16) | (b1 << 8) | b2;\n\n    out.push(CHARS[(num >> 18) & 63]);\n    out.push(CHARS[(num >> 12) & 63]);\n    out.push(n > 1 ? CHARS[(num >> 6) & 63] : \"=\");\n    out.push(n > 2 ? CHARS[num & 63] : \"=\");\n  }\n\n  return out.join(\"\");\n}\n\nreturn {\"doc\": {\n  b64: b64Encode($('AI Agent').first().json.output.doc),\n  mimetype: \"text/plain\",\n  file_name: \"requerimientos.md\",\n}};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1968,
+          -624
+        ],
+        "id": "e2b92079-90d3-49b1-8a1c-143097e658a7",
+        "name": "doc1"
+      },
+      {
+        "parameters": {
+          "jsCode": "function b64Encode(text) {\n  if (!text) return \"\";\n\n  const CHARS = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\";\n  const raw = Buffer.from(text, \"utf8\");\n  const out = [];\n\n  for (let i = 0; i < raw.length; i += 3) {\n    const block = raw.subarray(i, i + 3);\n    const n = block.length;\n    const pad = 3 - n;\n\n    const b0 = block[0] ?? 0;\n    const b1 = block[1] ?? 0;\n    const b2 = block[2] ?? 0;\n\n    const num = (b0 << 16) | (b1 << 8) | b2;\n\n    out.push(CHARS[(num >> 18) & 63]);\n    out.push(CHARS[(num >> 12) & 63]);\n    out.push(n > 1 ? CHARS[(num >> 6) & 63] : \"=\");\n    out.push(n > 2 ? CHARS[num & 63] : \"=\");\n  }\n\n  return out.join(\"\");\n}\n\nreturn {\"class_diagram\": {\n  \"b64\": b64Encode($('AI Agent').first().json.output.class_diagram),\n  \"mimetype\": \"text/plain\",\n  \"file_name\": \"diagrama de clases.mmd\",\n}};\n\n\n\n\n\n\n\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1968,
+          -464
+        ],
+        "id": "f2df0be5-bed4-4316-a9a1-044c38cd8728",
+        "name": "class diagram1"
+      },
+      {
+        "parameters": {
+          "jsCode": "function b64Encode(text) {\n  if (!text) return \"\";\n\n  const CHARS = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\";\n  const raw = Buffer.from(text, \"utf8\");\n  const out = [];\n\n  for (let i = 0; i < raw.length; i += 3) {\n    const block = raw.subarray(i, i + 3);\n    const n = block.length;\n    const pad = 3 - n;\n\n    const b0 = block[0] ?? 0;\n    const b1 = block[1] ?? 0;\n    const b2 = block[2] ?? 0;\n\n    const num = (b0 << 16) | (b1 << 8) | b2;\n\n    out.push(CHARS[(num >> 18) & 63]);\n    out.push(CHARS[(num >> 12) & 63]);\n    out.push(n > 1 ? CHARS[(num >> 6) & 63] : \"=\");\n    out.push(n > 2 ? CHARS[num & 63] : \"=\");\n  }\n\n  return out.join(\"\");\n}\n\nreturn {\"flowchart\": {\n  \"b64\": b64Encode($('AI Agent').first().json.output.flowchart),\n  \"mimetype\": \"text/plain\",\n  \"file_name\": \"diagrama de flujo.mmd\",\n}};\n\n\n\n\n\n\n\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1968,
+          -304
+        ],
+        "id": "79d1a392-3c89-4129-afd4-4fc22a58ff8f",
+        "name": "flowchart1"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+        "typeVersion": 1,
+        "position": [
+          1088,
+          448
+        ],
+        "id": "572ef038-156d-4220-928c-55e2c2583fe3",
+        "name": "DeepSeek Chat Model1",
+        "credentials": {
+          "deepSeekApi": {
+            "id": "1WRUh77hDpUB41ry",
+            "name": "DeepSeek fran"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "ddae018d-555d-4e2d-a987-5f64432cd777",
+                "leftValue": "={{ $json.doc.b64 }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          2256,
+          -624
+        ],
+        "id": "ae6e3a9c-7d98-4d4a-9b58-486fae4363d5",
+        "name": "If1"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "7313ebd3-1705-4178-a30e-a2b5b92b60da",
+                "leftValue": "={{ $json.class_diagram.b64 }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          2256,
+          -464
+        ],
+        "id": "3feea3b4-60a6-440f-84e6-49c9d159a24f",
+        "name": "If2"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "81e3159a-01ce-4895-88e1-b6ad63782814",
+                "leftValue": "={{ $json.flowchart.b64 }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          2256,
+          -304
+        ],
+        "id": "484d0a1d-d1b2-4b6d-af14-7231fd57186c",
+        "name": "If3"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "2598267e-bcb2-4d2f-be7f-6ffd0e88b082",
+                "leftValue": "={{ $json.csv.b64 }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          2256,
+          -144
+        ],
+        "id": "01ec7af8-919c-4eab-a8d0-36a38f4f55b0",
+        "name": "If4"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "={{ $('Data nomalize1').item.json.evo_api_host.trim() }}/message/sendMedia/{{ $('Data nomalize1').item.json.evo_api_instance }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "={{ $('Data nomalize1').item.json.evo_api_key }}"
+              },
+              {
+                "name": "content-type",
+                "value": "application/json; charset=UTF-8"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"number\": \"{{ $('Data nomalize1').item.json.remoteJid.split('@')[0] }}\",\n  \"mediatype\": \"document\",\n  \"mimetype\": \"{{ $json.doc.mimetype }}\",\n  \"media\": \"{{ $json.doc.b64 }}\",\n  \"fileName\": \"{{ $json.doc.file_name }}\",\n  \"delay\": 123,\n  \"linkPreview\": true,\n  \"mentionsEveryOne\": true\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          2720,
+          -640
+        ],
+        "id": "283ecb4e-f13e-4fb2-b292-4bcc0daa0fde",
+        "name": "send doc"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "={{ $('Data nomalize1').item.json.evo_api_host.trim() }}/message/sendMedia/{{ $('Data nomalize1').item.json.evo_api_instance }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "={{ $('Data nomalize1').item.json.evo_api_key }}"
+              },
+              {
+                "name": "content-type",
+                "value": "application/json; charset=UTF-8"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"number\": \"{{ $('Data nomalize1').item.json.remoteJid.split('@')[0] }}\",\n  \"mediatype\": \"document\",\n  \"mimetype\": \"{{ $json.class_diagram.mimetype }}\",\n  \"media\": \"{{ $json.class_diagram.b64 }}\",\n  \"fileName\": \"{{ $json.class_diagram.file_name }}\",\n  \"delay\": 123,\n  \"linkPreview\": true,\n  \"mentionsEveryOne\": true\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          2720,
+          -480
+        ],
+        "id": "83f5a186-fe10-4848-8a5a-60c0ba4fc9b8",
+        "name": "send class diagram"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "={{ $('Data nomalize1').item.json.evo_api_host.trim() }}/message/sendMedia/{{ $('Data nomalize1').item.json.evo_api_instance }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "={{ $('Data nomalize1').item.json.evo_api_key }}"
+              },
+              {
+                "name": "content-type",
+                "value": "application/json; charset=UTF-8"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"number\": \"{{ $('Data nomalize1').item.json.remoteJid.split('@')[0] }}\",\n  \"mediatype\": \"document\",\n  \"mimetype\": \"{{ $json.flowchart.mimetype }}\",\n  \"media\": \"{{ $json.flowchart.b64 }}\",\n  \"fileName\": \"{{ $json.flowchart.file_name }}\",\n  \"delay\": 123,\n  \"linkPreview\": true,\n  \"mentionsEveryOne\": true\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          2720,
+          -320
+        ],
+        "id": "5123d5b9-7b58-4bc8-b946-bef7325ecf05",
+        "name": "send flowchart"
+      },
+      {
+        "parameters": {
+          "text": "={{ $json.body.data.message.conversation }}",
+          "guardrails": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.guardrails",
+        "typeVersion": 2,
+        "position": [
+          368,
+          -16
+        ],
+        "id": "60fb008e-4db2-49c0-b654-f8886554b2c7",
+        "name": "Guardrails"
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "requirements",
+            "mode": "list",
+            "cachedResultName": "requirements"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "project_name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('project_name', ``, 'string') }}",
+              "version": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('version', ``, 'string') }}",
+              "doc": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('doc', ``, 'string') }}",
+              "class_diagram": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('class_diagram', ``, 'string') }}",
+              "flowchart": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('flowchart', ``, 'string') }}",
+              "created_at": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('created_at', ``, 'string') }}",
+              "updated_at": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('updated_at', ``, 'string') }}",
+              "csv": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('csv', ``, 'string') }}"
+            },
+            "matchingColumns": [
+              "id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "project_name",
+                "displayName": "project_name",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "version",
+                "displayName": "version",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "doc",
+                "displayName": "doc",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "class_diagram",
+                "displayName": "class_diagram",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "flowchart",
+                "displayName": "flowchart",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "csv",
+                "displayName": "csv",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "created_at",
+                "displayName": "created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "updated_at",
+                "displayName": "updated_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgresTool",
+        "typeVersion": 2.6,
+        "position": [
+          736,
+          304
+        ],
+        "id": "b4769735-7e20-4f0e-a46b-f323bca1a2a2",
+        "name": "insert data versions in requirements",
+        "credentials": {
+          "postgres": {
+            "id": "b4afdLbWtbWNdNMp",
+            "name": "Postgres account"
+          }
+        },
+        "notes": "este nodo es para insertar datos de versiones en postgres"
+      },
+      {
+        "parameters": {
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "n8n_chat_histories",
+            "mode": "name"
+          },
+          "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgresTool",
+        "typeVersion": 2.6,
+        "position": [
+          880,
+          240
+        ],
+        "id": "8e483b1e-c9c0-444a-a5a1-cde38562c1c1",
+        "name": "view conversations",
+        "credentials": {
+          "postgres": {
+            "id": "b4afdLbWtbWNdNMp",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "requirements",
+            "mode": "list",
+            "cachedResultName": "requirements"
+          },
+          "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgresTool",
+        "typeVersion": 2.6,
+        "position": [
+          800,
+          496
+        ],
+        "id": "8600e663-360b-4209-af30-170ff76a0356",
+        "name": "get data on the requirements",
+        "credentials": {
+          "postgres": {
+            "id": "b4afdLbWtbWNdNMp",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "raw",
+          "jsonOutput": "={\n  \"message\": \"{{ $json.chatInput }}\",\n  \"remoteJid\": \"5491150023292@s.whatsapp.net\",\n  \"sender\": \"5491157389737@s.whatsapp.net\",\n  \"evo_api_host\":\"https://evolutionapi.easypanel.frandev.com.ar/\",\n  \"evo_api_instance\":\"mi_numero_de_hito_agente\",\n  \"evo_api_key\": \"679817054255-4166-A114-15DC0737F0C9\",\n  \"db_identity_key\": \"postgres\"\n  \n}\n ",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2000,
+          672
+        ],
+        "id": "a71b8407-615c-445d-807e-7eca81f6edaa",
+        "name": "Data nomalize"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://n8n.hitofusion.frandev.com.ar/webhook/send_message_for_whatsapp",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"message\": \"{{ $json.message }}\",\n  \"remoteJid\": \"{{ $json.remoteJid }}\",\n  \"sender\": \"{{ $json.sender }}\",\n\n  \"evo_api_host\": \"{{ $json.evo_api_host }}\",\n  \"evo_api_instance\": \"{{ $json.evo_api_instance }}\",\n  \"evo_api_key\": \"{{ $json.evo_api_key }}\",\n\n  \"db_identity_key\": \"{{ $json.db_identity_key }}\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          2256,
+          672
+        ],
+        "id": "f93502b7-3fd0-455d-92b2-f6199a956b2f",
+        "name": "send message3"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+        "typeVersion": 1.4,
+        "position": [
+          1776,
+          672
+        ],
+        "id": "568aacc9-687a-4d2a-a983-e125f684bac7",
+        "name": "When chat message received",
+        "webhookId": "cc6eb4f7-ed1a-4519-b03f-6e4489e9cf26"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://n8n.hitofusion.frandev.com.ar/webhook/send_message_for_whatsapp",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"message\": {{ $json.output.message.toJsonString() }},\n  \"remoteJid\": {{ $('Data nomalize1').item.json.remoteJid.toJsonString() }},\n  \"sender\": {{ $('Data nomalize1').item.json.sender.toJsonString() }},\n\n  \"evo_api_host\": {{ $('Data nomalize1').item.json.evo_api_host.toJsonString() }},\n  \"evo_api_instance\": {{ $('Data nomalize1').item.json.evo_api_instance.toJsonString() }},\n  \"evo_api_key\": {{ $('Data nomalize1').item.json.evo_api_key.toJsonString() }},\n\n  \"db_identity_key\": {{ $('Data nomalize1').item.json.db_identity_key.toJsonString() }}\n}\n",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1408,
+          -304
+        ],
+        "id": "13c7af32-4125-4346-b581-e9d80c23c8fa",
+        "name": "send message4"
+      },
+      {
+        "parameters": {
+          "jsCode": "function b64Encode(text) {\n  if (!text) return \"\";\n\n  const CHARS = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\";\n  const raw = Buffer.from(text, \"utf8\");\n  const out = [];\n\n  for (let i = 0; i < raw.length; i += 3) {\n    const block = raw.subarray(i, i + 3);\n    const n = block.length;\n    const pad = 3 - n;\n\n    const b0 = block[0] ?? 0;\n    const b1 = block[1] ?? 0;\n    const b2 = block[2] ?? 0;\n\n    const num = (b0 << 16) | (b1 << 8) | b2;\n\n    out.push(CHARS[(num >> 18) & 63]);\n    out.push(CHARS[(num >> 12) & 63]);\n    out.push(n > 1 ? CHARS[(num >> 6) & 63] : \"=\");\n    out.push(n > 2 ? CHARS[num & 63] : \"=\");\n  }\n\n  return out.join(\"\");\n}\n\nreturn {\"csv\": {\n  \"b64\": b64Encode($('AI Agent').first().json.output.er_diagram),\n  \"mimetype\": \"text/plain\",\n  \"file_name\": \"diagrama de entidad relación.mmd\",\n}};\n\n\n\n\n\n\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1968,
+          -144
+        ],
+        "id": "3eff1286-15a3-4de5-9e6d-451a25dba3ef",
+        "name": "er_diagram"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "={{ $('Data nomalize1').item.json.evo_api_host.trim() }}/message/sendMedia/{{ $('Data nomalize1').item.json.evo_api_instance }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "={{ $('Data nomalize1').item.json.evo_api_key }}"
+              },
+              {
+                "name": "content-type",
+                "value": "application/json; charset=UTF-8"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"number\": \"{{ $('Data nomalize1').item.json.remoteJid.split('@')[0] }}\",\n  \"mediatype\": \"document\",\n  \"mimetype\": \"{{ $json.csv.mimetype }}\",\n  \"media\": \"{{ $json.csv.b64 }}\",\n  \"fileName\": \"{{ $json.csv.file_name }}\",\n  \"delay\": 123,\n  \"linkPreview\": true,\n  \"mentionsEveryOne\": true\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          2720,
+          -160
+        ],
+        "id": "9cf64fac-71f5-4e8b-8185-430fc22a2f75",
+        "name": "send er_diagram"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "asdas",
+          "options": {
+            "systemMessage": "Necesito que generes un Python dict (NO JSON) con esta estructura exacta para construir un archivo Excel con la librería xlsxwriter:\n\nREGLAS GENERALES\n1) La salida debe ser SOLO código Python (sin markdown, sin explicaciones, sin texto extra).\n2) El dict debe llamarse exactamente: data\n3) Está PROHIBIDO usar null. Si un valor no existe, usar None.\n4) Todas las claves del dict deben ser strings con comillas dobles o simples (consistente).\n5) Mantener el orden lógico: workbook -> sheets -> (name, header_row_index, columns, row_heights, data, notes).\n6) Los textos deben conservar saltos de línea con \\n si el contenido lo incluye.\n7) No inventes columnas ni renombres keys: respetar exactamente los nombres de columnas detectados.\n8) Si hay caracteres especiales (tildes/emoji), mantenerlos tal cual (Unicode).\n\nESQUEMA OBLIGATORIO DEL DICT\ndata = {\n  \"workbook\": {\n    \"sheets\": [\n      {\n        \"name\": <str>,                    # nombre de la hoja\n        \"header_row_index\": <int>,        # índice 0-based donde se escriben los encabezados\n        \"columns\": [\n          {\"key\": <str>, \"width\": <float>}   # una entrada por columna, en el orden original\n        ],\n        \"row_heights\": [\n          {\"row_index\": <int>, \"height\": <float>}  # opcional, sólo si aplica\n        ],\n        \"data\": [\n          { \"<col_key_1>\": <value>, \"<col_key_2>\": <value>, ... }  # una entrada por fila\n        ],\n        \"notes\": [\n          {\"cell\": <str>, \"value\": <str>}  # opcional, ej: {\"cell\": \"A1\", \"value\": \"...\"}\n        ]\n      }\n    ]\n  }\n}\n\nREGLAS DE COLUMNAS\n- \"columns\" define el orden de columnas y el ancho.\n- Cada \"key\" en columns debe existir como clave en cada fila de \"data\" (si no hay valor, poner \"\" o None según corresponda).\n- \"width\" debe ser número (float o int), preferible float.\n\nREGLAS DE FILAS\n- \"header_row_index\" es 0-based.\n- Los \"row_index\" en row_heights también son 0-based (como xlsxwriter).\n- Si no hay datos para row_heights, usar lista vacía [].\n\nREGLAS DE DATA (FILAS)\n- \"data\" debe ser una lista de dicts.\n- Cada dict representa una fila.\n- Si una celda está vacía: usar \"\" (string vacío).\n- Si explícitamente el valor es inexistente: usar None.\n- No mezclar tipos raros: strings para texto, números para números.\n\nREGLAS DE NOTES\n- \"cell\" es estilo A1 (ej: \"A1\").\n- Si no hay notas, usar [].\n\nINPUT\nTe voy a pasar contenido tabular (encabezados + filas) y metadatos (nombre de hoja, header_row_index, anchos de columnas, alturas de filas, notas). Tu tarea es devolver el dict \"data\" cumpliendo TODAS las reglas anteriores.\n\nIMPORTANTE\n- No generes funciones ni imports.\n- No uses json.dumps ni json.loads.\n- Sólo el dict Python: data = {...}"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3,
+        "position": [
+          416,
+          -656
+        ],
+        "id": "2e6c0f50-292f-42c4-9264-72dcd3cfa2b6",
+        "name": "crear archivos excel"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "={{ $('Data nomalize1').item.json.evo_api_host.trim() }}/message/sendMedia/{{ $('Data nomalize1').item.json.evo_api_instance }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "={{ $('Data nomalize1').item.json.evo_api_key }}"
+              },
+              {
+                "name": "content-type",
+                "value": "application/json; charset=UTF-8"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"number\": \"{{ $('Data nomalize1').item.json.remoteJid.split('@')[0] }}\",\n  \"mediatype\": \"document\",\n  \"mimetype\": \"{{ $json.xlsx.mimetype }}\",\n  \"media\": \"{{ $json.xlsx.b64 }}\",\n  \"fileName\": \"{{ $json.xlsx.file_name }}\",\n  \"delay\": 123,\n  \"linkPreview\": true,\n  \"mentionsEveryOne\": true\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          2720,
+          0
+        ],
+        "id": "36745feb-b692-4fdf-8d16-fdb427f5eca1",
+        "name": "send xlsx"
+      },
+      {
+        "parameters": {
+          "mode": "raw",
+          "jsonOutput": "={\n  \"xlsx\": {{ JSON.parse($json.main_result) }} \n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          2480,
+          0
+        ],
+        "id": "4524fd0b-6124-4c53-8129-2a8bbef975e3",
+        "name": "format data xlsx"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "http://produ_python_runner:8000/execute",
+          "authentication": "genericCredentialType",
+          "genericAuthType": "httpHeaderAuth",
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "script",
+                "value": "=import base64\nimport json\nfrom io import BytesIO\nimport xlsxwriter\n\n\ndef _a1_to_row_col(a1):\n    a1 = a1.strip().upper()\n    col_part = \"\"\n    row_part = \"\"\n    for ch in a1:\n        if \"A\" <= ch <= \"Z\":\n            col_part += ch\n        elif \"0\" <= ch <= \"9\":\n            row_part += ch\n    col = 0\n    for ch in col_part:\n        col = col * 26 + (ord(ch) - ord(\"A\") + 1)\n    col -= 1\n    row = int(row_part) - 1\n    return row, col\n\n\ndef create_excel_from_json(payload):\n    output = BytesIO()\n    workbook = xlsxwriter.Workbook(output, {\"in_memory\": True})\n\n    sheets = payload.get(\"workbook\", {}).get(\"sheets\", [])\n    for sheet in sheets:\n        sheet_name = sheet.get(\"name\") or \"Sheet1\"\n        worksheet = workbook.add_worksheet(sheet_name)\n\n        header_row_index = sheet.get(\"header_row_index\", 0)\n        columns = sheet.get(\"columns\", [])\n        data_rows = sheet.get(\"data\", [])\n\n        col_keys = [c.get(\"key\") for c in columns if c.get(\"key\") is not None]\n\n        for col_idx, col_def in enumerate(columns):\n            width = col_def.get(\"width\")\n            if isinstance(width, (int, float)):\n                worksheet.set_column(col_idx, col_idx, float(width))\n\n        for rh in sheet.get(\"row_heights\", []):\n            r = rh.get(\"row_index\")\n            h = rh.get(\"height\")\n            if isinstance(r, int) and isinstance(h, (int, float)):\n                worksheet.set_row(r, float(h))\n\n        for col_idx, key in enumerate(col_keys):\n            worksheet.write(header_row_index, col_idx, key)\n\n        start_row = header_row_index + 1\n        for i, row_dict in enumerate(data_rows):\n            r = start_row + i\n            for col_idx, key in enumerate(col_keys):\n                val = \"\"\n                if isinstance(row_dict, dict):\n                    val = row_dict.get(key, \"\")\n                worksheet.write(r, col_idx, val)\n\n        for note in sheet.get(\"notes\", []):\n            cell = note.get(\"cell\")\n            value = note.get(\"value\", \"\")\n            if cell:\n                r, c = _a1_to_row_col(cell)\n                worksheet.write(r, c, value)\n\n    workbook.close()\n    output.seek(0)\n    return base64.b64encode(output.read()).decode(\"utf-8\")\n\ndef main():\n\n    json_data = {\n    \"workbook\": {\n        \"sheets\": [\n            {\n                \"name\": \"Casos\",\n                \"header_row_index\": 2,\n                \"columns\": [\n                    {\n                        \"key\": \"Hilo de conversación\",\n                        \"width\": 30.0,\n                    },\n                    {\n                        \"key\": \"Pregutas\",\n                        \"width\": 13.0,\n                    },\n                    {\n                        \"key\": \"Respuesta esperada\",\n                        \"width\": 41.13,\n                    },\n                    {\n                        \"key\": \"Aclaraciones/Observaciones\",\n                        \"width\": 34.25,\n                    },\n                ],\n                \"row_heights\": [\n                    {\n                        \"row_index\": 3,\n                        \"height\": 41.25,\n                    },\n                ],\n                \"data\": [\n                    {\n                        \"Hilo de conversación\": \"conjunto de preguntas y respuestas para los casos de test\",\n                        \"Pregutas\": \"pregunta del caso de prueba\",\n                        \"Respuesta esperada\": \"Respuesta esperada del agente\",\n                        \"Aclaraciones/Observaciones\": \"Descripciones y detalles a contemplar a modo de guía para tomar el agente en odoo u otro servicio/sistema si corresponde\",\n                    },\n                    {\n                        \"Hilo de conversación\": \"ejemplo 1\",\n                        \"Pregutas\": \"hola, quiero mi estado de cuenta\",\n                        \"Respuesta esperada\": \"¡Hola, María! Claro 🙂\\nTu estado de cuenta es:\\n\\nFactura FA-C 00001-00000412 — $ 52.300 — Vence 25/11/2025 — Pendiente\",\n                        \"Aclaraciones/Observaciones\": None,\n                    },\n                    {\n                        \"Hilo de conversación\": \"ejemplo 1\",\n                        \"Pregutas\": \"Hola. Hay un error, esa deuda de $ 52.300 no corresponde\",\n                        \"Respuesta esperada\": \"Entendido, María. Para ayudarte, ¿podés indicarme el número de factura o algún dato de referencia?\\nAsí lo revisamos y registramos el reclamo.\",\n                        \"Aclaraciones/Observaciones\": \"Debe crearse un ticket/reclamo al responsable (pero el agente no debe solucionar el inconveniete)\",\n                    },\n                    {\n                        \"Hilo de conversación\": \"ejemplo 1\",\n                        \"Pregutas\": \"Es la FA-C 00001-00000412. La pagamos el 11/10/2025\",\n                        \"Respuesta esperada\": \"Gracias por el dato.\\n¿Tenés el comprobante o captura del pago? Si me lo enviás, lo adjunto al reclamo para acelerar la revisión.\",\n                        \"Aclaraciones/Observaciones\": \"Pedir comprobante de pago para adjuntarlo al reclamo.\",\n                    },\n                    {\n                        \"Hilo de conversación\": \"ejemplo 1\",\n                        \"Pregutas\": \"<Envio del archivo>\",\n                        \"Respuesta esperada\": \"Gracias, ya recibí el comprobante.\\nRegistré el reclamo y lo envié al área de cobranzas para revisión.\\nTe aviso apenas tenga una actualización.\",\n                        \"Aclaraciones/Observaciones\": \"El agente debe enviar el archivo y pedir que cobranzas revise el error\",\n                    },\n                ],\n                \"notes\": [\n                    {\n                        \"cell\": \"A1\",\n                        \"value\": \"Video explicativo de como completar la Planilla: https://kommodo.ai/recordings/vrtSXYQX5RQk0FUpwDnJ\",\n                    },\n                ],\n            },\n        ],\n    },\n}\n\n    # Generar el Excel y devolverlo en base64\n    return json.dumps(\n      {\n        \"b64\": create_excel_from_json(json_data),\n        \"mimetype\": \"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\n        \"file_name\": \"casos de prueba.xlsx\"\n      }\n)"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          2256,
+          0
+        ],
+        "id": "142335c7-4060-4ec6-8d8a-9ea4e4ba357d",
+        "name": "create xlsx in python3",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "7xRj4yTDXKIaFr6q",
+            "name": "Header Auth account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "2598267e-bcb2-4d2f-be7f-6ffd0e88b082",
+                "leftValue": "={{ $('AI Agent').item.json.output.xlsx }}",
+                "rightValue": "false",
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1968,
+          16
+        ],
+        "id": "36787f32-a38b-4f21-bfb7-765241a85931",
+        "name": "If xlsx"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+        "typeVersion": 1,
+        "position": [
+          864,
+          -432
+        ],
+        "id": "ba251df1-57a3-479c-875e-2c3ec9187aa7",
+        "name": "OpenRouter Chat Model",
+        "credentials": {
+          "openRouterApi": {
+            "id": "O3EWeCOyVZEaoklr",
+            "name": "OpenRouter fran"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "DeepSeek Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Postgres Chat Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Data nomalize1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Data nomalize1": {
+        "main": [
+          [
+            {
+              "node": "Redis memory endpoint",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "send message4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Date & Time": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Redis memory endpoint": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Guardrails",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Exit",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "doc1": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "class diagram1": {
+        "main": [
+          [
+            {
+              "node": "If2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "flowchart1": {
+        "main": [
+          [
+            {
+              "node": "If3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "DeepSeek Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Structured Output Parser",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "send doc",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If2": {
+        "main": [
+          [
+            {
+              "node": "send class diagram",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If3": {
+        "main": [
+          [
+            {
+              "node": "send flowchart",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If4": {
+        "main": [
+          [
+            {
+              "node": "send er_diagram",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Guardrails": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "insert data versions in requirements": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "view conversations": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "get data on the requirements": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Data nomalize": {
+        "main": [
+          [
+            {
+              "node": "send message3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "When chat message received": {
+        "main": [
+          [
+            {
+              "node": "Data nomalize",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "er_diagram": {
+        "main": [
+          [
+            {
+              "node": "If4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "send message4": {
+        "main": [
+          [
+            {
+              "node": "doc1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "class diagram1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "flowchart1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "If xlsx",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "er_diagram",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "format data xlsx": {
+        "main": [
+          [
+            {
+              "node": "send xlsx",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "create xlsx in python3": {
+        "main": [
+          [
+            {
+              "node": "format data xlsx",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If xlsx": {
+        "main": [
+          [
+            {
+              "node": "create xlsx in python3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Francisco Fiorentino",
+    "name": "Version c635c4d5",
+    "description": ""
+  },
+  "tags": []
+}
