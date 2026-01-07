@@ -1,0 +1,1411 @@
+{
+  "updatedAt": "2026-01-02T19:11:09.637Z",
+  "createdAt": "2025-12-23T18:57:15.525Z",
+  "id": "oNYwBccMtuS0hoVA",
+  "name": "Redis endpoint for whatsapp - endpoint",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "push",
+        "list": "=buffer_{{ $json.remoteJid }}",
+        "messageData": "={{ JSON.stringify( $json.body) }}",
+        "tail": true
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -912,
+        240
+      ],
+      "id": "eb6634d7-ddd7-4149-ad3d-784c6a07dac6",
+      "name": "Redis Push buffer1",
+      "credentials": {
+        "redis": {
+          "id": "30wPzwlDpuWKCXmz",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "messages",
+        "key": "=buffer_{{ $('Data nomalize1').item.json.remoteJid }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -688,
+        240
+      ],
+      "id": "7c2e6d84-bc0d-4e09-90fd-de35ef54c5eb",
+      "name": "Redis Get buffer1",
+      "credentials": {
+        "redis": {
+          "id": "30wPzwlDpuWKCXmz",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 6
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -256,
+        448
+      ],
+      "id": "955a8086-7b72-4bb4-bea1-723faf9a5aee",
+      "name": "Wait buffer1",
+      "webhookId": "cae2ee0f-a9cb-4e73-9d0f-50501b086d27"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "=buffer_{{ $('Webhook').item.json.body.data.key.remoteJid }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -256,
+        240
+      ],
+      "id": "950ad509-9826-435b-824c-abcd972e9c1e",
+      "name": "Redis Delete1",
+      "notesInFlow": false,
+      "credentials": {
+        "redis": {
+          "id": "30wPzwlDpuWKCXmz",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ JSON.parse($json.messages.last()).data.key.id === $('Redis Push buffer1').item.json.body.data.key.id ? 0 : 1 }}\n",
+                    "rightValue": "=6",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    },
+                    "id": "225fe3a9-0fc4-4fb0-b78f-5f22ade1bc3b"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Stop"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e5d3afb6-e92a-4c3f-83c3-2c870d912dd3",
+                    "leftValue": "={{ JSON.parse($json.messages.last()).data.messageTimestamp.toDateTime('s') }}",
+                    "rightValue": "={{ $now.minus(15, 'seconds') }}",
+                    "operator": {
+                      "type": "dateTime",
+                      "operation": "before"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Continue"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Espera"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -464,
+        224
+      ],
+      "id": "b15df308-e3d3-48e1-a267-455edd56af80",
+      "name": "Switch4"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "redis_endpoint_for_whatsapp",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1504,
+        240
+      ],
+      "id": "0b26fe7c-464b-4e9a-9fd7-e2ac86249ea1",
+      "name": "Webhook",
+      "webhookId": "f3b79dc1-1922-4c41-9194-db46d6b93dba"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"body\": {},\n  \"should_reply\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        -256,
+        16
+      ],
+      "id": "1d2a5ea9-d72e-405b-8059-735168bd6be8",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"remoteJid\": \"{{ $json.body.data.key.remoteJid }}\",\n  \"remoteJidAlt\": \"{{ $json.body.data.key.remoteJidAlt }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n  \"id\": \"{{$json.body.data.key.id}}\",\n  \"evo_api_instance\":\"{{ $json.body.instance }}\",\n  \"evo_api_key\": \"{{ $json.body.apikey }}\",\n  \"body\": {{ $json.body }},\n  \"db_identity_key\": {{ $json.query.db_identity_key }}\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1152,
+        240
+      ],
+      "id": "6f18d203-23bc-4273-af53-9c7e465268d3",
+      "name": "Data nomalize1"
+    },
+    {
+      "parameters": {
+        "content": "# bufer de redis  más guardado de mensajes de conversaciones en postgres\n## pasos del flujo:\n\n#### 1. Entra el body de evolutionapi/whatsapp\n### 2. Se guarda en redis temporalmente\n### 3. si entra otro mensaje se cancela el flujo y devuelve {\"should_reply\" : false, \"body\": {vacio}}\n### 4. si se completa el tiempo de espera:\n### a. registra todos los mensajes en postgres menos el último\n### b. responde con {\"should_reply\" : false, \"body\": {el contenido del último body de whatsapp recivido en redis}}",
+        "height": 992,
+        "width": 2752
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1232,
+        -1328
+      ],
+      "typeVersion": 1,
+      "id": "80b93af1-34af-4c41-a93c-6141a63d8940",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "whatsapp_messages",
+          "mode": "list",
+          "cachedResultName": "whatsapp_messages"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "data": "={{ $json.body }}",
+            "created_at": "={{ new Date().toISOString() }}",
+            "db_identity_key": "={{ $json.query.db_identity_key }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "db_identity_key",
+              "displayName": "db_identity_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -1152,
+        64
+      ],
+      "id": "79d4d278-2043-4e3a-9db8-f026bca36703",
+      "name": "save body in whatsapp_messages",
+      "credentials": {
+        "postgres": {
+          "id": "b4afdLbWtbWNdNMp",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"body\": {{ $json.body.toJsonString() }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        912,
+        96
+      ],
+      "id": "ff989d65-5995-4032-9b83-87720f865b08",
+      "name": "Respond to Webhook2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        240,
+        240
+      ],
+      "id": "069c4502-5725-4052-9f28-f271bb2f0def",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "n8n_chat_histories",
+          "mode": "list",
+          "cachedResultName": "n8n_chat_histories"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "session_id": "={{ $('Data nomalize1').item.json.remoteJid }}",
+            "message": "={\n  \"content\": \"{{ $json.guardrailsInput.replace(/\\r?\\n|\\r/g, \"\\\\n\") }}\",\n  \"type\": \"human\",\n  \"additional_kwargs\": {},\n  \"response_metadata\": {}\n}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        912,
+        304
+      ],
+      "id": "234a4bf8-7cce-46b8-9f58-eb75a2bafd85",
+      "name": "save memory messages1",
+      "credentials": {
+        "postgres": {
+          "id": "b4afdLbWtbWNdNMp",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sanitize",
+        "text": "={{ conversation in JSON.parse($json.messages).data.message ? JSON.parse($json.messages).data.message.conversation : \"\"}}",
+        "guardrails": {
+          "pii": {
+            "value": {
+              "type": "all"
+            }
+          },
+          "secretKeys": {
+            "value": {
+              "permissiveness": "balanced"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.guardrails",
+      "typeVersion": 2,
+      "position": [
+        640,
+        304
+      ],
+      "id": "4db83336-56e1-4228-84c3-291af98f826a",
+      "name": "Guardrails1"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "messages",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -32,
+        240
+      ],
+      "id": "22e194e7-fb0f-4659-95c1-8e2272095327",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nlet body = JSON.parse($('Redis Delete1').first().json.messages[$('Redis Delete1').first().json.messages.length - 1])\nbody.should_reply = true\nreturn {\"body\": body};\n  \n  // .toJsonString()"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        96
+      ],
+      "id": "69fda3c1-b05d-40e3-bfc0-4f8c2bb9de8e",
+      "name": "Code in JavaScript1"
+    }
+  ],
+  "connections": {
+    "Redis Push buffer1": {
+      "main": [
+        [
+          {
+            "node": "Redis Get buffer1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Get buffer1": {
+      "main": [
+        [
+          {
+            "node": "Switch4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait buffer1": {
+      "main": [
+        [
+          {
+            "node": "Redis Get buffer1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Delete1": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch4": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Redis Delete1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait buffer1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Data nomalize1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "save body in whatsapp_messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook": {
+      "main": [
+        []
+      ]
+    },
+    "Data nomalize1": {
+      "main": [
+        [
+          {
+            "node": "Redis Push buffer1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Guardrails1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guardrails1": {
+      "main": [
+        [
+          {
+            "node": "save memory messages1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "save memory messages1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "timezone": "America/Argentina/Buenos_Aires",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.hitofusion.frandev.com.ar",
+            "user-agent": "axios/1.12.0",
+            "content-length": "1532",
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "content-type": "application/json",
+            "x-forwarded-for": "172.18.0.1",
+            "x-forwarded-host": "n8n.hitofusion.frandev.com.ar",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "23b292eae554",
+            "x-real-ip": "172.18.0.1"
+          },
+          "params": {},
+          "query": {
+            "db_identity_key": "postgres"
+          },
+          "body": {
+            "event": "messages.upsert",
+            "instance": "mi_numero_de_hito_agente",
+            "data": {
+              "key": {
+                "remoteJid": "5491150023292@s.whatsapp.net",
+                "remoteJidAlt": "5491150023292@s.whatsapp.net",
+                "fromMe": false,
+                "id": "ACB4A6E652F6541E425CDDFF90D8BF9C",
+                "participant": "",
+                "addressingMode": "lid"
+              },
+              "pushName": "Francisco Fiorentino",
+              "status": "DELIVERY_ACK",
+              "message": {
+                "conversation": "Necesito aún nuevo requerimiento",
+                "messageContextInfo": {
+                  "threadId": [],
+                  "deviceListMetadata": {
+                    "senderKeyIndexes": [],
+                    "recipientKeyIndexes": [],
+                    "senderKeyHash": {
+                      "0": 197,
+                      "1": 69,
+                      "2": 165,
+                      "3": 57,
+                      "4": 133,
+                      "5": 75,
+                      "6": 221,
+                      "7": 66,
+                      "8": 97,
+                      "9": 17
+                    },
+                    "senderTimestamp": {
+                      "low": 1765902850,
+                      "high": 0,
+                      "unsigned": true
+                    },
+                    "recipientKeyHash": {
+                      "0": 188,
+                      "1": 235,
+                      "2": 111,
+                      "3": 132,
+                      "4": 133,
+                      "5": 4,
+                      "6": 52,
+                      "7": 46,
+                      "8": 158,
+                      "9": 7
+                    },
+                    "recipientTimestamp": {
+                      "low": 1765788976,
+                      "high": 0,
+                      "unsigned": true
+                    }
+                  },
+                  "deviceListMetadataVersion": 2,
+                  "messageSecret": {
+                    "0": 23,
+                    "1": 67,
+                    "2": 17,
+                    "3": 31,
+                    "4": 113,
+                    "5": 109,
+                    "6": 96,
+                    "7": 234,
+                    "8": 121,
+                    "9": 0,
+                    "10": 122,
+                    "11": 181,
+                    "12": 41,
+                    "13": 244,
+                    "14": 85,
+                    "15": 96,
+                    "16": 31,
+                    "17": 8,
+                    "18": 61,
+                    "19": 216,
+                    "20": 108,
+                    "21": 134,
+                    "22": 124,
+                    "23": 233,
+                    "24": 236,
+                    "25": 83,
+                    "26": 222,
+                    "27": 181,
+                    "28": 47,
+                    "29": 54,
+                    "30": 230,
+                    "31": 42
+                  }
+                }
+              },
+              "messageType": "conversation",
+              "messageTimestamp": 1767114882,
+              "instanceId": "56f84f78-0d56-4592-b848-b01b0c254241",
+              "source": "android"
+            },
+            "destination": "https://n8n.hitofusion.frandev.com.ar/webhook/203fcfc0-23db-47da-8fac-01db5ed482bc",
+            "date_time": "2025-12-30T14:14:42.798Z",
+            "sender": "5491157389737@s.whatsapp.net",
+            "server_url": "https://evolutionapi.easypanel.frandev.com.ar",
+            "apikey": "679817054255-4166-A114-15DC0737F0C9"
+          },
+          "webhookUrl": "https://produ-n8n.qojds3.easypanel.host/webhook/redis_endpoint_for_whatsapp",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "b2a41d7b-6fc7-4347-9a6b-871644c8b762",
+  "activeVersionId": "a117abf8-6763-4389-83cb-fd9f0d8d8c13",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-12-23T18:57:15.529Z",
+      "createdAt": "2025-12-23T18:57:15.529Z",
+      "role": "workflow:owner",
+      "workflowId": "oNYwBccMtuS0hoVA",
+      "projectId": "Ts2xaK8jD6HfpDh3"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2025-12-30T17:49:30.000Z",
+    "createdAt": "2025-12-30T17:49:27.712Z",
+    "versionId": "a117abf8-6763-4389-83cb-fd9f0d8d8c13",
+    "workflowId": "oNYwBccMtuS0hoVA",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "push",
+          "list": "=buffer_{{ $json.remoteJid }}",
+          "messageData": "={{ JSON.stringify( $json.body) }}",
+          "tail": true
+        },
+        "type": "n8n-nodes-base.redis",
+        "typeVersion": 1,
+        "position": [
+          -912,
+          240
+        ],
+        "id": "eb6634d7-ddd7-4149-ad3d-784c6a07dac6",
+        "name": "Redis Push buffer1",
+        "credentials": {
+          "redis": {
+            "id": "30wPzwlDpuWKCXmz",
+            "name": "Redis account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "get",
+          "propertyName": "messages",
+          "key": "=buffer_{{ $('Data nomalize1').item.json.remoteJid }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.redis",
+        "typeVersion": 1,
+        "position": [
+          -688,
+          240
+        ],
+        "id": "7c2e6d84-bc0d-4e09-90fd-de35ef54c5eb",
+        "name": "Redis Get buffer1",
+        "credentials": {
+          "redis": {
+            "id": "30wPzwlDpuWKCXmz",
+            "name": "Redis account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": 6
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          -256,
+          448
+        ],
+        "id": "955a8086-7b72-4bb4-bea1-723faf9a5aee",
+        "name": "Wait buffer1",
+        "webhookId": "cae2ee0f-a9cb-4e73-9d0f-50501b086d27"
+      },
+      {
+        "parameters": {
+          "operation": "delete",
+          "key": "=buffer_{{ $('Webhook').item.json.body.data.key.remoteJid }}"
+        },
+        "type": "n8n-nodes-base.redis",
+        "typeVersion": 1,
+        "position": [
+          -256,
+          240
+        ],
+        "id": "950ad509-9826-435b-824c-abcd972e9c1e",
+        "name": "Redis Delete1",
+        "notesInFlow": false,
+        "credentials": {
+          "redis": {
+            "id": "30wPzwlDpuWKCXmz",
+            "name": "Redis account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "loose",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ JSON.parse($json.messages.last()).data.key.id === $('Redis Push buffer1').item.json.body.data.key.id ? 0 : 1 }}\n",
+                      "rightValue": "=6",
+                      "operator": {
+                        "type": "boolean",
+                        "operation": "true",
+                        "singleValue": true
+                      },
+                      "id": "225fe3a9-0fc4-4fb0-b78f-5f22ade1bc3b"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Stop"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "loose",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "e5d3afb6-e92a-4c3f-83c3-2c870d912dd3",
+                      "leftValue": "={{ JSON.parse($json.messages.last()).data.messageTimestamp.toDateTime('s') }}",
+                      "rightValue": "={{ $now.minus(15, 'seconds') }}",
+                      "operator": {
+                        "type": "dateTime",
+                        "operation": "before"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Continue"
+              }
+            ]
+          },
+          "looseTypeValidation": true,
+          "options": {
+            "fallbackOutput": "extra",
+            "renameFallbackOutput": "Espera"
+          }
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          -464,
+          224
+        ],
+        "id": "b15df308-e3d3-48e1-a267-455edd56af80",
+        "name": "Switch4"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "redis_endpoint_for_whatsapp",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -1504,
+          240
+        ],
+        "id": "0b26fe7c-464b-4e9a-9fd7-e2ac86249ea1",
+        "name": "Webhook",
+        "webhookId": "f3b79dc1-1922-4c41-9194-db46d6b93dba"
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "{\n  \"body\": {},\n  \"should_reply\": false\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          -256,
+          16
+        ],
+        "id": "1d2a5ea9-d72e-405b-8059-735168bd6be8",
+        "name": "Respond to Webhook"
+      },
+      {
+        "parameters": {
+          "mode": "raw",
+          "jsonOutput": "={\n  \"remoteJid\": \"{{ $json.body.data.key.remoteJid }}\",\n  \"remoteJidAlt\": \"{{ $json.body.data.key.remoteJidAlt }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n  \"id\": \"{{$json.body.data.key.id}}\",\n  \"evo_api_instance\":\"{{ $json.body.instance }}\",\n  \"evo_api_key\": \"{{ $json.body.apikey }}\",\n  \"body\": {{ $json.body }},\n  \"db_identity_key\": {{ $json.query.db_identity_key }}\n}\n ",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -1152,
+          240
+        ],
+        "id": "6f18d203-23bc-4273-af53-9c7e465268d3",
+        "name": "Data nomalize1"
+      },
+      {
+        "parameters": {
+          "content": "# bufer de redis  más guardado de mensajes de conversaciones en postgres\n## pasos del flujo:\n\n#### 1. Entra el body de evolutionapi/whatsapp\n### 2. Se guarda en redis temporalmente\n### 3. si entra otro mensaje se cancela el flujo y devuelve {\"should_reply\" : false, \"body\": {vacio}}\n### 4. si se completa el tiempo de espera:\n### a. registra todos los mensajes en postgres menos el último\n### b. responde con {\"should_reply\" : false, \"body\": {el contenido del último body de whatsapp recivido en redis}}",
+          "height": 992,
+          "width": 2752
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -1232,
+          -1296
+        ],
+        "typeVersion": 1,
+        "id": "80b93af1-34af-4c41-a93c-6141a63d8940",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "whatsapp_messages",
+            "mode": "list",
+            "cachedResultName": "whatsapp_messages"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "data": "={{ $json.body }}",
+              "created_at": "={{ new Date().toISOString() }}",
+              "db_identity_key": "={{ $json.query.db_identity_key }}"
+            },
+            "matchingColumns": [
+              "id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "created_at",
+                "displayName": "created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "data",
+                "displayName": "data",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "object",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "db_identity_key",
+                "displayName": "db_identity_key",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -1152,
+          64
+        ],
+        "id": "79d4d278-2043-4e3a-9db8-f026bca36703",
+        "name": "save body in whatsapp_messages",
+        "credentials": {
+          "postgres": {
+            "id": "b4afdLbWtbWNdNMp",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={\n  \"body\": {{ $json.body.toJsonString() }}\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          912,
+          96
+        ],
+        "id": "ff989d65-5995-4032-9b83-87720f865b08",
+        "name": "Respond to Webhook2"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          240,
+          240
+        ],
+        "id": "069c4502-5725-4052-9f28-f271bb2f0def",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "n8n_chat_histories",
+            "mode": "list",
+            "cachedResultName": "n8n_chat_histories"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "session_id": "={{ $('Data nomalize1').item.json.remoteJid }}",
+              "message": "={\n  \"content\": \"{{ $json.guardrailsInput.replace(/\\r?\\n|\\r/g, \"\\\\n\") }}\",\n  \"type\": \"human\",\n  \"additional_kwargs\": {},\n  \"response_metadata\": {}\n}"
+            },
+            "matchingColumns": [
+              "id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "session_id",
+                "displayName": "session_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "message",
+                "displayName": "message",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "object",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          912,
+          304
+        ],
+        "id": "234a4bf8-7cce-46b8-9f58-eb75a2bafd85",
+        "name": "save memory messages1",
+        "credentials": {
+          "postgres": {
+            "id": "b4afdLbWtbWNdNMp",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "sanitize",
+          "text": "={{ conversation in JSON.parse($json.messages).data.message ? JSON.parse($json.messages).data.message.conversation : \"\"}}",
+          "guardrails": {
+            "pii": {
+              "value": {
+                "type": "all"
+              }
+            },
+            "secretKeys": {
+              "value": {
+                "permissiveness": "balanced"
+              }
+            }
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.guardrails",
+        "typeVersion": 2,
+        "position": [
+          640,
+          304
+        ],
+        "id": "4db83336-56e1-4228-84c3-291af98f826a",
+        "name": "Guardrails1"
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "messages",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          -32,
+          240
+        ],
+        "id": "22e194e7-fb0f-4659-95c1-8e2272095327",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nlet body = JSON.parse($('Redis Delete1').first().json.messages[$('Redis Delete1').first().json.messages.length - 1])\nbody.should_reply = true\nreturn {\"body\": body};\n  \n  // .toJsonString()"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          640,
+          96
+        ],
+        "id": "69fda3c1-b05d-40e3-bfc0-4f8c2bb9de8e",
+        "name": "Code in JavaScript1"
+      }
+    ],
+    "connections": {
+      "Redis Push buffer1": {
+        "main": [
+          [
+            {
+              "node": "Redis Get buffer1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Redis Get buffer1": {
+        "main": [
+          [
+            {
+              "node": "Switch4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait buffer1": {
+        "main": [
+          [
+            {
+              "node": "Redis Get buffer1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Redis Delete1": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch4": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Redis Delete1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Wait buffer1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Data nomalize1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "save body in whatsapp_messages",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Respond to Webhook": {
+        "main": [
+          []
+        ]
+      },
+      "Data nomalize1": {
+        "main": [
+          [
+            {
+              "node": "Redis Push buffer1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Guardrails1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Guardrails1": {
+        "main": [
+          [
+            {
+              "node": "save memory messages1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "save memory messages1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript1": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Francisco Fiorentino",
+    "name": "Version a117abf8",
+    "description": ""
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-01-02T18:06:44.373Z",
+      "createdAt": "2026-01-02T18:06:44.373Z",
+      "id": "j5nYIs86m0bTs5P8",
+      "name": "Endpoint"
+    }
+  ]
+}
