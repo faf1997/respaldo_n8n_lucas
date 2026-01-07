@@ -1,0 +1,30 @@
+{
+  "updatedAt": "2026-01-02T18:13:42.000Z",
+  "createdAt": "2026-01-02T18:12:44.929Z",
+  "id": "PiEVeKPfgN1E3fbO",
+  "name": "prueba",
+  "active": false,
+  "isArchived": true,
+  "nodes": [],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "1f90d477-9e4f-46d7-b11b-27cf623334c1",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-02T18:12:44.940Z",
+      "createdAt": "2026-01-02T18:12:44.940Z",
+      "role": "workflow:owner",
+      "workflowId": "PiEVeKPfgN1E3fbO",
+      "projectId": "Ts2xaK8jD6HfpDh3"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
