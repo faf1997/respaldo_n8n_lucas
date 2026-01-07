@@ -1,0 +1,241 @@
+{
+  "updatedAt": "2026-01-05T17:54:15.302Z",
+  "createdAt": "2026-01-05T06:13:52.776Z",
+  "id": "9XTwunCCW92hHpv9",
+  "name": "python_runner_api",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        16,
+        -48
+      ],
+      "id": "1d92f211-6539-4419-b37e-79fa10d9ce55",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "command": "ping produ_python_runner:8000"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        224,
+        -240
+      ],
+      "id": "ad167524-fc29-43df-9682-7c747858b737",
+      "name": "Execute Command",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://produ_python_runner:8000/execute",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "script",
+              "value": "=\n\ndef main():\n  return {\"ok\": [i for i in range(5)], \"id\": 7}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        224,
+        -48
+      ],
+      "id": "fe8cf767-4c8a-42dc-bd69-11d56cbc9bf3",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "7xRj4yTDXKIaFr6q",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://produ_python_runner:8000/execute",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "script",
+              "value": "=import xlsxwriter\nimport base64\nimport json\nfrom io import BytesIO\n\ndef create_excel_from_json(data):\n    output = BytesIO()\n    workbook = xlsxwriter.Workbook(output, {'in_memory': True})\n    worksheet = workbook.add_worksheet(data[\"hoja\"])\n    \n    # Formato del encabezado\n    header_format = workbook.add_format({\n        'bold': True,\n        'bg_color': data[\"formato\"][\"colorEncabezado\"],\n        'font_name': data[\"formato\"][\"fuente\"],\n        'font_size': data[\"formato\"][\"tamañoFuente\"]\n    })\n\n    # Escribir encabezados\n    for col, key in enumerate(data[\"columnas\"]):\n        worksheet.write(0, col, key, header_format)\n        worksheet.set_column(col, col, data[\"columnas\"][key])\n\n    # Escribir datos y aplicar alturas de filas\n    for row_idx, row in enumerate(data[\"datos\"], start=1):\n        for col_idx, key in enumerate(data[\"columnas\"]):\n            worksheet.write(row_idx, col_idx, row.get(key, \"\"))\n    \n    # Aplicar alturas de fila\n    for fila in data.get(\"filas\", []):\n        indice = fila[\"indice\"]\n        altura = fila[\"altura\"]\n        worksheet.set_row(indice, altura)\n\n    workbook.close()\n    \n    # Obtener el contenido del archivo en base64\n    output.seek(0)\n    return base64.b64encode(output.read()).decode('utf-8')\n\ndef main():\n    # Aquí usarías la estructura JSON que definimos\n    json_data = {\n        \"hoja\": \"Clientes\",\n        \"formato\": {\n            \"colorEncabezado\": \"#FFDD00\",\n            \"fuente\": \"Arial\",\n            \"tamañoFuente\": 12\n        },\n        \"columnas\": {\n            \"nombre\": 20,\n            \"edad\": 10,\n            \"ciudad\": 15\n        },\n        \"filas\": [\n            {\"indice\": 1, \"altura\": 25},\n            {\"indice\": 2, \"altura\": 18},\n            {\"indice\": 3, \"altura\": 22}\n        ],\n        \"datos\": [\n            {\"nombre\": \"Juan Pérez\", \"edad\": 30, \"ciudad\": \"Buenos Aires\"},\n            {\"nombre\": \"Ana López\", \"edad\": 25, \"ciudad\": \"Córdoba\"}\n        ]\n    }\n\n    # Generar el Excel y devolverlo en base64\n    return json.dumps({\"b64\": create_excel_from_json(json_data), \"bool\": False})"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        144,
+        -464
+      ],
+      "id": "4771a462-566e-41a5-a39d-343dbe017a33",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "7xRj4yTDXKIaFr6q",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## estructura de datos para crear excel\n\n{\n  \"hoja\": \"Clientes\",\n  \"formato\": {\n    \"colorEncabezado\": \"#FFDD00\",\n    \"fuente\": \"Arial\",\n    \"tamañoFuente\": 12\n  },\n  \"columnas\": {\n    \"nombre\": 20,\n    \"edad\": 10,\n    \"ciudad\": 15\n  },\n  \"filas\": [\n    {\"indice\": 1, \"altura\": 25},\n    {\"indice\": 2, \"altura\": 18},\n    {\"indice\": 3, \"altura\": 22}\n  ],\n  \"datos\": [\n    {\"nombre\": \"Juan Pérez\", \"edad\": 30, \"ciudad\": \"Buenos Aires\"},\n    {\"nombre\": \"Ana López\", \"edad\": 25, \"ciudad\": \"Córdoba\"}\n  ]\n}",
+        "height": 528,
+        "width": 800
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -880,
+        -528
+      ],
+      "typeVersion": 1,
+      "id": "4a9a51cd-6328-4f92-a0e5-21b3d967dcb4",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"result\": {{JSON.parse($json.main_result)}}\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        352,
+        -464
+      ],
+      "id": "81127ce1-dee5-47e3-8d71-6987feb09ca4",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://produ_python_runner:8000/execute",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "script",
+              "value": "=import base64\nimport json\nfrom io import BytesIO\nimport xlsxwriter\n\n\ndef _a1_to_row_col(a1):\n    a1 = a1.strip().upper()\n    col_part = \"\"\n    row_part = \"\"\n    for ch in a1:\n        if \"A\" <= ch <= \"Z\":\n            col_part += ch\n        elif \"0\" <= ch <= \"9\":\n            row_part += ch\n    col = 0\n    for ch in col_part:\n        col = col * 26 + (ord(ch) - ord(\"A\") + 1)\n    col -= 1\n    row = int(row_part) - 1\n    return row, col\n\n\ndef create_excel_from_json(payload):\n    output = BytesIO()\n    workbook = xlsxwriter.Workbook(output, {\"in_memory\": True})\n\n    sheets = payload.get(\"workbook\", {}).get(\"sheets\", [])\n    for sheet in sheets:\n        sheet_name = sheet.get(\"name\") or \"Sheet1\"\n        worksheet = workbook.add_worksheet(sheet_name)\n\n        header_row_index = sheet.get(\"header_row_index\", 0)\n        columns = sheet.get(\"columns\", [])\n        data_rows = sheet.get(\"data\", [])\n\n        col_keys = [c.get(\"key\") for c in columns if c.get(\"key\") is not None]\n\n        for col_idx, col_def in enumerate(columns):\n            width = col_def.get(\"width\")\n            if isinstance(width, (int, float)):\n                worksheet.set_column(col_idx, col_idx, float(width))\n\n        for rh in sheet.get(\"row_heights\", []):\n            r = rh.get(\"row_index\")\n            h = rh.get(\"height\")\n            if isinstance(r, int) and isinstance(h, (int, float)):\n                worksheet.set_row(r, float(h))\n\n        for col_idx, key in enumerate(col_keys):\n            worksheet.write(header_row_index, col_idx, key)\n\n        start_row = header_row_index + 1\n        for i, row_dict in enumerate(data_rows):\n            r = start_row + i\n            for col_idx, key in enumerate(col_keys):\n                val = \"\"\n                if isinstance(row_dict, dict):\n                    val = row_dict.get(key, \"\")\n                worksheet.write(r, col_idx, val)\n\n        for note in sheet.get(\"notes\", []):\n            cell = note.get(\"cell\")\n            value = note.get(\"value\", \"\")\n            if cell:\n                r, c = _a1_to_row_col(cell)\n                worksheet.write(r, c, value)\n\n    workbook.close()\n    output.seek(0)\n    return base64.b64encode(output.read()).decode(\"utf-8\")\n\ndef main():\n\n    json_data = {\n    \"workbook\": {\n        \"sheets\": [\n            {\n                \"name\": \"Casos\",\n                \"header_row_index\": 2,\n                \"columns\": [\n                    {\n                        \"key\": \"Hilo de conversación\",\n                        \"width\": 30.0,\n                    },\n                    {\n                        \"key\": \"Pregutas\",\n                        \"width\": 13.0,\n                    },\n                    {\n                        \"key\": \"Respuesta esperada\",\n                        \"width\": 41.13,\n                    },\n                    {\n                        \"key\": \"Aclaraciones/Observaciones\",\n                        \"width\": 34.25,\n                    },\n                ],\n                \"row_heights\": [\n                    {\n                        \"row_index\": 3,\n                        \"height\": 41.25,\n                    },\n                ],\n                \"data\": [\n                    {\n                        \"Hilo de conversación\": \"conjunto de preguntas y respuestas para los casos de test\",\n                        \"Pregutas\": \"pregunta del caso de prueba\",\n                        \"Respuesta esperada\": \"Respuesta esperada del agente\",\n                        \"Aclaraciones/Observaciones\": \"Descripciones y detalles a contemplar a modo de guía para tomar el agente en odoo u otro servicio/sistema si corresponde\",\n                    },\n                    {\n                        \"Hilo de conversación\": \"ejemplo 1\",\n                        \"Pregutas\": \"hola, quiero mi estado de cuenta\",\n                        \"Respuesta esperada\": \"¡Hola, María! Claro 🙂\\nTu estado de cuenta es:\\n\\nFactura FA-C 00001-00000412 — $ 52.300 — Vence 25/11/2025 — Pendiente\",\n                        \"Aclaraciones/Observaciones\": None,\n                    },\n                    {\n                        \"Hilo de conversación\": \"ejemplo 1\",\n                        \"Pregutas\": \"Hola. Hay un error, esa deuda de $ 52.300 no corresponde\",\n                        \"Respuesta esperada\": \"Entendido, María. Para ayudarte, ¿podés indicarme el número de factura o algún dato de referencia?\\nAsí lo revisamos y registramos el reclamo.\",\n                        \"Aclaraciones/Observaciones\": \"Debe crearse un ticket/reclamo al responsable (pero el agente no debe solucionar el inconveniete)\",\n                    },\n                    {\n                        \"Hilo de conversación\": \"ejemplo 1\",\n                        \"Pregutas\": \"Es la FA-C 00001-00000412. La pagamos el 11/10/2025\",\n                        \"Respuesta esperada\": \"Gracias por el dato.\\n¿Tenés el comprobante o captura del pago? Si me lo enviás, lo adjunto al reclamo para acelerar la revisión.\",\n                        \"Aclaraciones/Observaciones\": \"Pedir comprobante de pago para adjuntarlo al reclamo.\",\n                    },\n                    {\n                        \"Hilo de conversación\": \"ejemplo 1\",\n                        \"Pregutas\": \"<Envio del archivo>\",\n                        \"Respuesta esperada\": \"Gracias, ya recibí el comprobante.\\nRegistré el reclamo y lo envié al área de cobranzas para revisión.\\nTe aviso apenas tenga una actualización.\",\n                        \"Aclaraciones/Observaciones\": \"El agente debe enviar el archivo y pedir que cobranzas revise el error\",\n                    },\n                ],\n                \"notes\": [\n                    {\n                        \"cell\": \"A1\",\n                        \"value\": \"Video explicativo de como completar la Planilla: https://kommodo.ai/recordings/vrtSXYQX5RQk0FUpwDnJ\",\n                    },\n                ],\n            },\n        ],\n    },\n}\n\n    # Generar el Excel y devolverlo en base64\n    return json.dumps(\n      {\n        \"b64\": create_excel_from_json(json_data),\n        \"mime_type\": \"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet\",\n        \"file_name\": \"casos de prueba.xlsx\"\n      }\n)"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        864,
+        -144
+      ],
+      "id": "323df4f7-778b-4035-834e-7b12e72188d8",
+      "name": "HTTP Request2",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "7xRj4yTDXKIaFr6q",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"result\": {{JSON.parse($json.main_result)}}\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1104,
+        -144
+      ],
+      "id": "4a429ea2-f097-4e04-bdc8-ab8d44658575",
+      "name": "Edit Fields1"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "cda5abcf-8cff-45cd-862f-9d9ca50eaf17",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-05T06:13:52.786Z",
+      "createdAt": "2026-01-05T06:13:52.786Z",
+      "role": "workflow:owner",
+      "workflowId": "9XTwunCCW92hHpv9",
+      "projectId": "Ts2xaK8jD6HfpDh3"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
