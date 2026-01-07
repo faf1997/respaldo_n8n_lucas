@@ -1,0 +1,1843 @@
+{
+  "updatedAt": "2026-01-07T15:53:17.673Z",
+  "createdAt": "2025-12-23T13:51:51.854Z",
+  "id": "GfgcdVG5VN8tJXo7",
+  "name": "Agente Ventas",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "==== COMIENZO DEL PROMPT ===\n\n# IDENTIDAD\nSos un asistente de ventas humano y profesional.\nRepresentás al equipo comercial de la empresa (por ejemplo: Hitofusion).\n\nTu forma de comunicarte debe ser:\n- natural\n- profesional\n- tranquila\n- cercana\nComo una persona real con experiencia en ventas.\n\nNo hablás como un robot.\nNo explicás procesos internos.\nNo justificás por qué hacés preguntas.\n\n---\n\n# OBJETIVO\nMantener una conversación comercial natural para:\n- entender qué necesita el usuario\n- identificar el tipo de sistema\n- avanzar paso a paso hacia una reunión con un humano de ventas\n\nNO das soporte técnico.\nNO hacés consultoría profunda.\nNO hablás de precios ni tiempos en esta etapa.\n\n---\n\n# REGLA FUNDAMENTAL\nPrimero escuchás.\nDespués preguntás.\nRecién más adelante se coordina reunión.\n\nNunca hables de:\n- “orientarte”\n- “dimensionar”\n- “estimar”\nen el primer contacto si el usuario solo saludó.\n\n---\n\n# FORMATO DE SALIDA (OBLIGATORIO)\nTu salida DEBE ser SOLO un JSON válido (sin texto extra, sin markdown).\nDebe tener exactamente estas claves:\nmessage, next_action, collected, missing, handoff_ready\n\nEstructura:\n{\n  \"message\": \"texto listo para WhatsApp\",\n  \"next_action\": \"ask\" | \"schedule\" | \"handoff\" | \"none\" | \"error\",\n  \"collected\": { ... },\n  \"missing\": [ ... ],\n  \"handoff_ready\": true | false\n}\n\n---\n\n# MEMORIA / ESTADO (PARA NO REPREGUNTAR)\nVas a recibir (si existe) un objeto llamado state_collected con datos ya guardados previamente.\nTambién vas a recibir required_fields (lista de campos mínimos).\n\nReglas de estado:\n1) Partí de collected = state_collected (si no existe, {}).\n2) Sumá SOLO lo que el usuario diga explícitamente en este mensaje (sin inventar).\n3) missing = required_fields que todavía no estén en collected.\n\n---\n\n# REGLA DE PREGUNTAS (SIN TIEMPOS)\n- No preguntes tiempos ni “para cuándo”.\n- Máximo 1 pregunta por mensaje.\n- Si falta algo (missing no vacío): preguntá SOLO por el primer campo faltante, simple y directo.\n- Si no falta nada (missing vacío): next_action=\"schedule\" y handoff_ready=true.\n\n---\n\n# MANEJO DEL PRIMER MENSAJE\n## Si el usuario SOLO saluda\nRespondé simple y humano. Máximo 1 pregunta.\n\nEjemplo:\n“Hola, ¿cómo estás? Soy parte del equipo de ventas de Hitofusion.\nContame, ¿en qué puedo ayudarte?”\n\nEn este caso:\n- next_action=\"ask\"\n- collected={}\n- missing debe incluir lo que falte según required_fields\n\n---\n\n# CIERRE\nSi ya está listo para avanzar (missing vacío):\n- proponé coordinar reunión con un asesor humano\n- sin prometer horarios exactos\n\n---\n\n# ESTILO\n- Mensajes cortos\n- Lenguaje natural\n- WhatsApp friendly\n- *Negrita* solo cuando suma claridad\n\n=== FIN DEL PROMPT ===\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -96,
+        352
+      ],
+      "id": "f8eac5db-c70a-4e71-83af-2a039d5b9611",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        -2352,
+        192
+      ],
+      "id": "d4f65e1a-2939-43da-a5fa-138c9a30cf39",
+      "name": "Date & Time"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -1984,
+        384
+      ],
+      "id": "89094426-b318-48a0-9cab-119e69ba0483",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8eab2d58-46eb-4bbf-b768-3b38949842bd",
+              "leftValue": "={{$json.body.data.key.fromMe}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -3808,
+        400
+      ],
+      "id": "01ea5ae9-8ef6-4a2e-ad6c-6e54137cedd8",
+      "name": "If Filtrar fromMe"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data normalize').item.json.evo_api_host }}/message/sendText/{{ $('Data normalize').item.json.evo_api_instance }}\n",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data normalize').item.json.evo_api_key.trim() }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json; charset=UTF-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Data normalize').item.json.remoteJid.split(\"@\")[0] }}"
+            },
+            {
+              "name": "text",
+              "value": "={{$json.data.message}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        752,
+        640
+      ],
+      "id": "1f071a64-d5c7-444d-8ec2-48fe9adc2dc9",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "Agente Ventas",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -4064,
+        400
+      ],
+      "id": "36aa7be2-4f56-4e2a-8eee-35745f72ec8d",
+      "name": "Webhook",
+      "webhookId": "87388688-21dc-42f2-84be-822fea2515ba"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9b961717-a4f1-4848-9a95-07f6a2370c33",
+              "leftValue": "={{ $json.body.should_reply }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1760,
+        384
+      ],
+      "id": "bc5ce232-059a-4836-b45c-7b93709e88c6",
+      "name": "If"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -1472,
+        608
+      ],
+      "id": "c8ed99e3-60ab-4e52-a767-cc718a2cca7c",
+      "name": "Exit"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.body.data.message.conversation }}",
+        "guardrails": {
+          "keywords": "",
+          "secretKeys": {
+            "value": {
+              "permissiveness": "balanced"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.guardrails",
+      "typeVersion": 2,
+      "position": [
+        -1472,
+        368
+      ],
+      "id": "fbcbb0b3-13d2-44cc-8c7c-ef618cc762f1",
+      "name": "Guardrails"
+    },
+    {
+      "parameters": {
+        "content": "## Diccionario \nvariables",
+        "height": 304,
+        "width": 160,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -3568,
+        272
+      ],
+      "typeVersion": 1,
+      "id": "9b06e199-a3f1-46b2-ac99-3df7f4af751b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "agent_config",
+          "mode": "list",
+          "cachedResultName": "agent_config"
+        },
+        "limit": 1,
+        "where": {
+          "values": [
+            {
+              "column": "evo_api_instance",
+              "value": "={{ $json.evo_api_instance }}"
+            },
+            {
+              "column": "is_active",
+              "value": "true"
+            }
+          ]
+        },
+        "combineConditions": "OR",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3280,
+        288
+      ],
+      "id": "7756833c-0679-42d8-8f48-d997b87cd2ae",
+      "name": "Devuelve Config",
+      "credentials": {
+        "postgres": {
+          "id": "b4afdLbWtbWNdNMp",
+          "name": "Postgres account"
+        }
+      },
+      "notes": "Este nodo selecciona, de la columna correcta, datos como nombre de empresa, nombre de la instancia/agente y demas campos que van a formar la configuracion del agente.s"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"remoteJid\": \"{{ $json.body.data.key.remoteJid }}\",\n  \"remoteJidAlt\": \"{{ $json.body.data.key.remoteJidAlt }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n  \"id\": \"{{$json.body.data.key.id}}\",\n  \"evo_api_host\":\"{{ $json.body.server_url }}\",\n  \"evo_api_instance\":\"{{ $json.body.instance }}\",\n  \"evo_api_key\": \"{{ $json.body.apikey }}\",\n  \"body\": {{ $json.body }},\n  \"db_identity_key\": {{ $('Webhook').item.json.body.instance }}\n}\n ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3536,
+        416
+      ],
+      "id": "c942b0e9-9aa6-435a-a477-7761a78fea54",
+      "name": "Data normalize"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -3024,
+        400
+      ],
+      "id": "bd51b871-9422-4e4b-87bf-3ab58de6e6f3",
+      "name": "MergePostgres-DataNorm"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT db_name\nFROM tenants\nWHERE db_identify = $1\n  AND status = 'active'\nLIMIT 1;\n",
+        "options": {
+          "queryReplacement": "={{$json.db_identity_key}}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -2480,
+        1008
+      ],
+      "id": "c9d0ff70-2b3f-45f8-862e-88e4288a75fc",
+      "name": "Tenant",
+      "credentials": {
+        "postgres": {
+          "id": "zgjgMcykoy2dacf3",
+          "name": "Postgres account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://n8n.hitofusion.frandev.com.ar/webhook/redis_endpoint_for_whatsapp",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "db_identity_key",
+              "value": "={{ $('Data normalize').item.json.db_identity_key }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.body.toJsonString() }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2752,
+        400
+      ],
+      "id": "6eddcf22-990b-4546-a310-529da7ff7752",
+      "name": "Redis memory endpoint1"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"additionalProperties\": false,\n  \"required\": [\"message\", \"next_action\", \"collected\", \"missing\", \"handoff_ready\"],\n  \"properties\": {\n    \"message\": { \"type\": \"string\", \"minLength\": 1 },\n    \"next_action\": { \"type\": \"string\", \"enum\": [\"ask\", \"schedule\", \"handoff\", \"none\", \"error\"] },\n    \"collected\": { \"type\": \"object\" },\n    \"missing\": { \"type\": \"array\", \"items\": { \"type\": \"string\", \"minLength\": 1 } },\n    \"handoff_ready\": { \"type\": \"boolean\" }\n  }\n}\n",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        560
+      ],
+      "id": "35698e12-3d49-4bbc-b010-a83d2dfb96f8",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        560
+      ],
+      "id": "7a2e7484-21af-49b5-8f44-8b6816a9dd39",
+      "name": "DeepSeek Chat Model",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "1WRUh77hDpUB41ry",
+          "name": "DeepSeek fran"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        64,
+        736
+      ],
+      "id": "1632cddd-0b21-4993-9f5a-de44a93ddfaf",
+      "name": "DeepSeek Chat Model1",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "1WRUh77hDpUB41ry",
+          "name": "DeepSeek fran"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT state_collected\nFROM public.agent_conversation_state\nWHERE instance = $1\n  AND remote_jid = $2\nLIMIT 1;",
+        "options": {
+          "queryReplacement": "={{ $('Webhook').item.json.body.instance }},{{ $('Webhook').item.json.body.data.key.remoteJid }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -768,
+        368
+      ],
+      "id": "bd05bb84-7e17-419e-8440-5b2683ed5134",
+      "name": "Load State",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "b4afdLbWtbWNdNMp",
+          "name": "Postgres account"
+        }
+      },
+      "notes": "Busca en la base si ese chat ya tenía datos cargados antes.\nPermite que el agente no repregunte lo que el usuario ya respondió en mensajes anteriores."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6ff894b5-eca1-4f06-8d70-ddd040033cf9",
+              "name": "user_text",
+              "value": "={{ $('MergePostgres-DataNorm').item.json.body.data.message.conversation }}",
+              "type": "string"
+            },
+            {
+              "id": "9231def7-b5fd-4b01-8047-d9f3c0a2221f",
+              "name": "remoteJid",
+              "value": "={{ $('MergePostgres-DataNorm').item.json.body.data.key.remoteJid }}",
+              "type": "string"
+            },
+            {
+              "id": "d246f723-312f-473c-a18b-10d44ec4b1b4",
+              "name": "config_ref",
+              "value": "default",
+              "type": "string"
+            },
+            {
+              "id": "75841e55-ef6f-4827-85f6-7012693516f2",
+              "name": "required_fields",
+              "value": "[\"service\",\"use_case\"]",
+              "type": "array"
+            },
+            {
+              "id": "f0976c0c-919f-4ef1-a2fe-1d895e53716f",
+              "name": "state_collected",
+              "value": "={{ $json.state_collected || {} }}",
+              "type": "object"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1104,
+        368
+      ],
+      "id": "39f2747c-f12b-4e9f-96f1-438d54859af2",
+      "name": "Campos requeridos"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://n8n.hitofusion.frandev.com.ar/webhook/send_message_for_whatsapp",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message",
+              "value": "={{ $('AI Agent').item.json.output.message.toJsonString() }}"
+            },
+            {
+              "name": "remoteJid",
+              "value": "={{ $('AI Agent').item.json.output.message.toJsonString() }}"
+            },
+            {
+              "name": "sender",
+              "value": "={{ $('Data normalize').item.json.sender.toJsonString() }}"
+            },
+            {
+              "name": "evo_api_host",
+              "value": "={{ $('Data normalize').item.json.evo_api_host.toJsonString() }}"
+            },
+            {
+              "name": "evo_api_instance",
+              "value": "={{ $('Data normalize').item.json.evo_api_instance.toJsonString() }}"
+            },
+            {
+              "name": "evo_api_key",
+              "value": "={{ $('Data normalize').item.json.evo_api_key.toJsonString() }}"
+            },
+            {
+              "name": "db_identity_key",
+              "value": "={{ $('Data normalize').item.json.db_identity_key.toJsonString() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        768,
+        352
+      ],
+      "id": "031ae76b-c74f-48d2-8764-819cada2b1a5",
+      "name": "send message4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "593d75c5-9c0d-45c0-be42-c7662c2b73dc",
+              "name": "state_collected",
+              "value": "={{ {} }}",
+              "type": "object"
+            },
+            {
+              "id": "155f042b-ec0e-420b-b4b4-3c28d6ea73ff",
+              "name": "required_fields",
+              "value": "[\"service\",\"use_case\"]",
+              "type": "array"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -768,
+        192
+      ],
+      "id": "b8680670-0e0e-4604-b7f8-b5faf0d2a544",
+      "name": "Default State"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -368,
+        352
+      ],
+      "id": "79f6e9a6-c2c0-4968-bdb1-5573d76508dc",
+      "name": "Merge State"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO public.agent_conversation_state\n(instance, remote_jid, config_ref, state_collected, updated_at)\nVALUES ($1, $2, $3, $4::jsonb, now())\nON CONFLICT (instance, remote_jid, config_ref)\nDO UPDATE SET\n  state_collected = public.agent_conversation_state.state_collected || EXCLUDED.state_collected,\n  updated_at = now();",
+        "options": {
+          "queryReplacement": "={{ $('Data normalize').item.json.body.instance }},{{ $('Data normalize').item.json.remoteJid }},{{ $json.config_ref || 'default' }},{{ JSON.stringify($json.output.collected || {}) }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        480,
+        352
+      ],
+      "id": "2708f95c-00e8-418c-af16-457c9f46b5b3",
+      "name": "Upsert State",
+      "credentials": {
+        "postgres": {
+          "id": "b4afdLbWtbWNdNMp",
+          "name": "Postgres account"
+        }
+      },
+      "notes": "Guarda o actualiza los datos detectados (collected) para ese chat.\nAsí el estado se actualiza y pisa keys repetidas con lo nuevo. Eso es lo que evita repreguntas.\n"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Data normalize').item.json.body.data.key.remoteJid }}",
+        "contextWindowLength": 100
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        -80,
+        560
+      ],
+      "id": "d02012b6-921a-4da6-9a82-72d22e05a8e0",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "b4afdLbWtbWNdNMp",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Upsert State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Filtrar fromMe": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Data normalize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If Filtrar fromMe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Guardrails",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Exit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guardrails": {
+      "main": [
+        [
+          {
+            "node": "Campos requeridos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Devuelve Config": {
+      "main": [
+        [
+          {
+            "node": "MergePostgres-DataNorm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data normalize": {
+      "main": [
+        [
+          {
+            "node": "MergePostgres-DataNorm",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Devuelve Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MergePostgres-DataNorm": {
+      "main": [
+        [
+          {
+            "node": "Redis memory endpoint1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tenant": {
+      "main": [
+        []
+      ]
+    },
+    "Redis memory endpoint1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Structured Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load State": {
+      "main": [
+        [
+          {
+            "node": "Merge State",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Campos requeridos": {
+      "main": [
+        [
+          {
+            "node": "Load State",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Default State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send message4": {
+      "main": [
+        []
+      ]
+    },
+    "Default State": {
+      "main": [
+        [
+          {
+            "node": "Merge State",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge State": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert State": {
+      "main": [
+        [
+          {
+            "node": "send message4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "timezone": "America/Argentina/Buenos_Aires",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "produ-n8n.qojds3.easypanel.host",
+            "user-agent": "axios/1.13.2",
+            "content-length": "1578",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "content-type": "application/json",
+            "x-forwarded-for": "172.18.0.1",
+            "x-forwarded-host": "produ-n8n.qojds3.easypanel.host",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "23b292eae554",
+            "x-real-ip": "172.18.0.1"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "event": "messages.upsert",
+            "instance": "Agente Ventas",
+            "data": {
+              "key": {
+                "remoteJid": "5493412739739@s.whatsapp.net",
+                "remoteJidAlt": "5493412739739@s.whatsapp.net",
+                "fromMe": false,
+                "id": "3EB028FEC959F2A7AF2438",
+                "participant": "",
+                "addressingMode": "lid"
+              },
+              "pushName": "Genaro García",
+              "status": "DELIVERY_ACK",
+              "message": {
+                "conversation": "hola, buenas tardes",
+                "messageContextInfo": {
+                  "threadId": [],
+                  "deviceListMetadata": {
+                    "senderKeyIndexes": [],
+                    "recipientKeyIndexes": [],
+                    "senderKeyHash": {
+                      "0": 177,
+                      "1": 167,
+                      "2": 66,
+                      "3": 179,
+                      "4": 48,
+                      "5": 18,
+                      "6": 185,
+                      "7": 28,
+                      "8": 151,
+                      "9": 114
+                    },
+                    "senderTimestamp": {
+                      "low": 1767610362,
+                      "high": 0,
+                      "unsigned": true
+                    },
+                    "senderAccountType": 0,
+                    "receiverAccountType": 0,
+                    "recipientKeyHash": {
+                      "0": 27,
+                      "1": 157,
+                      "2": 190,
+                      "3": 232,
+                      "4": 73,
+                      "5": 55,
+                      "6": 25,
+                      "7": 156,
+                      "8": 179,
+                      "9": 217
+                    },
+                    "recipientTimestamp": {
+                      "low": 1766854942,
+                      "high": 0,
+                      "unsigned": true
+                    }
+                  },
+                  "deviceListMetadataVersion": 2,
+                  "messageSecret": {
+                    "0": 138,
+                    "1": 126,
+                    "2": 38,
+                    "3": 203,
+                    "4": 168,
+                    "5": 86,
+                    "6": 217,
+                    "7": 67,
+                    "8": 16,
+                    "9": 44,
+                    "10": 208,
+                    "11": 165,
+                    "12": 178,
+                    "13": 244,
+                    "14": 62,
+                    "15": 151,
+                    "16": 116,
+                    "17": 80,
+                    "18": 85,
+                    "19": 157,
+                    "20": 38,
+                    "21": 200,
+                    "22": 38,
+                    "23": 190,
+                    "24": 24,
+                    "25": 150,
+                    "26": 220,
+                    "27": 117,
+                    "28": 170,
+                    "29": 30,
+                    "30": 172,
+                    "31": 87
+                  },
+                  "limitSharingV2": {
+                    "trigger": 0,
+                    "initiatedByMe": false
+                  }
+                }
+              },
+              "messageType": "conversation",
+              "messageTimestamp": 1767743621,
+              "instanceId": "cb02d646-7b0d-4066-9a9d-f1bb3976874b",
+              "source": "web"
+            },
+            "destination": "https://produ-n8n.qojds3.easypanel.host/webhook/Agente Ventas",
+            "date_time": "2026-01-06T20:53:42.620Z",
+            "sender": "5493446544882@s.whatsapp.net",
+            "server_url": "https://produ-evolution-api.qojds3.easypanel.host",
+            "apikey": "6B07C0F41179-446D-A843-661F35B4F4BD"
+          },
+          "webhookUrl": "https://n8n.hitofusion.frandev.com.ar/webhook/Agente Ventas",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "e8d01dcc-7417-4b6f-a5cb-81840b84bafd",
+  "activeVersionId": "d0e8252a-7fa0-407c-90a0-ab7e6868659e",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-12-23T13:51:51.857Z",
+      "createdAt": "2025-12-23T13:51:51.857Z",
+      "role": "workflow:owner",
+      "workflowId": "GfgcdVG5VN8tJXo7",
+      "projectId": "Ts2xaK8jD6HfpDh3"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-01-07T15:07:01.000Z",
+    "createdAt": "2026-01-07T15:06:58.082Z",
+    "versionId": "d0e8252a-7fa0-407c-90a0-ab7e6868659e",
+    "workflowId": "GfgcdVG5VN8tJXo7",
+    "nodes": [
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=",
+          "hasOutputParser": true,
+          "options": {
+            "systemMessage": "==== COMIENZO DEL PROMPT ===\n\n# IDENTIDAD\nSos un asistente de ventas humano y profesional.\nRepresentás al equipo comercial de la empresa (por ejemplo: Hitofusion).\n\nTu forma de comunicarte debe ser:\n- natural\n- profesional\n- tranquila\n- cercana\nComo una persona real con experiencia en ventas.\n\nNo hablás como un robot.\nNo explicás procesos internos.\nNo justificás por qué hacés preguntas.\n\n---\n\n# OBJETIVO\nMantener una conversación comercial natural para:\n- entender qué necesita el usuario\n- identificar el tipo de sistema\n- avanzar paso a paso hacia una reunión con un humano de ventas\n\nNO das soporte técnico.\nNO hacés consultoría profunda.\nNO hablás de precios ni tiempos en esta etapa.\n\n---\n\n# REGLA FUNDAMENTAL\nPrimero escuchás.\nDespués preguntás.\nRecién más adelante se coordina reunión.\n\nNunca hables de:\n- “orientarte”\n- “dimensionar”\n- “estimar”\nen el primer contacto si el usuario solo saludó.\n\n---\n\n# FORMATO DE SALIDA (OBLIGATORIO)\nTu salida DEBE ser SOLO un JSON válido (sin texto extra, sin markdown).\nDebe tener exactamente estas claves:\nmessage, next_action, collected, missing, handoff_ready\n\nEstructura:\n{\n  \"message\": \"texto listo para WhatsApp\",\n  \"next_action\": \"ask\" | \"schedule\" | \"handoff\" | \"none\" | \"error\",\n  \"collected\": { ... },\n  \"missing\": [ ... ],\n  \"handoff_ready\": true | false\n}\n\n---\n\n# MEMORIA / ESTADO (PARA NO REPREGUNTAR)\nVas a recibir (si existe) un objeto llamado state_collected con datos ya guardados previamente.\nTambién vas a recibir required_fields (lista de campos mínimos).\n\nReglas de estado:\n1) Partí de collected = state_collected (si no existe, {}).\n2) Sumá SOLO lo que el usuario diga explícitamente en este mensaje (sin inventar).\n3) missing = required_fields que todavía no estén en collected.\n\n---\n\n# REGLA DE PREGUNTAS (SIN TIEMPOS)\n- No preguntes tiempos ni “para cuándo”.\n- Máximo 1 pregunta por mensaje.\n- Si falta algo (missing no vacío): preguntá SOLO por el primer campo faltante, simple y directo.\n- Si no falta nada (missing vacío): next_action=\"schedule\" y handoff_ready=true.\n\n---\n\n# MANEJO DEL PRIMER MENSAJE\n## Si el usuario SOLO saluda\nRespondé simple y humano. Máximo 1 pregunta.\n\nEjemplo:\n“Hola, ¿cómo estás? Soy parte del equipo de ventas de Hitofusion.\nContame, ¿en qué puedo ayudarte?”\n\nEn este caso:\n- next_action=\"ask\"\n- collected={}\n- missing debe incluir lo que falte según required_fields\n\n---\n\n# CIERRE\nSi ya está listo para avanzar (missing vacío):\n- proponé coordinar reunión con un asesor humano\n- sin prometer horarios exactos\n\n---\n\n# ESTILO\n- Mensajes cortos\n- Lenguaje natural\n- WhatsApp friendly\n- *Negrita* solo cuando suma claridad\n\n=== FIN DEL PROMPT ===\n\n"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3,
+        "position": [
+          -96,
+          352
+        ],
+        "id": "f8eac5db-c70a-4e71-83af-2a039d5b9611",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.dateTime",
+        "typeVersion": 2,
+        "position": [
+          -2352,
+          192
+        ],
+        "id": "d4f65e1a-2939-43da-a5fa-138c9a30cf39",
+        "name": "Date & Time"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -1984,
+          384
+        ],
+        "id": "89094426-b318-48a0-9cab-119e69ba0483",
+        "name": "Merge"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "8eab2d58-46eb-4bbf-b768-3b38949842bd",
+                "leftValue": "={{$json.body.data.key.fromMe}}",
+                "rightValue": true,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          -3808,
+          400
+        ],
+        "id": "01ea5ae9-8ef6-4a2e-ad6c-6e54137cedd8",
+        "name": "If Filtrar fromMe"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "={{ $('Data normalize').item.json.evo_api_host }}/message/sendText/{{ $('Data normalize').item.json.evo_api_instance }}\n",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "={{ $('Data normalize').item.json.evo_api_key.trim() }}"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json; charset=UTF-8"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "number",
+                "value": "={{ $('Data normalize').item.json.remoteJid.split(\"@\")[0] }}"
+              },
+              {
+                "name": "text",
+                "value": "={{$json.data.message}}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          752,
+          640
+        ],
+        "id": "1f071a64-d5c7-444d-8ec2-48fe9adc2dc9",
+        "name": "HTTP Request"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "Agente Ventas",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -4064,
+          400
+        ],
+        "id": "36aa7be2-4f56-4e2a-8eee-35745f72ec8d",
+        "name": "Webhook",
+        "webhookId": "87388688-21dc-42f2-84be-822fea2515ba"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "9b961717-a4f1-4848-9a95-07f6a2370c33",
+                "leftValue": "={{ $json.body.should_reply }}",
+                "rightValue": false,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -1760,
+          384
+        ],
+        "id": "bc5ce232-059a-4836-b45c-7b93709e88c6",
+        "name": "If"
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          -1472,
+          608
+        ],
+        "id": "c8ed99e3-60ab-4e52-a767-cc718a2cca7c",
+        "name": "Exit"
+      },
+      {
+        "parameters": {
+          "text": "={{ $json.body.data.message.conversation }}",
+          "guardrails": {
+            "keywords": "",
+            "secretKeys": {
+              "value": {
+                "permissiveness": "balanced"
+              }
+            }
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.guardrails",
+        "typeVersion": 2,
+        "position": [
+          -1472,
+          368
+        ],
+        "id": "fbcbb0b3-13d2-44cc-8c7c-ef618cc762f1",
+        "name": "Guardrails"
+      },
+      {
+        "parameters": {
+          "content": "## Diccionario \nvariables",
+          "height": 304,
+          "width": 160,
+          "color": 3
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -3568,
+          272
+        ],
+        "typeVersion": 1,
+        "id": "9b06e199-a3f1-46b2-ac99-3df7f4af751b",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "agent_config",
+            "mode": "list",
+            "cachedResultName": "agent_config"
+          },
+          "limit": 1,
+          "where": {
+            "values": [
+              {
+                "column": "evo_api_instance",
+                "value": "={{ $json.evo_api_instance }}"
+              },
+              {
+                "column": "is_active",
+                "value": "true"
+              }
+            ]
+          },
+          "combineConditions": "OR",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -3280,
+          288
+        ],
+        "id": "7756833c-0679-42d8-8f48-d997b87cd2ae",
+        "name": "Devuelve Config",
+        "credentials": {
+          "postgres": {
+            "id": "b4afdLbWtbWNdNMp",
+            "name": "Postgres account"
+          }
+        },
+        "notes": "Este nodo selecciona, de la columna correcta, datos como nombre de empresa, nombre de la instancia/agente y demas campos que van a formar la configuracion del agente.s"
+      },
+      {
+        "parameters": {
+          "mode": "raw",
+          "jsonOutput": "={\n  \"remoteJid\": \"{{ $json.body.data.key.remoteJid }}\",\n  \"remoteJidAlt\": \"{{ $json.body.data.key.remoteJidAlt }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n  \"id\": \"{{$json.body.data.key.id}}\",\n  \"evo_api_host\":\"{{ $json.body.server_url }}\",\n  \"evo_api_instance\":\"{{ $json.body.instance }}\",\n  \"evo_api_key\": \"{{ $json.body.apikey }}\",\n  \"body\": {{ $json.body }},\n  \"db_identity_key\": {{ $('Webhook').item.json.body.instance }}\n}\n ",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -3536,
+          416
+        ],
+        "id": "c942b0e9-9aa6-435a-a477-7761a78fea54",
+        "name": "Data normalize"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -3024,
+          400
+        ],
+        "id": "bd51b871-9422-4e4b-87bf-3ab58de6e6f3",
+        "name": "MergePostgres-DataNorm"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT db_name\nFROM tenants\nWHERE db_identify = $1\n  AND status = 'active'\nLIMIT 1;\n",
+          "options": {
+            "queryReplacement": "={{$json.db_identity_key}}"
+          }
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -2480,
+          1008
+        ],
+        "id": "c9d0ff70-2b3f-45f8-862e-88e4288a75fc",
+        "name": "Tenant",
+        "credentials": {
+          "postgres": {
+            "id": "zgjgMcykoy2dacf3",
+            "name": "Postgres account 2"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://n8n.hitofusion.frandev.com.ar/webhook/redis_endpoint_for_whatsapp",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "db_identity_key",
+                "value": "={{ $('Data normalize').item.json.db_identity_key }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json.body.toJsonString() }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          -2752,
+          400
+        ],
+        "id": "6eddcf22-990b-4546-a310-529da7ff7752",
+        "name": "Redis memory endpoint1"
+      },
+      {
+        "parameters": {
+          "schemaType": "manual",
+          "inputSchema": "{\n  \"type\": \"object\",\n  \"additionalProperties\": false,\n  \"required\": [\"message\", \"next_action\", \"collected\", \"missing\", \"handoff_ready\"],\n  \"properties\": {\n    \"message\": { \"type\": \"string\", \"minLength\": 1 },\n    \"next_action\": { \"type\": \"string\", \"enum\": [\"ask\", \"schedule\", \"handoff\", \"none\", \"error\"] },\n    \"collected\": { \"type\": \"object\" },\n    \"missing\": { \"type\": \"array\", \"items\": { \"type\": \"string\", \"minLength\": 1 } },\n    \"handoff_ready\": { \"type\": \"boolean\" }\n  }\n}\n",
+          "autoFix": true
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.3,
+        "position": [
+          64,
+          560
+        ],
+        "id": "35698e12-3d49-4bbc-b010-a83d2dfb96f8",
+        "name": "Structured Output Parser"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+        "typeVersion": 1,
+        "position": [
+          -240,
+          560
+        ],
+        "id": "7a2e7484-21af-49b5-8f44-8b6816a9dd39",
+        "name": "DeepSeek Chat Model",
+        "credentials": {
+          "deepSeekApi": {
+            "id": "1WRUh77hDpUB41ry",
+            "name": "DeepSeek fran"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+        "typeVersion": 1,
+        "position": [
+          64,
+          736
+        ],
+        "id": "1632cddd-0b21-4993-9f5a-de44a93ddfaf",
+        "name": "DeepSeek Chat Model1",
+        "credentials": {
+          "deepSeekApi": {
+            "id": "1WRUh77hDpUB41ry",
+            "name": "DeepSeek fran"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT state_collected\nFROM public.agent_conversation_state\nWHERE instance = $1\n  AND remote_jid = $2\nLIMIT 1;",
+          "options": {
+            "queryReplacement": "={{ $('Webhook').item.json.body.instance }},{{ $('Webhook').item.json.body.data.key.remoteJid }}"
+          }
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -768,
+          368
+        ],
+        "id": "bd05bb84-7e17-419e-8440-5b2683ed5134",
+        "name": "Load State",
+        "alwaysOutputData": true,
+        "credentials": {
+          "postgres": {
+            "id": "b4afdLbWtbWNdNMp",
+            "name": "Postgres account"
+          }
+        },
+        "notes": "Busca en la base si ese chat ya tenía datos cargados antes.\nPermite que el agente no repregunte lo que el usuario ya respondió en mensajes anteriores."
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "6ff894b5-eca1-4f06-8d70-ddd040033cf9",
+                "name": "user_text",
+                "value": "={{ $('MergePostgres-DataNorm').item.json.body.data.message.conversation }}",
+                "type": "string"
+              },
+              {
+                "id": "9231def7-b5fd-4b01-8047-d9f3c0a2221f",
+                "name": "remoteJid",
+                "value": "={{ $('MergePostgres-DataNorm').item.json.body.data.key.remoteJid }}",
+                "type": "string"
+              },
+              {
+                "id": "d246f723-312f-473c-a18b-10d44ec4b1b4",
+                "name": "config_ref",
+                "value": "default",
+                "type": "string"
+              },
+              {
+                "id": "75841e55-ef6f-4827-85f6-7012693516f2",
+                "name": "required_fields",
+                "value": "[\"service\",\"use_case\"]",
+                "type": "array"
+              },
+              {
+                "id": "f0976c0c-919f-4ef1-a2fe-1d895e53716f",
+                "name": "state_collected",
+                "value": "={{ $json.state_collected || {} }}",
+                "type": "object"
+              }
+            ]
+          },
+          "includeOtherFields": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -1104,
+          368
+        ],
+        "id": "39f2747c-f12b-4e9f-96f1-438d54859af2",
+        "name": "Campos requeridos"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://n8n.hitofusion.frandev.com.ar/webhook/send_message_for_whatsapp",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"message\": {{ $json.output.message.toJsonString() }},\n  \"remoteJid\": {{ $('Data normalize').item.json.remoteJid.toJsonString() }},\n  \"sender\": {{ $('Data normalize').item.json.sender.toJsonString() }},\n\n  \"evo_api_host\": {{ $('Data normalize').item.json.evo_api_host.toJsonString() }},\n  \"evo_api_instance\": {{ $('Data normalize').item.json.evo_api_instance.toJsonString() }},\n  \"evo_api_key\": {{ $('Data normalize').item.json.evo_api_key.toJsonString() }},\n\n  \"db_identity_key\": {{ $('Data normalize').item.json.db_identity_key.toJsonString() }}\n}\n",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          768,
+          352
+        ],
+        "id": "031ae76b-c74f-48d2-8764-819cada2b1a5",
+        "name": "send message4"
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "593d75c5-9c0d-45c0-be42-c7662c2b73dc",
+                "name": "state_collected",
+                "value": "={{ {} }}",
+                "type": "object"
+              },
+              {
+                "id": "155f042b-ec0e-420b-b4b4-3c28d6ea73ff",
+                "name": "required_fields",
+                "value": "[\"service\",\"use_case\"]",
+                "type": "array"
+              }
+            ]
+          },
+          "includeOtherFields": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          -768,
+          192
+        ],
+        "id": "b8680670-0e0e-4604-b7f8-b5faf0d2a544",
+        "name": "Default State"
+      },
+      {
+        "parameters": {
+          "mode": "combine",
+          "combineBy": "combineByPosition",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.merge",
+        "typeVersion": 3.2,
+        "position": [
+          -368,
+          352
+        ],
+        "id": "79f6e9a6-c2c0-4968-bdb1-5573d76508dc",
+        "name": "Merge State"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "INSERT INTO public.agent_conversation_state\n(instance, remote_jid, config_ref, state_collected, updated_at)\nVALUES ($1, $2, $3, $4::jsonb, now())\nON CONFLICT (instance, remote_jid, config_ref)\nDO UPDATE SET\n  state_collected = public.agent_conversation_state.state_collected || EXCLUDED.state_collected,\n  updated_at = now();\n",
+          "options": {
+            "queryReplacement": "={{ $('Data normalize').item.json.body.instance }},{{ $('Data normalize').item.json.remoteJid }},{{$json.config_ref}},{{ JSON.stringify($json.output.collected || {}) }}"
+          }
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          480,
+          352
+        ],
+        "id": "2708f95c-00e8-418c-af16-457c9f46b5b3",
+        "name": "Upsert State",
+        "credentials": {
+          "postgres": {
+            "id": "b4afdLbWtbWNdNMp",
+            "name": "Postgres account"
+          }
+        },
+        "notes": "Guarda o actualiza los datos detectados (collected) para ese chat.\nAsí el estado se actualiza y pisa keys repetidas con lo nuevo. Eso es lo que evita repreguntas.\n"
+      }
+    ],
+    "connections": {
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Upsert State",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Date & Time": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If Filtrar fromMe": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Data normalize",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "If Filtrar fromMe",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Guardrails",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Exit",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Guardrails": {
+        "main": [
+          [
+            {
+              "node": "Campos requeridos",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Devuelve Config": {
+        "main": [
+          [
+            {
+              "node": "MergePostgres-DataNorm",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Data normalize": {
+        "main": [
+          [
+            {
+              "node": "MergePostgres-DataNorm",
+              "type": "main",
+              "index": 1
+            },
+            {
+              "node": "Devuelve Config",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "MergePostgres-DataNorm": {
+        "main": [
+          [
+            {
+              "node": "Redis memory endpoint1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tenant": {
+        "main": [
+          []
+        ]
+      },
+      "Redis memory endpoint1": {
+        "main": [
+          [
+            {
+              "node": "Merge",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "DeepSeek Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "DeepSeek Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Structured Output Parser",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Load State": {
+        "main": [
+          [
+            {
+              "node": "Merge State",
+              "type": "main",
+              "index": 1
+            }
+          ]
+        ]
+      },
+      "Campos requeridos": {
+        "main": [
+          [
+            {
+              "node": "Load State",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Default State",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "send message4": {
+        "main": [
+          []
+        ]
+      },
+      "Default State": {
+        "main": [
+          [
+            {
+              "node": "Merge State",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Merge State": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Upsert State": {
+        "main": [
+          [
+            {
+              "node": "send message4",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Francisco Fiorentino",
+    "name": "Version d0e8252a",
+    "description": ""
+  },
+  "tags": [
+    {
+      "updatedAt": "2025-12-27T18:34:03.820Z",
+      "createdAt": "2025-12-27T18:34:03.820Z",
+      "id": "jtI4yXmoFxaMrTIn",
+      "name": "CHatBot"
+    },
+    {
+      "updatedAt": "2025-12-27T18:33:55.590Z",
+      "createdAt": "2025-12-27T18:33:55.590Z",
+      "id": "sVWerFCjZ0Jn4heL",
+      "name": "Ventas"
+    }
+  ]
+}
