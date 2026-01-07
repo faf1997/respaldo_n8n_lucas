@@ -1,0 +1,1174 @@
+{
+  "updatedAt": "2026-01-07T14:22:58.426Z",
+  "createdAt": "2025-12-26T17:44:17.314Z",
+  "id": "c1XDmCsXI0JVI8O0",
+  "name": "send message for whatsapp - endpoint",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "send_message_for_whatsapp",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        16,
+        96
+      ],
+      "id": "cd5c12db-c3d7-4987-bb77-d0d17ef2ca2b",
+      "name": "Webhook",
+      "webhookId": "2fed1a4c-01ac-4e91-a33a-dfaeb131fbf8",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"message\": \"{{ $json.body.message }}\",\n  \"remoteJid\": \"{{ $json.body.remoteJid }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n\n  \"evo_api_host\":\"https://evolutionapi.easypanel.frandev.com.ar\",\n  \"evo_api_instance\":\"{{ $json.body.evo_api_instance }}\",\n  \"evo_api_key\": \"{{ $json.body.evo_api_key }}\",\n  \"db_identity_key\": \"{{ $json.body.db_identity_key }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        224,
+        96
+      ],
+      "id": "2654c69b-bf5c-49b2-8338-308913eba9b8",
+      "name": "Data nomalize1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize1').item.json.evo_api_host.trim() }}/message/sendText/{{ $('Data nomalize1').item.json.evo_api_instance }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize1').item.json.evo_api_key.trim() }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json; charset=UTF-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Data nomalize1').item.json.remoteJid.split(\"@\")[0] }}"
+            },
+            {
+              "name": "=text",
+              "value": "={{ $json.message }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        800,
+        208
+      ],
+      "id": "50dfb25b-b25f-4ad1-a96a-f31618c0bc73",
+      "name": "send message3"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "whatsapp_messages",
+          "mode": "list",
+          "cachedResultName": "whatsapp_messages"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "data": "={\n  \"key\": {{ $json.body.key.toJsonString() }},\n  \"pushName\": \"{{ $json.body.pushName }}\",\n  \"message\": {{ $json.body.message.toJsonString() }},\n  \"contextInfo\": {{ $json.body.contextInfo.toJsonString() }},\n  \"messageType\": \"{{ $json.body.messageType }}\",\n  \"instanceId\": \"{{ $json.body.instanceId }}\",\n  \"source\": \"{{ $json.body.source }}\"\n}",
+            "db_identity_key": "={{ $('Data nomalize1').item.json.db_identity_key }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "db_identity_key",
+              "displayName": "db_identity_key",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1216,
+        192
+      ],
+      "id": "bcf63701-3907-4b6e-8abb-08e1fdc23371",
+      "name": "Insert rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "b4afdLbWtbWNdNMp",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "empty",
+                      "singleValue": true
+                    },
+                    "id": "fdc4907e-ff8d-47f3-b5ff-462e2e7778d2"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "b428873c-0c86-4089-bcfb-bd0dc7e0607d",
+                    "leftValue": "={{ $json.remoteJid }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c5f6c8e6-fb27-4eb3-a17d-ac42cf835f5e",
+                    "leftValue": "={{ $json.sender }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "d9d2ec05-2c56-4d2d-90c4-9be23597f999",
+                    "leftValue": "={{ $json.evo_api_host }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "1bc3295e-09a9-4fda-9dc7-bb185bc06ab3",
+                    "leftValue": "={{ $json.evo_api_instance }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "42915082-d941-4fef-95c0-132a351a650a",
+                    "leftValue": "={{ $json.evo_api_key }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "2e756c62-7a14-4876-8af5-8b87da755a2c",
+                    "leftValue": "={{ $json.db_identity_key }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "continue"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "ff9d3089-b8c1-48d5-bc63-56a0c7362b2c",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9a76120e-f61b-4f15-b093-72c620458bf8",
+              "leftValue": "={{ $json.statusCode !== 201}}",
+              "rightValue": 0,
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1008,
+        208
+      ],
+      "id": "c436aa31-09b1-420e-9441-26b45ab8db26",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1440,
+        192
+      ],
+      "id": "1f208f6e-30b5-4da0-b5a2-310cbc3e4d3f",
+      "name": "Respond status code 200"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": "={{ $('send message3').item.json.statusCode }}",
+          "responseKey": "no se pudo enviar el mensaje por whatsapp"
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1216,
+        336
+      ],
+      "id": "dd91e83c-9f1b-460f-ba09-134a5e41c185",
+      "name": "Respond no send message"
+    },
+    {
+      "parameters": {
+        "options": {
+          "responseCode": 400,
+          "responseKey": "=debe completar todos los campos del json para enviar una respuesta en texto por whatsapp:\n{\n  \"message\": \"{{ $('Data nomalize1').item.json.message }}\",\n  \"remoteJid\": \"{{ $('Data nomalize1').item.json.remoteJid }}\",\n  \"sender\": \"{{ $('Data nomalize1').item.json.sender }}\",\n\n  \"evo_api_host\":\"https://evolutionapi.easypanel.frandev.com.ar\",\n  \"evo_api_instance\":\"{{ $('Data nomalize1').item.json.evo_api_instance }}\",\n  \"evo_api_key\": \"{{ $('Data nomalize1').item.json.evo_api_key }}\",\n  \"db_identity_key\": \"{{ $('Data nomalize1').item.json.db_identity_key }}\"\n}"
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        800,
+        0
+      ],
+      "id": "83cb94b0-ab52-4182-b31a-245d693ff86c",
+      "name": "Respond status code 400"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Data nomalize1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data nomalize1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "send message3": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Respond status code 400",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond status code 400",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond status code 400",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond status code 400",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond status code 400",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond status code 400",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond status code 400",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "send message3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert rows in a table": {
+      "main": [
+        [
+          {
+            "node": "Respond status code 200",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Insert rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond no send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.hitofusion.frandev.com.ar",
+            "user-agent": "axios/1.12.0",
+            "content-length": "918",
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "content-type": "application/json",
+            "x-forwarded-for": "172.18.0.1",
+            "x-forwarded-host": "n8n.hitofusion.frandev.com.ar",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "23b292eae554",
+            "x-real-ip": "172.18.0.1"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "message": "Perfecto! Aquí tienes la planilla Excel (xlsx) con los casos de conversación para el Agente de Tickets Etapa 1. Esta planilla contiene 15 casos de prueba que cubren todos los flujos principales del sistema.\n\n**📋 Contenido del archivo:**\n- 15 casos de conversación detallados\n- Columnas: Hilo de conversación, Pregunta, Respuesta esperada, Aclaraciones/Observaciones\n- Casos que cubren: registro, consultas, creación de tickets, manejo de grupos, sincronización con Odoo\n\n**📥 Para descargar:** [casos_conversacion_agente_tickets.xlsx]\n\n¿Necesitas que agregue algún caso adicional o modifique alguno existente?",
+            "remoteJid": "5491150023292@s.whatsapp.net",
+            "sender": "5491157389737@s.whatsapp.net",
+            "evo_api_host": "https://evolutionapi.easypanel.frandev.com.ar",
+            "evo_api_instance": "mi_numero_de_hito_agente",
+            "evo_api_key": "679817054255-4166-A114-15DC0737F0C9",
+            "db_identity_key": "postgres"
+          },
+          "webhookUrl": "https://n8n.hitofusion.frandev.com.ar/webhook/send_message_for_whatsapp",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "versionId": "52d914ae-514d-440c-93ce-1467839ec140",
+  "activeVersionId": "52d914ae-514d-440c-93ce-1467839ec140",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2025-12-26T17:44:17.344Z",
+      "createdAt": "2025-12-26T17:44:17.344Z",
+      "role": "workflow:owner",
+      "workflowId": "c1XDmCsXI0JVI8O0",
+      "projectId": "Ts2xaK8jD6HfpDh3"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-01-07T14:23:01.000Z",
+    "createdAt": "2026-01-07T14:22:58.427Z",
+    "versionId": "52d914ae-514d-440c-93ce-1467839ec140",
+    "workflowId": "c1XDmCsXI0JVI8O0",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "send_message_for_whatsapp",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          16,
+          96
+        ],
+        "id": "cd5c12db-c3d7-4987-bb77-d0d17ef2ca2b",
+        "name": "Webhook",
+        "webhookId": "2fed1a4c-01ac-4e91-a33a-dfaeb131fbf8",
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "mode": "raw",
+          "jsonOutput": "={\n  \"message\": \"{{ $json.body.message }}\",\n  \"remoteJid\": \"{{ $json.body.remoteJid }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n\n  \"evo_api_host\":\"https://evolutionapi.easypanel.frandev.com.ar\",\n  \"evo_api_instance\":\"{{ $json.body.evo_api_instance }}\",\n  \"evo_api_key\": \"{{ $json.body.evo_api_key }}\",\n  \"db_identity_key\": \"{{ $json.body.db_identity_key }}\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          224,
+          96
+        ],
+        "id": "2654c69b-bf5c-49b2-8338-308913eba9b8",
+        "name": "Data nomalize1"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "={{ $('Data nomalize1').item.json.evo_api_host.trim() }}/message/sendText/{{ $('Data nomalize1').item.json.evo_api_instance }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "={{ $('Data nomalize1').item.json.evo_api_key.trim() }}"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json; charset=UTF-8"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "number",
+                "value": "={{ $('Data nomalize1').item.json.remoteJid.split(\"@\")[0] }}"
+              },
+              {
+                "name": "=text",
+                "value": "={{ $json.message }}"
+              }
+            ]
+          },
+          "options": {
+            "response": {
+              "response": {
+                "fullResponse": true,
+                "responseFormat": "json"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          800,
+          208
+        ],
+        "id": "50dfb25b-b25f-4ad1-a96a-f31618c0bc73",
+        "name": "send message3"
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "whatsapp_messages",
+            "mode": "list",
+            "cachedResultName": "whatsapp_messages"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "data": "={\n  \"key\": {{ $json.body.key.toJsonString() }},\n  \"pushName\": \"{{ $json.body.pushName }}\",\n  \"message\": {{ $json.body.message.toJsonString() }},\n  \"contextInfo\": {{ $json.body.contextInfo.toJsonString() }},\n  \"messageType\": \"{{ $json.body.messageType }}\",\n  \"instanceId\": \"{{ $json.body.instanceId }}\",\n  \"source\": \"{{ $json.body.source }}\"\n}",
+              "db_identity_key": "={{ $('Data nomalize1').item.json.db_identity_key }}"
+            },
+            "matchingColumns": [
+              "id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "created_at",
+                "displayName": "created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "data",
+                "displayName": "data",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "object",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "db_identity_key",
+                "displayName": "db_identity_key",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          1216,
+          192
+        ],
+        "id": "bcf63701-3907-4b6e-8abb-08e1fdc23371",
+        "name": "Insert rows in a table",
+        "credentials": {
+          "postgres": {
+            "id": "b4afdLbWtbWNdNMp",
+            "name": "Postgres account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.message }}",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "empty",
+                        "singleValue": true
+                      },
+                      "id": "fdc4907e-ff8d-47f3-b5ff-462e2e7778d2"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "b428873c-0c86-4089-bcfb-bd0dc7e0607d",
+                      "leftValue": "={{ $json.remoteJid }}",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "c5f6c8e6-fb27-4eb3-a17d-ac42cf835f5e",
+                      "leftValue": "={{ $json.sender }}",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "d9d2ec05-2c56-4d2d-90c4-9be23597f999",
+                      "leftValue": "={{ $json.evo_api_host }}",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "1bc3295e-09a9-4fda-9dc7-bb185bc06ab3",
+                      "leftValue": "={{ $json.evo_api_instance }}",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "42915082-d941-4fef-95c0-132a351a650a",
+                      "leftValue": "={{ $json.evo_api_key }}",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "2e756c62-7a14-4876-8af5-8b87da755a2c",
+                      "leftValue": "={{ $json.db_identity_key }}",
+                      "rightValue": "",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {
+            "fallbackOutput": "extra",
+            "renameFallbackOutput": "continue"
+          }
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          416,
+          0
+        ],
+        "id": "ff9d3089-b8c1-48d5-bc63-56a0c7362b2c",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "loose",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "9a76120e-f61b-4f15-b093-72c620458bf8",
+                "leftValue": "={{ $json.statusCode !== 201}}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "false",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "looseTypeValidation": true,
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          1008,
+          208
+        ],
+        "id": "c436aa31-09b1-420e-9441-26b45ab8db26",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "options": {
+            "responseCode": 200
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          1440,
+          192
+        ],
+        "id": "1f208f6e-30b5-4da0-b5a2-310cbc3e4d3f",
+        "name": "Respond status code 200"
+      },
+      {
+        "parameters": {
+          "options": {
+            "responseCode": "={{ $('send message3').item.json.statusCode }}",
+            "responseKey": "no se pudo enviar el mensaje por whatsapp"
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          1216,
+          336
+        ],
+        "id": "dd91e83c-9f1b-460f-ba09-134a5e41c185",
+        "name": "Respond no send message"
+      },
+      {
+        "parameters": {
+          "options": {
+            "responseCode": 400,
+            "responseKey": "=debe completar todos los campos del json para enviar una respuesta en texto por whatsapp:\n{\n  \"message\": \"{{ $('Data nomalize1').item.json.message }}\",\n  \"remoteJid\": \"{{ $('Data nomalize1').item.json.remoteJid }}\",\n  \"sender\": \"{{ $('Data nomalize1').item.json.sender }}\",\n\n  \"evo_api_host\":\"https://evolutionapi.easypanel.frandev.com.ar\",\n  \"evo_api_instance\":\"{{ $('Data nomalize1').item.json.evo_api_instance }}\",\n  \"evo_api_key\": \"{{ $('Data nomalize1').item.json.evo_api_key }}\",\n  \"db_identity_key\": \"{{ $('Data nomalize1').item.json.db_identity_key }}\"\n}"
+          }
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.5,
+        "position": [
+          800,
+          0
+        ],
+        "id": "83cb94b0-ab52-4182-b31a-245d693ff86c",
+        "name": "Respond status code 400"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Data nomalize1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Data nomalize1": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "send message3": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Respond status code 400",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Respond status code 400",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Respond status code 400",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Respond status code 400",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Respond status code 400",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Respond status code 400",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Respond status code 400",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "send message3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Insert rows in a table": {
+        "main": [
+          [
+            {
+              "node": "Respond status code 200",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Insert rows in a table",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Respond no send message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Francisco Fiorentino",
+    "name": "Version 52d914ae",
+    "description": ""
+  },
+  "tags": [
+    {
+      "updatedAt": "2026-01-02T18:06:44.373Z",
+      "createdAt": "2026-01-02T18:06:44.373Z",
+      "id": "j5nYIs86m0bTs5P8",
+      "name": "Endpoint"
+    }
+  ]
+}
