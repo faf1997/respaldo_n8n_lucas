@@ -1,0 +1,1080 @@
+{
+  "updatedAt": "2026-01-07T20:09:21.070Z",
+  "createdAt": "2026-01-07T19:30:13.423Z",
+  "id": "HeNpreZ6NXNk2aS0",
+  "name": "BackUp de N8N a GitHub",
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "### PASO 1: Obten los archivos desde Github",
+        "height": 236,
+        "width": 380,
+        "color": 5
+      },
+      "id": "6d1f3028-88ae-4b88-aa35-377f02ae2e68",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1280,
+        192
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### PASO 2: Obten lo flujos de tu n8n",
+        "height": 236,
+        "width": 684,
+        "color": 3
+      },
+      "id": "262dd544-c563-4705-88a1-81dfc660e3b6",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -880,
+        192
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### PASO 3: Lleva los flujos, nuevos o no, a GitHub",
+        "height": 284,
+        "width": 1180,
+        "color": 4
+      },
+      "id": "4a7fcc2a-e641-48fb-91f1-3cb30c0cd3fd",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -176,
+        208
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1488,
+        384
+      ],
+      "id": "9b0073d1-3e40-4454-9cd8-cf65cdfab19a",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "list",
+        "owner": {
+          "__rl": true,
+          "value": "faf1997",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "respaldo_n8n_lucas",
+          "mode": "list",
+          "cachedResultName": "respaldo_n8n_lucas",
+          "cachedResultUrl": "https://github.com/faf1997/respaldo_n8n_lucas"
+        },
+        "filePath": "="
+      },
+      "id": "4627c094-0e7b-45d9-af6f-8ab7c030d436",
+      "name": "Enlista los archivos del repositorio",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        -1280,
+        -112
+      ],
+      "webhookId": "354d699e-44b0-4444-9d31-af7fd4ff5561",
+      "typeVersion": 1,
+      "alwaysOutputData": true,
+      "credentials": {
+        "githubApi": {
+          "id": "PcYzKdigIDlV4PzO",
+          "name": "GitHub account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "name"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "efd7aa68-5cf4-411a-9aab-28e73dde635d",
+      "name": "Junta",
+      "type": "n8n-nodes-base.aggregate",
+      "position": [
+        -1024,
+        256
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "filters": {},
+        "requestOptions": {}
+      },
+      "id": "d5061d3a-d9ee-4a6a-a4ff-de1e4eee2aa5",
+      "name": "Obten los flujos de tu n8n",
+      "type": "n8n-nodes-base.n8n",
+      "position": [
+        -800,
+        256
+      ],
+      "typeVersion": 1,
+      "credentials": {
+        "n8nApi": {
+          "id": "fs7oj4vHzRRCOhwZ",
+          "name": "n8n account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "mode": "each",
+        "options": {
+          "format": true
+        }
+      },
+      "id": "fd3f1c5e-1605-42dc-93ed-ad8c0101f114",
+      "name": "Convierte a .JSON",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        -576,
+        256
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "id": "a20408f4-6b85-43c2-b92f-2dfc369a2e18",
+      "name": "A base64",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        -352,
+        256
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fe4a36ef-9f04-40e3-99bd-cc517a49b440",
+              "name": "commitDate",
+              "type": "string",
+              "value": "={{ $now.format('dd-MM-yyyy/H:mm') }}"
+            },
+            {
+              "id": "b0fe1bcc-e79c-4a6b-b8b4-44222c8bf4e8",
+              "name": "fileName",
+              "type": "string",
+              "value": "={{ $('Obten los flujos de tu n8n').item.json.name.replace(/\\s+/g, '-').toLowerCase() }}-{{ $('Obten los flujos de tu n8n').item.json.tags[0].name }}.json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9d296048-e81a-4f71-87dc-312259825861",
+      "name": "Commit Fecha + Nombre de archivo",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -128,
+        256
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "5a619d55-af20-428e-96bd-0c19d50380ba",
+      "name": "Separa de 1 en 1",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [
+        128,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $('Junta').item.json.name }}",
+              "operation": "contains",
+              "value2": "={{ $('Obten los flujos de tu n8n').item.json.name.replace(/\\s+/g, '-').toLowerCase() }}-{{ $('Obten los flujos de tu n8n').item.json.tags[0].name }}.json"
+            }
+          ]
+        }
+      },
+      "id": "87d87b5b-432d-4271-8282-8492596ece0f",
+      "name": "¿El archivo ya está respaldado?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        352,
+        240
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "value": "faf1997",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "respaldo_n8n_lucas",
+          "mode": "list",
+          "cachedResultName": "respaldo_n8n_lucas",
+          "cachedResultUrl": "https://github.com/faf1997/respaldo_n8n_lucas"
+        },
+        "filePath": "={{ $('Obten los flujos de tu n8n').item.json.name.replace(/\\s+/g, '-').toLowerCase() }}-{{ $('Obten los flujos de tu n8n').item.json.tags[0].name }}.json",
+        "fileContent": "={{ $('A base64').item.json.data }}",
+        "commitMessage": "=backup-{{ $('Commit Fecha + Nombre de archivo').item.json.commitDate }}"
+      },
+      "id": "8c5f4b86-b364-4715-b911-1deea91c55e3",
+      "name": "Actualizar archivo",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        768,
+        272
+      ],
+      "webhookId": "27218087-8df7-474d-a39f-70cfa9c34ec8",
+      "typeVersion": 1,
+      "credentials": {
+        "githubApi": {
+          "id": "PcYzKdigIDlV4PzO",
+          "name": "GitHub account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "owner": {
+          "__rl": true,
+          "value": "faf1997",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "respaldo_n8n_lucas",
+          "mode": "list",
+          "cachedResultName": "respaldo_n8n_lucas",
+          "cachedResultUrl": "https://github.com/faf1997/respaldo_n8n_lucas"
+        },
+        "filePath": "={{ $('Obten los flujos de tu n8n').item.json.name.replace(/\\s+/g, '-').toLowerCase() }}-{{ $('Obten los flujos de tu n8n').item.json.tags[0].name }}.json",
+        "fileContent": "={{ $('A base64').item.json.data }}",
+        "commitMessage": "=backup-{{ $node['Commit Fecha + Nombre de archivo'].json.commitDate }}"
+      },
+      "id": "35a79971-f659-4edc-be96-bf47f439da26",
+      "name": "Subir Archivo",
+      "type": "n8n-nodes-base.github",
+      "position": [
+        544,
+        304
+      ],
+      "webhookId": "ce4b561b-acb9-4cd8-b76f-4928dada9674",
+      "typeVersion": 1,
+      "credentials": {
+        "githubApi": {
+          "id": "PcYzKdigIDlV4PzO",
+          "name": "GitHub account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "id": "df341ab3-0370-4129-81cb-2768198755c8",
+      "name": "Schedule Trigger1",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -1488,
+        208
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "list",
+        "owner": {
+          "__rl": true,
+          "value": "faf1997",
+          "mode": "list",
+          "cachedResultName": "faf1997",
+          "cachedResultUrl": "https://github.com/faf1997"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "respaldo_n8n_lucas",
+          "mode": "list",
+          "cachedResultName": "respaldo_n8n_lucas",
+          "cachedResultUrl": "https://github.com/faf1997/respaldo_n8n_lucas"
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        -1216,
+        272
+      ],
+      "id": "ea8d1b6b-edce-420c-9e77-dfda695ead67",
+      "name": "List files",
+      "webhookId": "b5fa983d-9f81-4969-941b-84fe790fa64d",
+      "credentials": {
+        "githubApi": {
+          "id": "PcYzKdigIDlV4PzO",
+          "name": "GitHub account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "List files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enlista los archivos del repositorio": {
+      "main": [
+        []
+      ]
+    },
+    "Junta": {
+      "main": [
+        [
+          {
+            "node": "Obten los flujos de tu n8n",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obten los flujos de tu n8n": {
+      "main": [
+        [
+          {
+            "node": "Convierte a .JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convierte a .JSON": {
+      "main": [
+        [
+          {
+            "node": "A base64",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "A base64": {
+      "main": [
+        [
+          {
+            "node": "Commit Fecha + Nombre de archivo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Commit Fecha + Nombre de archivo": {
+      "main": [
+        [
+          {
+            "node": "Separa de 1 en 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Separa de 1 en 1": {
+      "main": [
+        [
+          {
+            "node": "¿El archivo ya está respaldado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿El archivo ya está respaldado?": {
+      "main": [
+        [
+          {
+            "node": "Actualizar archivo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Subir Archivo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Actualizar archivo": {
+      "main": [
+        [
+          {
+            "node": "Separa de 1 en 1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Separa de 1 en 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Subir Archivo": {
+      "main": [
+        [
+          {
+            "node": "Separa de 1 en 1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Separa de 1 en 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "List files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List files": {
+      "main": [
+        [
+          {
+            "node": "Junta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": {
+    "node:Schedule Trigger1": {
+      "recurrenceRules": []
+    }
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "When clicking ‘Execute workflow’": [
+      {
+        "json": {}
+      }
+    ]
+  },
+  "versionId": "bd2943e7-0385-484c-909d-78f1ffd29d0f",
+  "activeVersionId": "bd2943e7-0385-484c-909d-78f1ffd29d0f",
+  "triggerCount": 1,
+  "shared": [
+    {
+      "updatedAt": "2026-01-07T19:30:13.430Z",
+      "createdAt": "2026-01-07T19:30:13.430Z",
+      "role": "workflow:owner",
+      "workflowId": "HeNpreZ6NXNk2aS0",
+      "projectId": "Ts2xaK8jD6HfpDh3"
+    }
+  ],
+  "activeVersion": {
+    "updatedAt": "2026-01-07T20:09:24.000Z",
+    "createdAt": "2026-01-07T20:09:21.072Z",
+    "versionId": "bd2943e7-0385-484c-909d-78f1ffd29d0f",
+    "workflowId": "HeNpreZ6NXNk2aS0",
+    "nodes": [
+      {
+        "parameters": {
+          "content": "### PASO 1: Obten los archivos desde Github",
+          "height": 236,
+          "width": 380,
+          "color": 5
+        },
+        "id": "6d1f3028-88ae-4b88-aa35-377f02ae2e68",
+        "name": "Sticky Note1",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -1280,
+          192
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "content": "### PASO 2: Obten lo flujos de tu n8n",
+          "height": 236,
+          "width": 684,
+          "color": 3
+        },
+        "id": "262dd544-c563-4705-88a1-81dfc660e3b6",
+        "name": "Sticky Note2",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -880,
+          192
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "content": "### PASO 3: Lleva los flujos, nuevos o no, a GitHub",
+          "height": 284,
+          "width": 1180,
+          "color": 4
+        },
+        "id": "4a7fcc2a-e641-48fb-91f1-3cb30c0cd3fd",
+        "name": "Sticky Note3",
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          -176,
+          208
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.manualTrigger",
+        "typeVersion": 1,
+        "position": [
+          -1488,
+          384
+        ],
+        "id": "9b0073d1-3e40-4454-9cd8-cf65cdfab19a",
+        "name": "When clicking ‘Execute workflow’"
+      },
+      {
+        "parameters": {
+          "resource": "file",
+          "operation": "list",
+          "owner": {
+            "__rl": true,
+            "value": "faf1997",
+            "mode": "name"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "respaldo_n8n_lucas",
+            "mode": "list",
+            "cachedResultName": "respaldo_n8n_lucas",
+            "cachedResultUrl": "https://github.com/faf1997/respaldo_n8n_lucas"
+          },
+          "filePath": "="
+        },
+        "id": "4627c094-0e7b-45d9-af6f-8ab7c030d436",
+        "name": "Enlista los archivos del repositorio",
+        "type": "n8n-nodes-base.github",
+        "position": [
+          -1280,
+          -112
+        ],
+        "webhookId": "354d699e-44b0-4444-9d31-af7fd4ff5561",
+        "typeVersion": 1,
+        "alwaysOutputData": true,
+        "credentials": {
+          "githubApi": {
+            "id": "PcYzKdigIDlV4PzO",
+            "name": "GitHub account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "fieldsToAggregate": {
+            "fieldToAggregate": [
+              {
+                "fieldToAggregate": "name"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "efd7aa68-5cf4-411a-9aab-28e73dde635d",
+        "name": "Junta",
+        "type": "n8n-nodes-base.aggregate",
+        "position": [
+          -1024,
+          256
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "filters": {},
+          "requestOptions": {}
+        },
+        "id": "d5061d3a-d9ee-4a6a-a4ff-de1e4eee2aa5",
+        "name": "Obten los flujos de tu n8n",
+        "type": "n8n-nodes-base.n8n",
+        "position": [
+          -800,
+          256
+        ],
+        "typeVersion": 1,
+        "credentials": {
+          "n8nApi": {
+            "id": "fs7oj4vHzRRCOhwZ",
+            "name": "n8n account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "toJson",
+          "mode": "each",
+          "options": {
+            "format": true
+          }
+        },
+        "id": "fd3f1c5e-1605-42dc-93ed-ad8c0101f114",
+        "name": "Convierte a .JSON",
+        "type": "n8n-nodes-base.convertToFile",
+        "position": [
+          -576,
+          256
+        ],
+        "typeVersion": 1.1
+      },
+      {
+        "parameters": {
+          "operation": "binaryToPropery",
+          "options": {}
+        },
+        "id": "a20408f4-6b85-43c2-b92f-2dfc369a2e18",
+        "name": "A base64",
+        "type": "n8n-nodes-base.extractFromFile",
+        "position": [
+          -352,
+          256
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "fe4a36ef-9f04-40e3-99bd-cc517a49b440",
+                "name": "commitDate",
+                "type": "string",
+                "value": "={{ $now.format('dd-MM-yyyy/H:mm') }}"
+              },
+              {
+                "id": "b0fe1bcc-e79c-4a6b-b8b4-44222c8bf4e8",
+                "name": "fileName",
+                "type": "string",
+                "value": "={{ $('Obten los flujos de tu n8n').item.json.name.replace(/\\s+/g, '-').toLowerCase() }}-{{ $('Obten los flujos de tu n8n').item.json.tags[0].name }}.json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "9d296048-e81a-4f71-87dc-312259825861",
+        "name": "Commit Fecha + Nombre de archivo",
+        "type": "n8n-nodes-base.set",
+        "position": [
+          -128,
+          256
+        ],
+        "typeVersion": 3.4
+      },
+      {
+        "parameters": {
+          "batchSize": 1,
+          "options": {}
+        },
+        "id": "5a619d55-af20-428e-96bd-0c19d50380ba",
+        "name": "Separa de 1 en 1",
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 2,
+        "position": [
+          128,
+          256
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "string": [
+              {
+                "value1": "={{ $('Junta').item.json.name }}",
+                "operation": "contains",
+                "value2": "={{ $('Obten los flujos de tu n8n').item.json.name.replace(/\\s+/g, '-').toLowerCase() }}-{{ $('Obten los flujos de tu n8n').item.json.tags[0].name }}.json"
+              }
+            ]
+          }
+        },
+        "id": "87d87b5b-432d-4271-8282-8492596ece0f",
+        "name": "¿El archivo ya está respaldado?",
+        "type": "n8n-nodes-base.if",
+        "position": [
+          352,
+          240
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "resource": "file",
+          "operation": "edit",
+          "owner": {
+            "__rl": true,
+            "value": "faf1997",
+            "mode": "name"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "respaldo_n8n_lucas",
+            "mode": "list",
+            "cachedResultName": "respaldo_n8n_lucas",
+            "cachedResultUrl": "https://github.com/faf1997/respaldo_n8n_lucas"
+          },
+          "filePath": "={{ $('Obten los flujos de tu n8n').item.json.name.replace(/\\s+/g, '-').toLowerCase() }}-{{ $('Obten los flujos de tu n8n').item.json.tags[0].name }}.json",
+          "fileContent": "={{ $('A base64').item.json.data }}",
+          "commitMessage": "=backup-{{ $('Commit Fecha + Nombre de archivo').item.json.commitDate }}"
+        },
+        "id": "8c5f4b86-b364-4715-b911-1deea91c55e3",
+        "name": "Actualizar archivo",
+        "type": "n8n-nodes-base.github",
+        "position": [
+          768,
+          272
+        ],
+        "webhookId": "27218087-8df7-474d-a39f-70cfa9c34ec8",
+        "typeVersion": 1,
+        "credentials": {
+          "githubApi": {
+            "id": "PcYzKdigIDlV4PzO",
+            "name": "GitHub account"
+          }
+        },
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "resource": "file",
+          "owner": {
+            "__rl": true,
+            "value": "faf1997",
+            "mode": "name"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "respaldo_n8n_lucas",
+            "mode": "list",
+            "cachedResultName": "respaldo_n8n_lucas",
+            "cachedResultUrl": "https://github.com/faf1997/respaldo_n8n_lucas"
+          },
+          "filePath": "={{ $('Obten los flujos de tu n8n').item.json.name.replace(/\\s+/g, '-').toLowerCase() }}-{{ $('Obten los flujos de tu n8n').item.json.tags[0].name }}.json",
+          "fileContent": "={{ $('A base64').item.json.data }}",
+          "commitMessage": "=backup-{{ $node['Commit Fecha + Nombre de archivo'].json.commitDate }}"
+        },
+        "id": "35a79971-f659-4edc-be96-bf47f439da26",
+        "name": "Subir Archivo",
+        "type": "n8n-nodes-base.github",
+        "position": [
+          544,
+          304
+        ],
+        "webhookId": "ce4b561b-acb9-4cd8-b76f-4928dada9674",
+        "typeVersion": 1,
+        "credentials": {
+          "githubApi": {
+            "id": "PcYzKdigIDlV4PzO",
+            "name": "GitHub account"
+          }
+        },
+        "onError": "continueErrorOutput"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {}
+            ]
+          }
+        },
+        "id": "df341ab3-0370-4129-81cb-2768198755c8",
+        "name": "Schedule Trigger1",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "position": [
+          -1488,
+          208
+        ],
+        "typeVersion": 1.2
+      },
+      {
+        "parameters": {
+          "resource": "file",
+          "operation": "list",
+          "owner": {
+            "__rl": true,
+            "value": "faf1997",
+            "mode": "list",
+            "cachedResultName": "faf1997",
+            "cachedResultUrl": "https://github.com/faf1997"
+          },
+          "repository": {
+            "__rl": true,
+            "value": "respaldo_n8n_lucas",
+            "mode": "list",
+            "cachedResultName": "respaldo_n8n_lucas",
+            "cachedResultUrl": "https://github.com/faf1997/respaldo_n8n_lucas"
+          }
+        },
+        "type": "n8n-nodes-base.github",
+        "typeVersion": 1.1,
+        "position": [
+          -1216,
+          272
+        ],
+        "id": "ea8d1b6b-edce-420c-9e77-dfda695ead67",
+        "name": "List files",
+        "webhookId": "b5fa983d-9f81-4969-941b-84fe790fa64d",
+        "credentials": {
+          "githubApi": {
+            "id": "PcYzKdigIDlV4PzO",
+            "name": "GitHub account"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "When clicking ‘Execute workflow’": {
+        "main": [
+          [
+            {
+              "node": "List files",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Enlista los archivos del repositorio": {
+        "main": [
+          []
+        ]
+      },
+      "Junta": {
+        "main": [
+          [
+            {
+              "node": "Obten los flujos de tu n8n",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Obten los flujos de tu n8n": {
+        "main": [
+          [
+            {
+              "node": "Convierte a .JSON",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Convierte a .JSON": {
+        "main": [
+          [
+            {
+              "node": "A base64",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "A base64": {
+        "main": [
+          [
+            {
+              "node": "Commit Fecha + Nombre de archivo",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Commit Fecha + Nombre de archivo": {
+        "main": [
+          [
+            {
+              "node": "Separa de 1 en 1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Separa de 1 en 1": {
+        "main": [
+          [
+            {
+              "node": "¿El archivo ya está respaldado?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "¿El archivo ya está respaldado?": {
+        "main": [
+          [
+            {
+              "node": "Actualizar archivo",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Subir Archivo",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Actualizar archivo": {
+        "main": [
+          [
+            {
+              "node": "Separa de 1 en 1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Separa de 1 en 1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Subir Archivo": {
+        "main": [
+          [
+            {
+              "node": "Separa de 1 en 1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Separa de 1 en 1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger1": {
+        "main": [
+          [
+            {
+              "node": "List files",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "List files": {
+        "main": [
+          [
+            {
+              "node": "Junta",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Francisco Fiorentino",
+    "name": "Version bd2943e7",
+    "description": ""
+  },
+  "tags": []
+}
