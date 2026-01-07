@@ -1,0 +1,42 @@
+{
+  "updatedAt": "2026-01-02T20:39:23.662Z",
+  "createdAt": "2026-01-02T18:32:47.763Z",
+  "id": "bJBC0ZAO8RofFL3E",
+  "name": "agente de cobranzas",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "67994889-4fd2-4ba9-9895-15fb6c68914b",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "connections": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "2c0cbb9d-f310-46be-af88-247aa0cdcb0f",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-02T18:32:47.779Z",
+      "createdAt": "2026-01-02T18:32:47.779Z",
+      "role": "workflow:owner",
+      "workflowId": "bJBC0ZAO8RofFL3E",
+      "projectId": "Ts2xaK8jD6HfpDh3"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
