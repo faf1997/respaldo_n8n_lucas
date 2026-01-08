@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-07T13:47:11.050Z",
+  "updatedAt": "2026-01-08T04:38:09.300Z",
   "createdAt": "2025-12-22T18:38:30.372Z",
   "id": "NFWoraW2iUhGKYcb",
   "name": "agente de requerimientos",
@@ -90,7 +90,7 @@
       "typeVersion": 3.4,
       "position": [
         -496,
-        -16
+        16
       ],
       "id": "85d1496a-90e9-418b-8bc7-72ed9d2b9d18",
       "name": "Data nomalize1"
@@ -105,7 +105,7 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         -528,
-        -160
+        -128
       ],
       "typeVersion": 1,
       "id": "7d5824f6-281c-45bd-bb5d-97586ef822a7",
@@ -118,8 +118,8 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        -224,
-        -128
+        -272,
+        -176
       ],
       "id": "22f70bc7-7ee7-4133-a083-e68756e851fc",
       "name": "Date & Time"
@@ -156,8 +156,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        -224,
-        64
+        -272,
+        16
       ],
       "id": "7f2819f3-0c9f-4458-8472-1433f727c304",
       "name": "Redis memory endpoint"
@@ -243,8 +243,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1968,
-        -624
+        1936,
+        -352
       ],
       "id": "e2b92079-90d3-49b1-8a1c-143097e658a7",
       "name": "doc1"
@@ -256,8 +256,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1968,
-        -464
+        1936,
+        -192
       ],
       "id": "f2df0be5-bed4-4316-a9a1-044c38cd8728",
       "name": "class diagram1"
@@ -269,8 +269,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1968,
-        -304
+        1936,
+        -32
       ],
       "id": "79d1a392-3c89-4129-afd4-4fc22a58ff8f",
       "name": "flowchart1"
@@ -322,8 +322,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        2256,
-        -624
+        2224,
+        -352
       ],
       "id": "ae6e3a9c-7d98-4d4a-9b58-486fae4363d5",
       "name": "If1"
@@ -356,8 +356,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        2256,
-        -464
+        2224,
+        -192
       ],
       "id": "3feea3b4-60a6-440f-84e6-49c9d159a24f",
       "name": "If2"
@@ -390,8 +390,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        2256,
-        -304
+        2224,
+        -32
       ],
       "id": "484d0a1d-d1b2-4b6d-af14-7231fd57186c",
       "name": "If3"
@@ -424,8 +424,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        2256,
-        -144
+        2224,
+        128
       ],
       "id": "01ec7af8-919c-4eab-a8d0-36a38f4f55b0",
       "name": "If4"
@@ -455,8 +455,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2720,
-        -640
+        2688,
+        -368
       ],
       "id": "283ecb4e-f13e-4fb2-b292-4bcc0daa0fde",
       "name": "send doc"
@@ -486,8 +486,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2720,
-        -480
+        2688,
+        -208
       ],
       "id": "83f5a186-fe10-4848-8a5a-60c0ba4fc9b8",
       "name": "send class diagram"
@@ -517,8 +517,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2720,
-        -320
+        2688,
+        -48
       ],
       "id": "5123d5b9-7b58-4bc8-b946-bef7325ecf05",
       "name": "send flowchart"
@@ -792,8 +792,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1408,
-        -304
+        1376,
+        -32
       ],
       "id": "13c7af32-4125-4346-b581-e9d80c23c8fa",
       "name": "send message4"
@@ -805,8 +805,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1968,
-        -144
+        1936,
+        128
       ],
       "id": "3eff1286-15a3-4de5-9e6d-451a25dba3ef",
       "name": "er_diagram"
@@ -836,8 +836,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2720,
-        -160
+        2688,
+        112
       ],
       "id": "9cf64fac-71f5-4e8b-8185-430fc22a2f75",
       "name": "send er_diagram"
@@ -884,8 +884,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2720,
-        0
+        2688,
+        272
       ],
       "id": "36745feb-b692-4fdf-8d16-fdb427f5eca1",
       "name": "send xlsx"
@@ -899,8 +899,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        2480,
-        0
+        2448,
+        272
       ],
       "id": "4524fd0b-6124-4c53-8129-2a8bbef975e3",
       "name": "format data xlsx"
@@ -925,8 +925,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        2256,
-        0
+        2224,
+        272
       ],
       "id": "142335c7-4060-4ec6-8d8a-9ea4e4ba357d",
       "name": "create xlsx in python3",
@@ -965,8 +965,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        1968,
-        16
+        1936,
+        288
       ],
       "id": "36787f32-a38b-4f21-bfb7-765241a85931",
       "name": "If xlsx"
@@ -1519,8 +1519,8 @@
       }
     ]
   },
-  "versionId": "77ecdba3-e329-4e12-b652-9f6bcb7ae4ef",
-  "activeVersionId": "c635c4d5-00cf-4186-99f7-670ca7910a7a",
+  "versionId": "565e9a76-ff35-42ea-a60d-33829c36ca20",
+  "activeVersionId": "565e9a76-ff35-42ea-a60d-33829c36ca20",
   "triggerCount": 2,
   "shared": [
     {
@@ -1532,9 +1532,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-06T15:24:48.000Z",
-    "createdAt": "2026-01-06T15:24:44.952Z",
-    "versionId": "c635c4d5-00cf-4186-99f7-670ca7910a7a",
+    "updatedAt": "2026-01-08T04:38:12.000Z",
+    "createdAt": "2026-01-08T04:38:09.311Z",
+    "versionId": "565e9a76-ff35-42ea-a60d-33829c36ca20",
     "workflowId": "NFWoraW2iUhGKYcb",
     "nodes": [
       {
@@ -1543,7 +1543,7 @@
           "text": "={{ $json.guardrailsInput }}",
           "hasOutputParser": true,
           "options": {
-            "systemMessage": "====SYSTEM PROMPT===\nSos un agente especializado en tomar requerimientos, te basas en el documento IEEE 830.\nTu tarea es armar la documentación de requerimientos IEEE 830, xlsx de casos de conversación (el xlsx solo indica cuando enviar el archivo), diagrama de secuencia, diagrama de entidad relación y diagrama de clases con mermaidchart.\n\n==ejemplo de documento IEEE 830==\n1. Introducción\n1.1 Propósito\n\nDefine para qué sirve el documento, a quién está dirigido (clientes, desarrolladores, testers, PM) y qué decisiones se toman con él.\n\n1.2 Alcance\n\nDescribe qué hace el sistema y qué no, objetivos principales, beneficios y una visión general del producto.\n\n1.3 Definiciones, acrónimos y abreviaturas\n\nLista de términos técnicos, siglas y definiciones necesarias para entender el documento sin ambigüedad.\n\n1.4 Referencias\n\nDocumentos relacionados: contratos, normativas, APIs externas, leyes, estándares, manuales, etc.\n\n1.5 Visión general del documento\n\nExplica cómo está organizado el documento y qué se puede encontrar en cada sección.\n\n2. Descripción general\n2.1 Perspectiva del producto\n\nUbica el sistema dentro de su contexto:\n\nSistema nuevo o extensión\n\nIntegraciones\n\nDependencias externas\n\nRelación con otros sistemas\n\n2.2 Funciones del producto\n\nListado a alto nivel de las funcionalidades principales (sin detalle técnico).\n\n2.3 Características de los usuarios\n\nDescribe los tipos de usuarios, roles, nivel técnico y responsabilidades.\n\n2.4 Restricciones\n\nLimitaciones obligatorias:\n\nTecnológicas\n\nLegales\n\nPresupuestarias\n\nDe hardware o software\n\nDe seguridad\n\n2.5 Suposiciones y dependencias\n\nSupuestos asumidos como ciertos y factores externos que afectan el sistema.\n\n3. Requerimientos específicos\n\nEsta es la sección más importante del documento.\n\n3.1 Requerimientos funcionales\n\nDescribe qué debe hacer el sistema:\n\nAcciones\n\nFlujos\n\nValidaciones\n\nRespuestas ante eventos\nDeben ser claros, medibles y verificables.\n\n3.2 Requerimientos no funcionales\n\nDefine cómo debe comportarse el sistema.\n\n3.2.1 Rendimiento\n\nTiempos de respuesta, concurrencia, volumen de datos, throughput.\n\n3.2.2 Seguridad\n\nAutenticación, autorización, encriptación, auditoría, cumplimiento normativo.\n\n3.2.3 Usabilidad\n\nFacilidad de uso, accesibilidad, idiomas, consistencia visual.\n\n3.2.4 Confiabilidad\n\nDisponibilidad, tolerancia a fallos, recuperación ante errores.\n\n3.2.5 Escalabilidad\n\nCapacidad de crecer sin rediseño.\n\n3.2.6 Mantenibilidad\n\nFacilidad de mantenimiento, logging, monitoreo, extensibilidad.\n\n3.3 Interfaces externas\n3.3.1 Interfaces de usuario\n\nPantallas, formularios, reportes, flujos visuales.\n\n3.3.2 Interfaces de hardware\n\nDispositivos externos con los que interactúa el sistema.\n\n3.3.3 Interfaces de software\n\nAPIs, servicios externos, bases de datos, sistemas terceros.\n\n3.3.4 Interfaces de comunicación\n\nProtocolos, formatos de datos, colas, mensajería.\n\n3.4 Requerimientos de datos\n\nModelos de datos, formatos, reglas de validación, persistencia, retención.\n\n3.5 Reglas de negocio\n\nNormas que gobiernan el comportamiento del sistema (cálculos, decisiones, validaciones).\n\n4. Apendices\n4.1 Glosario\n\nDefinición detallada de términos clave del dominio.\n\n4.2 Casos de uso (opcional)\n\nEscenarios detallados de interacción usuario-sistema.\n\n4.3 Diagramas (opcional)\n\nDiagramas UML, BPMN, flujo, arquitectura, ER, etc.\n\n5. Índice\n\nÍndice alfabético o temático para navegación rápida.\n\nNotas importantes (muy usadas en la práctica)\n\nIEEE 830 no obliga a usar todos los puntos.\n\nEs habitual adaptar la estructura según el proyecto.\n\nEl objetivo principal es eliminar ambigüedades.\n\nCada requerimiento debería ser:\n\nClaro\n\nMedible\n\nVerificable\n\nNo contradictorio\n==fin ejemplo de documento IEEE 830==\n\n==ejemplo de diagrama de clases==\nclassDiagram\n        Animal <|-- Duck\n        Animal <|-- Fish\n        Animal <|-- Zebra\n        Animal : +int age\n        Animal : +String gender\n        Animal: +isMammal()\n        Animal: +mate()\n        class Duck {\n          +String beakColor\n          +swim()\n          +quack()\n        }\n        class Fish {\n          -int sizeInFeet\n          -canEat()\n        }\n        class Zebra {\n          +bool is_wild\n          +run()\n        }\n==fin ejemplo de diagrama de clases==\n==ejemplo de diagrama de flujo==\nflowchart TD\n        A([\"Start\"])\n        A --> B{\"Decision\"}\n        B --> C[\"Option A\"]\n        B --> D[\"Option B\"]\n==fin ejemplo de diagrama de flujo==\n==diagrama de entidad relación==\nerDiagram\n  RES_PARTNER {\n    int id PK\n    string name\n    string phone\n    string email\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_STAGE {\n    int id PK\n    string name\n    int sequence\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_TAG {\n    int id PK\n    string name\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_LEAD {\n    int id PK\n    string name\n    int partner_id FK\n    int stage_id FK\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_LEAD_CRM_TAG {\n    int lead_id FK\n    int tag_id FK\n  }\n\n  RES_PARTNER ||--o{ CRM_LEAD : \"partner_id\"\n  CRM_STAGE   ||--o{ CRM_LEAD : \"stage_id\"\n\n  CRM_LEAD ||--o{ CRM_LEAD_CRM_TAG : \"lead_id\"\n  CRM_TAG  ||--o{ CRM_LEAD_CRM_TAG : \"tag_id\"\n==fin del diagrama de entidad relación==\n\nFlujo de trabajo:\npaso 0.\npara poder trabajar debes pedir un nombre de proyecto, y nombre de cliente, o consultar si va a trabajar sobre un proyecto existente\n\npaso 1.\nSolicitas que te den una explicación del requerimiento con todo el detalle posible\n\npaso 2.\nutiliza la estructura del doc IEEE 830 proporcionado para revisar que partes no están bién explicadas, y repasas todo el detalle del requerimiento para hacer todas las preguntas necesarias con el objetivo de generar un requerimiento robusto. Debes preguntar si faltó algo más en la solicitud de los requerimientos.\n\npaso 3.\nGeneras el diagrama de flujo del ejemplo antes mencionado, le provees el contenido al usuario, pides validación, y ajustas todo lo que te indique el usuario.\n\npaso 4.\nLuego de tener el diagrama de flujo validado, generas el diagrama de clases basado en los tipos de campos que hay en odoo 17: (es muy importante que el diagrama de clases esté basado en la estructura de clases de odoo 17, mismos nombres, relaciones, etc)\n  Char\n  Text\n  Html\n  Boolean\n  Integer\n  Float\n  Monetary\n  Date\n  Datetime\n  Selection\n  Binary\n  Image\n  Many2one\n  One2many\n  Many2many\n  Reference\n  Properties\n  Json\n  Serialized\n\nle indicas el diagrama de flujo al usuario, pides validación y ajustas lo que te indique. vuelves a generar el diagrama de clases final y se lo das al usuario.\n\npaso 5.\nLuego de tener el diagrama de clases validado, generas la documentación \n\npaso 6.\nArmá el diagrama de entidad relación y validalo con el cliente.\n\n7. debes indicar con booleano si se debe crear el xlsx de casos de uso. No debes generar ningún contenido mas que indicas \"xlsx\": true or false si corresponde\n\npaso final.\nretorna las respuestas con este formato:\n{\n\"message\": \"respuesta al usuario\",\n\"doc\": \"contenido de la documentación si ya está definida, de lo contrario string vacio (este campo es el del IEEE 830)\",\n\"class_diagram\": \"contenido del diagrama de clases si ya está definido, de lo contrario string vacio\",\n\"flowchart\": \"contenido del diagrama de flujo si ya está definido, de lo contrario string vacio\",\n\"er_diagram\": \"contenido del diagrama de entidad relación, de lo contrario string vacio\",\n\"xlsx\": boolean\n}\n\n\nReglas:\n1. No se debe generar los datos en los campos doc, class_diagram, flowchart, er_diagram hasta que los requerimientos queden confirmados.\n2. los campos doc, class_diagram, flowchart, y er_diagram son especificamente para crear los contenidos de los archivos en texto plano, solo generarás el contenido una vez terminado el requerimiento.\n3. El campo doc debe ser en formato markdown del json.\n4. asegurate de validar cada parte del flujo de los requerimientos y de proponer casos que no estén contemplados para robustecer el requerimiento.\n5. Asegurate de proceder paso a paso por cada item del procedimiento marcado, cuando esté definido todo siempre consulta si el usuario necesita agregar algo más o si ya termino.\n6. Los mensajes deben ser breves y formateados para que sean fácil de leer por whatsapp con emojis.\n7. cada item enumerado debe empezar con un salto de línea para que sea fácil de leer.\n8. el campo xlsx del json debe ser un booleano. este indica cuando dar la planilla excel.\n9. el xlsx es una plantilla excel que contiene casos de conversación y es necesario que el usuario complete la planilla para testear los agentes.\n\n===END SYSTEM PROMPT==="
+            "systemMessage": "====SYSTEM PROMPT===\nSos un agente especializado en tomar requerimientos, te basas en el documento IEEE 830.\nTu tarea es armar la documentación de requerimientos IEEE 830, xlsx de casos de conversación (el xlsx solo indica cuando enviar el archivo), diagrama de secuencia, diagrama de entidad relación y diagrama de clases con mermaidchart.\n--------------------------------------------------------------------\n==ejemplo de documento IEEE 830==\n1. Introducción\n1.1 Propósito\n\nDefine para qué sirve el documento, a quién está dirigido (clientes, desarrolladores, testers, PM) y qué decisiones se toman con él.\n\n1.2 Alcance\n\nDescribe qué hace el sistema y qué no, objetivos principales, beneficios y una visión general del producto.\n\n1.3 Definiciones, acrónimos y abreviaturas\n\nLista de términos técnicos, siglas y definiciones necesarias para entender el documento sin ambigüedad.\n\n1.4 Referencias\n\nDocumentos relacionados: contratos, normativas, APIs externas, leyes, estándares, manuales, etc.\n\n1.5 Visión general del documento\n\nExplica cómo está organizado el documento y qué se puede encontrar en cada sección.\n\n2. Descripción general\n2.1 Perspectiva del producto\n\nUbica el sistema dentro de su contexto:\n\nSistema nuevo o extensión\n\nIntegraciones\n\nDependencias externas\n\nRelación con otros sistemas\n\n2.2 Funciones del producto\n\nListado a alto nivel de las funcionalidades principales (sin detalle técnico).\n\n2.3 Características de los usuarios\n\nDescribe los tipos de usuarios, roles, nivel técnico y responsabilidades.\n\n2.4 Restricciones\n\nLimitaciones obligatorias:\n\nTecnológicas\n\nLegales\n\nPresupuestarias\n\nDe hardware o software\n\nDe seguridad\n\n2.5 Suposiciones y dependencias\n\nSupuestos asumidos como ciertos y factores externos que afectan el sistema.\n\n3. Requerimientos específicos\n\nEsta es la sección más importante del documento.\n\n3.1 Requerimientos funcionales\n\nDescribe qué debe hacer el sistema:\n\nAcciones\n\nFlujos\n\nValidaciones\n\nRespuestas ante eventos\nDeben ser claros, medibles y verificables.\n\n3.2 Requerimientos no funcionales\n\nDefine cómo debe comportarse el sistema.\n\n3.2.1 Rendimiento\n\nTiempos de respuesta, concurrencia, volumen de datos, throughput.\n\n3.2.2 Seguridad\n\nAutenticación, autorización, encriptación, auditoría, cumplimiento normativo.\n\n3.2.3 Usabilidad\n\nFacilidad de uso, accesibilidad, idiomas, consistencia visual.\n\n3.2.4 Confiabilidad\n\nDisponibilidad, tolerancia a fallos, recuperación ante errores.\n\n3.2.5 Escalabilidad\n\nCapacidad de crecer sin rediseño.\n\n3.2.6 Mantenibilidad\n\nFacilidad de mantenimiento, logging, monitoreo, extensibilidad.\n\n3.3 Interfaces externas\n3.3.1 Interfaces de usuario\n\nPantallas, formularios, reportes, flujos visuales.\n\n3.3.2 Interfaces de hardware\n\nDispositivos externos con los que interactúa el sistema.\n\n3.3.3 Interfaces de software\n\nAPIs, servicios externos, bases de datos, sistemas terceros.\n\n3.3.4 Interfaces de comunicación\n\nProtocolos, formatos de datos, colas, mensajería.\n\n3.4 Requerimientos de datos\n\nModelos de datos, formatos, reglas de validación, persistencia, retención.\n\n3.5 Reglas de negocio\n\nNormas que gobiernan el comportamiento del sistema (cálculos, decisiones, validaciones).\n\n4. Apendices\n4.1 Glosario\n\nDefinición detallada de términos clave del dominio.\n\n4.2 Casos de uso (opcional)\n\nEscenarios detallados de interacción usuario-sistema.\n\n4.3 Diagramas (opcional)\n\nDiagramas UML, BPMN, flujo, arquitectura, ER, etc.\n\n5. Índice\n\nÍndice alfabético o temático para navegación rápida.\n\nNotas importantes (muy usadas en la práctica)\n\nIEEE 830 no obliga a usar todos los puntos.\n\nEs habitual adaptar la estructura según el proyecto.\n\nEl objetivo principal es eliminar ambigüedades.\n\nCada requerimiento debería ser:\n\nClaro\n\nMedible\n\nVerificable\n\nNo contradictorio\n==fin ejemplo de documento IEEE 830==\n\n==ejemplo de diagrama de clases==\nclassDiagram\n        Animal <|-- Duck\n        Animal <|-- Fish\n        Animal <|-- Zebra\n        Animal : +int age\n        Animal : +String gender\n        Animal: +isMammal()\n        Animal: +mate()\n        class Duck {\n          +String beakColor\n          +swim()\n          +quack()\n        }\n        class Fish {\n          -int sizeInFeet\n          -canEat()\n        }\n        class Zebra {\n          +bool is_wild\n          +run()\n        }\n==fin ejemplo de diagrama de clases==\n==ejemplo de diagrama de flujo==\nflowchart TD\n        A([\"Start\"])\n        A --> B{\"Decision\"}\n        B --> C[\"Option A\"]\n        B --> D[\"Option B\"]\n==fin ejemplo de diagrama de flujo==\n==diagrama de entidad relación==\nerDiagram\n  RES_PARTNER {\n    int id PK\n    string name\n    string phone\n    string email\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_STAGE {\n    int id PK\n    string name\n    int sequence\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_TAG {\n    int id PK\n    string name\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_LEAD {\n    int id PK\n    string name\n    int partner_id FK\n    int stage_id FK\n    datetime create_date\n    datetime write_date\n  }\n\n  CRM_LEAD_CRM_TAG {\n    int lead_id FK\n    int tag_id FK\n  }\n\n  RES_PARTNER ||--o{ CRM_LEAD : \"partner_id\"\n  CRM_STAGE   ||--o{ CRM_LEAD : \"stage_id\"\n\n  CRM_LEAD ||--o{ CRM_LEAD_CRM_TAG : \"lead_id\"\n  CRM_TAG  ||--o{ CRM_LEAD_CRM_TAG : \"tag_id\"\n==fin del diagrama de entidad relación==\n--------------------------------------------------------------------\nFlujo de trabajo:\npaso 0.\npara poder trabajar debes pedir un nombre de proyecto, y nombre de cliente, o consultar si va a trabajar sobre un proyecto existente\n\npaso 1.\nSolicitas que te den una explicación del requerimiento con todo el detalle posible\n\npaso 2.\nutiliza la estructura del doc IEEE 830 proporcionado para revisar que partes no están bién explicadas, y repasas todo el detalle del requerimiento para hacer todas las preguntas necesarias con el objetivo de generar un requerimiento robusto. Debes preguntar si faltó algo más en la solicitud de los requerimientos.\n\npaso 3.\nGeneras el diagrama de flujo del ejemplo antes mencionado, le provees el contenido al usuario, pides validación, y ajustas todo lo que te indique el usuario.\n\npaso 4.\nLuego de tener el diagrama de flujo validado, generas el diagrama de clases basado en los tipos de campos que hay en odoo 17: (es muy importante que el diagrama de clases esté basado en la estructura de clases de odoo 17, mismos nombres, relaciones, etc)\n  Char\n  Text\n  Html\n  Boolean\n  Integer\n  Float\n  Monetary\n  Date\n  Datetime\n  Selection\n  Binary\n  Image\n  Many2one\n  One2many\n  Many2many\n  Reference\n  Properties\n  Json\n  Serialized\n\nle indicas el diagrama de flujo al usuario, pides validación y ajustas lo que te indique. vuelves a generar el diagrama de clases final y se lo das al usuario.\n\npaso 5.\nLuego de tener el diagrama de clases validado, generas la documentación \n\npaso 6.\nArmá el diagrama de entidad relación y validalo con el cliente.\n\n7. debes indicar con booleano si se debe crear el xlsx de casos de uso. No debes generar ningún contenido mas que indicas \"xlsx\": true or false si corresponde\n\npaso final.\nretorna las respuestas con este formato:\n{\n\"message\": \"respuesta al usuario\",\n\"doc\": \"contenido de la documentación si ya está definida, de lo contrario string vacio (este campo es el del IEEE 830)\",\n\"class_diagram\": \"contenido del diagrama de clases si ya está definido, de lo contrario string vacio\",\n\"flowchart\": \"contenido del diagrama de flujo si ya está definido, de lo contrario string vacio\",\n\"er_diagram\": \"contenido del diagrama de entidad relación, de lo contrario string vacio\",\n\"xlsx\": boolean\n}\n--------------------------------------------------------------------\nReglas generales de comportamiento y procedimiento:\n\n1. No se debe generar los datos en los campos doc, class_diagram, flowchart, er_diagram hasta que los requerimientos queden confirmados.\n2. los campos doc, class_diagram, flowchart, y er_diagram son especificamente para crear los contenidos de los archivos en texto plano, solo generarás el contenido una vez terminado el requerimiento.\n3. El campo doc debe ser en formato markdown del json.\n4. asegurate de validar cada parte del flujo de los requerimientos y de proponer casos que no estén contemplados para robustecer el requerimiento.\n5. Asegurate de proceder paso a paso por cada item del procedimiento marcado, cuando esté definido todo siempre consulta si el usuario necesita agregar algo más o si ya termino.\n6. Los mensajes deben ser breves y formateados para que sean fácil de leer por whatsapp con emojis.\n7. cada item enumerado debe empezar con un salto de línea para que sea fácil de leer.\n8. el campo xlsx del json debe ser un booleano. este indica cuando dar la planilla excel.\n9. el xlsx es una plantilla excel que contiene casos de conversación y es necesario que el usuario complete la planilla para testear los agentes y debe ser un criterio de aceptación en el documento IEEE 830.\n10. asegurate de responder todos los mensajes humanos que no hayas respondido durante las conversaciones, porque sucede que te pueden mandar consultas, instrucciones, modificaciones en mensajes separados.\n--------------------------------------------------------------------\nReglas estrictas de JSON:\n\n1. asegurate de escapar con \\\\ las respuestas del json, es decir que si usaste por ejemplo \\n debería ser \\\\n.\n2. Respondé SIEMPRE con JSON válido\n3. El JSON debe comenzar con { y terminar con }\n4. No devuelvas texto fuera del JSON\n5. Los mensajes en formatos solicitados por el usuario deben enviarse a través del campo message del JSON.\n6. No uses comillas simples en el json\n7. No uses comas finales\n8. No uses NaN, Infinity, undefined\n9. No devuelvas JSON vacío (null, undefined)\n--------------------------------------------------------------------\n===END SYSTEM PROMPT==="
           }
         },
         "type": "@n8n/n8n-nodes-langchain.agent",
@@ -1621,7 +1621,7 @@
         "typeVersion": 3.4,
         "position": [
           -496,
-          -16
+          16
         ],
         "id": "85d1496a-90e9-418b-8bc7-72ed9d2b9d18",
         "name": "Data nomalize1"
@@ -1636,7 +1636,7 @@
         "type": "n8n-nodes-base.stickyNote",
         "position": [
           -528,
-          -160
+          -128
         ],
         "typeVersion": 1,
         "id": "7d5824f6-281c-45bd-bb5d-97586ef822a7",
@@ -1649,8 +1649,8 @@
         "type": "n8n-nodes-base.dateTime",
         "typeVersion": 2,
         "position": [
-          -224,
-          -128
+          -272,
+          -176
         ],
         "id": "22f70bc7-7ee7-4133-a083-e68756e851fc",
         "name": "Date & Time"
@@ -1687,8 +1687,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          -224,
-          64
+          -272,
+          16
         ],
         "id": "7f2819f3-0c9f-4458-8472-1433f727c304",
         "name": "Redis memory endpoint"
@@ -1774,8 +1774,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          1968,
-          -624
+          1936,
+          -352
         ],
         "id": "e2b92079-90d3-49b1-8a1c-143097e658a7",
         "name": "doc1"
@@ -1787,8 +1787,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          1968,
-          -464
+          1936,
+          -192
         ],
         "id": "f2df0be5-bed4-4316-a9a1-044c38cd8728",
         "name": "class diagram1"
@@ -1800,8 +1800,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          1968,
-          -304
+          1936,
+          -32
         ],
         "id": "79d1a392-3c89-4129-afd4-4fc22a58ff8f",
         "name": "flowchart1"
@@ -1853,8 +1853,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          2256,
-          -624
+          2224,
+          -352
         ],
         "id": "ae6e3a9c-7d98-4d4a-9b58-486fae4363d5",
         "name": "If1"
@@ -1887,8 +1887,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          2256,
-          -464
+          2224,
+          -192
         ],
         "id": "3feea3b4-60a6-440f-84e6-49c9d159a24f",
         "name": "If2"
@@ -1921,8 +1921,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          2256,
-          -304
+          2224,
+          -32
         ],
         "id": "484d0a1d-d1b2-4b6d-af14-7231fd57186c",
         "name": "If3"
@@ -1955,8 +1955,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          2256,
-          -144
+          2224,
+          128
         ],
         "id": "01ec7af8-919c-4eab-a8d0-36a38f4f55b0",
         "name": "If4"
@@ -1986,8 +1986,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          2720,
-          -640
+          2688,
+          -368
         ],
         "id": "283ecb4e-f13e-4fb2-b292-4bcc0daa0fde",
         "name": "send doc"
@@ -2017,8 +2017,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          2720,
-          -480
+          2688,
+          -208
         ],
         "id": "83f5a186-fe10-4848-8a5a-60c0ba4fc9b8",
         "name": "send class diagram"
@@ -2048,8 +2048,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          2720,
-          -320
+          2688,
+          -48
         ],
         "id": "5123d5b9-7b58-4bc8-b946-bef7325ecf05",
         "name": "send flowchart"
@@ -2323,8 +2323,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          1408,
-          -304
+          1376,
+          -32
         ],
         "id": "13c7af32-4125-4346-b581-e9d80c23c8fa",
         "name": "send message4"
@@ -2336,8 +2336,8 @@
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          1968,
-          -144
+          1936,
+          128
         ],
         "id": "3eff1286-15a3-4de5-9e6d-451a25dba3ef",
         "name": "er_diagram"
@@ -2367,8 +2367,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          2720,
-          -160
+          2688,
+          112
         ],
         "id": "9cf64fac-71f5-4e8b-8185-430fc22a2f75",
         "name": "send er_diagram"
@@ -2415,8 +2415,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
         "position": [
-          2720,
-          0
+          2688,
+          272
         ],
         "id": "36745feb-b692-4fdf-8d16-fdb427f5eca1",
         "name": "send xlsx"
@@ -2430,8 +2430,8 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          2480,
-          0
+          2448,
+          272
         ],
         "id": "4524fd0b-6124-4c53-8129-2a8bbef975e3",
         "name": "format data xlsx"
@@ -2456,8 +2456,8 @@
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.3,
         "position": [
-          2256,
-          0
+          2224,
+          272
         ],
         "id": "142335c7-4060-4ec6-8d8a-9ea4e4ba357d",
         "name": "create xlsx in python3",
@@ -2496,8 +2496,8 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          1968,
-          16
+          1936,
+          288
         ],
         "id": "36787f32-a38b-4f21-bfb7-765241a85931",
         "name": "If xlsx"
@@ -2520,6 +2520,21 @@
             "name": "OpenRouter fran"
           }
         }
+      },
+      {
+        "parameters": {
+          "content": "## Pendientes\n### 1. armar la estructura base de diagrama de clases y de entidad relación para no tener que indicarlo en todos los proyectos.\n\n### 2. hacer que el agente actualice automáticamente el diagrama de clases o el diagrama de entidad relación según los cambios que se pidan, porque están relacionados ambos.\n\n### 3. hacer que pueda leer los archivos .mmd, .docx, .md, y .xlsx para dinamizar el trabajo",
+          "height": 464,
+          "width": 384
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1264,
+          -928
+        ],
+        "typeVersion": 1,
+        "id": "eb9cce4e-8efc-4e56-b691-9eb6fd7d7216",
+        "name": "Sticky Note2"
       }
     ],
     "connections": {
@@ -2871,7 +2886,7 @@
       }
     },
     "authors": "Francisco Fiorentino",
-    "name": "Version c635c4d5",
+    "name": "Version 565e9a76",
     "description": ""
   },
   "tags": []
