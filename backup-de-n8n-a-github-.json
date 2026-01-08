@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-07T20:09:21.070Z",
+  "updatedAt": "2026-01-07T20:12:17.769Z",
   "createdAt": "2026-01-07T19:30:13.423Z",
   "id": "HeNpreZ6NXNk2aS0",
   "name": "BackUp de N8N a GitHub",
@@ -64,41 +64,6 @@
       ],
       "id": "9b0073d1-3e40-4454-9cd8-cf65cdfab19a",
       "name": "When clicking ‘Execute workflow’"
-    },
-    {
-      "parameters": {
-        "resource": "file",
-        "operation": "list",
-        "owner": {
-          "__rl": true,
-          "value": "faf1997",
-          "mode": "name"
-        },
-        "repository": {
-          "__rl": true,
-          "value": "respaldo_n8n_lucas",
-          "mode": "list",
-          "cachedResultName": "respaldo_n8n_lucas",
-          "cachedResultUrl": "https://github.com/faf1997/respaldo_n8n_lucas"
-        },
-        "filePath": "="
-      },
-      "id": "4627c094-0e7b-45d9-af6f-8ab7c030d436",
-      "name": "Enlista los archivos del repositorio",
-      "type": "n8n-nodes-base.github",
-      "position": [
-        -1280,
-        -112
-      ],
-      "webhookId": "354d699e-44b0-4444-9d31-af7fd4ff5561",
-      "typeVersion": 1,
-      "alwaysOutputData": true,
-      "credentials": {
-        "githubApi": {
-          "id": "PcYzKdigIDlV4PzO",
-          "name": "GitHub account"
-        }
-      }
     },
     {
       "parameters": {
@@ -348,7 +313,7 @@
       "typeVersion": 1.1,
       "position": [
         -1216,
-        272
+        256
       ],
       "id": "ea8d1b6b-edce-420c-9e77-dfda695ead67",
       "name": "List files",
@@ -371,11 +336,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "Enlista los archivos del repositorio": {
-      "main": [
-        []
       ]
     },
     "Junta": {
@@ -539,8 +499,8 @@
       }
     ]
   },
-  "versionId": "bd2943e7-0385-484c-909d-78f1ffd29d0f",
-  "activeVersionId": "bd2943e7-0385-484c-909d-78f1ffd29d0f",
+  "versionId": "7d7eda5d-5475-4eaf-966b-380ce20ee688",
+  "activeVersionId": "7d7eda5d-5475-4eaf-966b-380ce20ee688",
   "triggerCount": 1,
   "shared": [
     {
@@ -552,9 +512,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-07T20:09:24.000Z",
-    "createdAt": "2026-01-07T20:09:21.072Z",
-    "versionId": "bd2943e7-0385-484c-909d-78f1ffd29d0f",
+    "updatedAt": "2026-01-07T20:11:36.000Z",
+    "createdAt": "2026-01-07T20:11:34.429Z",
+    "versionId": "7d7eda5d-5475-4eaf-966b-380ce20ee688",
     "workflowId": "HeNpreZ6NXNk2aS0",
     "nodes": [
       {
@@ -615,41 +575,6 @@
         ],
         "id": "9b0073d1-3e40-4454-9cd8-cf65cdfab19a",
         "name": "When clicking ‘Execute workflow’"
-      },
-      {
-        "parameters": {
-          "resource": "file",
-          "operation": "list",
-          "owner": {
-            "__rl": true,
-            "value": "faf1997",
-            "mode": "name"
-          },
-          "repository": {
-            "__rl": true,
-            "value": "respaldo_n8n_lucas",
-            "mode": "list",
-            "cachedResultName": "respaldo_n8n_lucas",
-            "cachedResultUrl": "https://github.com/faf1997/respaldo_n8n_lucas"
-          },
-          "filePath": "="
-        },
-        "id": "4627c094-0e7b-45d9-af6f-8ab7c030d436",
-        "name": "Enlista los archivos del repositorio",
-        "type": "n8n-nodes-base.github",
-        "position": [
-          -1280,
-          -112
-        ],
-        "webhookId": "354d699e-44b0-4444-9d31-af7fd4ff5561",
-        "typeVersion": 1,
-        "alwaysOutputData": true,
-        "credentials": {
-          "githubApi": {
-            "id": "PcYzKdigIDlV4PzO",
-            "name": "GitHub account"
-          }
-        }
       },
       {
         "parameters": {
@@ -899,7 +824,7 @@
         "typeVersion": 1.1,
         "position": [
           -1216,
-          272
+          256
         ],
         "id": "ea8d1b6b-edce-420c-9e77-dfda695ead67",
         "name": "List files",
@@ -922,11 +847,6 @@
               "index": 0
             }
           ]
-        ]
-      },
-      "Enlista los archivos del repositorio": {
-        "main": [
-          []
         ]
       },
       "Junta": {
@@ -1073,7 +993,7 @@
       }
     },
     "authors": "Francisco Fiorentino",
-    "name": "Version bd2943e7",
+    "name": "Version 7d7eda5d",
     "description": ""
   },
   "tags": []
