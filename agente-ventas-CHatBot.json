@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-07T15:53:17.673Z",
+  "updatedAt": "2026-01-09T03:29:30.555Z",
   "createdAt": "2025-12-23T13:51:51.854Z",
   "id": "GfgcdVG5VN8tJXo7",
   "name": "Agente Ventas",
@@ -9,10 +9,10 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=",
+        "text": "={{ $json.guardrailsInput }}",
         "hasOutputParser": true,
         "options": {
-          "systemMessage": "==== COMIENZO DEL PROMPT ===\n\n# IDENTIDAD\nSos un asistente de ventas humano y profesional.\nRepresentás al equipo comercial de la empresa (por ejemplo: Hitofusion).\n\nTu forma de comunicarte debe ser:\n- natural\n- profesional\n- tranquila\n- cercana\nComo una persona real con experiencia en ventas.\n\nNo hablás como un robot.\nNo explicás procesos internos.\nNo justificás por qué hacés preguntas.\n\n---\n\n# OBJETIVO\nMantener una conversación comercial natural para:\n- entender qué necesita el usuario\n- identificar el tipo de sistema\n- avanzar paso a paso hacia una reunión con un humano de ventas\n\nNO das soporte técnico.\nNO hacés consultoría profunda.\nNO hablás de precios ni tiempos en esta etapa.\n\n---\n\n# REGLA FUNDAMENTAL\nPrimero escuchás.\nDespués preguntás.\nRecién más adelante se coordina reunión.\n\nNunca hables de:\n- “orientarte”\n- “dimensionar”\n- “estimar”\nen el primer contacto si el usuario solo saludó.\n\n---\n\n# FORMATO DE SALIDA (OBLIGATORIO)\nTu salida DEBE ser SOLO un JSON válido (sin texto extra, sin markdown).\nDebe tener exactamente estas claves:\nmessage, next_action, collected, missing, handoff_ready\n\nEstructura:\n{\n  \"message\": \"texto listo para WhatsApp\",\n  \"next_action\": \"ask\" | \"schedule\" | \"handoff\" | \"none\" | \"error\",\n  \"collected\": { ... },\n  \"missing\": [ ... ],\n  \"handoff_ready\": true | false\n}\n\n---\n\n# MEMORIA / ESTADO (PARA NO REPREGUNTAR)\nVas a recibir (si existe) un objeto llamado state_collected con datos ya guardados previamente.\nTambién vas a recibir required_fields (lista de campos mínimos).\n\nReglas de estado:\n1) Partí de collected = state_collected (si no existe, {}).\n2) Sumá SOLO lo que el usuario diga explícitamente en este mensaje (sin inventar).\n3) missing = required_fields que todavía no estén en collected.\n\n---\n\n# REGLA DE PREGUNTAS (SIN TIEMPOS)\n- No preguntes tiempos ni “para cuándo”.\n- Máximo 1 pregunta por mensaje.\n- Si falta algo (missing no vacío): preguntá SOLO por el primer campo faltante, simple y directo.\n- Si no falta nada (missing vacío): next_action=\"schedule\" y handoff_ready=true.\n\n---\n\n# MANEJO DEL PRIMER MENSAJE\n## Si el usuario SOLO saluda\nRespondé simple y humano. Máximo 1 pregunta.\n\nEjemplo:\n“Hola, ¿cómo estás? Soy parte del equipo de ventas de Hitofusion.\nContame, ¿en qué puedo ayudarte?”\n\nEn este caso:\n- next_action=\"ask\"\n- collected={}\n- missing debe incluir lo que falte según required_fields\n\n---\n\n# CIERRE\nSi ya está listo para avanzar (missing vacío):\n- proponé coordinar reunión con un asesor humano\n- sin prometer horarios exactos\n\n---\n\n# ESTILO\n- Mensajes cortos\n- Lenguaje natural\n- WhatsApp friendly\n- *Negrita* solo cuando suma claridad\n\n=== FIN DEL PROMPT ===\n\n"
+          "systemMessage": "==== COMIENZO DEL PROMPT ===\n\n# IDENTIDAD\nSos un asistente de ventas humano y profesional.\nRepresentás al equipo comercial de la empresa (por ejemplo: Hitofusion).\n\nTu forma de comunicarte debe ser:\n- natural\n- profesional\n- tranquila\n- cercana\nComo una persona real con experiencia en ventas.\n\nNo hablás como un robot.\nNo explicás procesos internos.\nNo justificás por qué hacés preguntas.\n\n---\n\n# OBJETIVO\nMantener una conversación comercial natural para:\n- entender qué necesita el usuario\n- identificar el tipo de sistema\n- avanzar paso a paso hacia una reunión con un humano de ventas\n\nNO das soporte técnico.\nNO hacés consultoría profunda.\nNO hablás de precios ni tiempos en esta etapa.\n\n---\n\n# REGLA FUNDAMENTAL\nPrimero escuchás.\nDespués preguntás.\nRecién más adelante se coordina reunión.\n\nNunca hables de:\n- “orientarte”\n- “dimensionar”\n- “estimar”\nen el primer contacto si el usuario solo saludó.\n\n---\n\n# FORMATO DE SALIDA (OBLIGATORIO)\nTu salida DEBE ser SOLO un JSON válido (sin texto extra, sin markdown).\nDebe tener exactamente estas claves:\nmessage, next_action, collected, missing, handoff_ready\n\nEstructura:\n{\n  \"message\": \"texto listo para WhatsApp\",\n  \"next_action\": \"ask\" | \"schedule\" | \"handoff\" | \"none\" | \"error\",\n  \"collected\": { ... },\n  \"missing\": [ ... ],\n  \"handoff_ready\": true | false\n}\n\n---\n\n# MEMORIA / ESTADO (PARA NO REPREGUNTAR)\nVas a recibir (si existe) un objeto llamado state_collected con datos ya guardados previamente.\nTambién vas a recibir required_fields (lista de campos mínimos).\n\nReglas de estado:\n1) Partí de collected = state_collected (si no existe, {}).\n2) Sumá SOLO lo que el usuario diga explícitamente en este mensaje (sin inventar).\n3) missing = required_fields que todavía no estén en collected.\n\n---\n\n# REGLA DE PREGUNTAS (SIN TIEMPOS)\n- No preguntes tiempos ni “para cuándo”.\n- Máximo 1 pregunta por mensaje.\n- Si falta algo (missing no vacío): preguntá SOLO por el primer campo faltante, simple y directo.\n- Si no falta nada (missing vacío): next_action=\"schedule\" y handoff_ready=true.\n\n---\n\n# MANEJO DEL PRIMER MENSAJE\n## Si el usuario SOLO saluda\nRespondé simple y humano. Máximo 1 pregunta.\n\nEjemplo:\n“Hola, ¿cómo estás? Soy parte del equipo de ventas de Hitofusion. Contame, ¿en qué puedo ayudarte?”\n\nEn este caso:\n- next_action=\"ask\"\n- collected={}\n- missing debe incluir lo que falte según required_fields\n\n---\n\n# CIERRE\nSi ya está listo para avanzar (missing vacío):\n- proponé coordinar reunión con un asesor humano\n- sin prometer horarios exactos\n\n---\n\n# ESTILO\n- Mensajes cortos\n- Lenguaje natural\n- WhatsApp friendly\n- *Negrita* solo cuando suma claridad\n\n=== FIN DEL PROMPT ===\n\n"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -80,47 +80,6 @@
       ],
       "id": "01ea5ae9-8ef6-4a2e-ad6c-6e54137cedd8",
       "name": "If Filtrar fromMe"
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "={{ $('Data normalize').item.json.evo_api_host }}/message/sendText/{{ $('Data normalize').item.json.evo_api_instance }}\n",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            {
-              "name": "apikey",
-              "value": "={{ $('Data normalize').item.json.evo_api_key.trim() }}"
-            },
-            {
-              "name": "Content-Type",
-              "value": "application/json; charset=UTF-8"
-            }
-          ]
-        },
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "number",
-              "value": "={{ $('Data normalize').item.json.remoteJid.split(\"@\")[0] }}"
-            },
-            {
-              "name": "text",
-              "value": "={{$json.data.message}}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.3,
-      "position": [
-        752,
-        640
-      ],
-      "id": "1f071a64-d5c7-444d-8ec2-48fe9adc2dc9",
-      "name": "HTTP Request"
     },
     {
       "parameters": {
@@ -269,7 +228,7 @@
     {
       "parameters": {
         "mode": "raw",
-        "jsonOutput": "={\n  \"remoteJid\": \"{{ $json.body.data.key.remoteJid }}\",\n  \"remoteJidAlt\": \"{{ $json.body.data.key.remoteJidAlt }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n  \"id\": \"{{$json.body.data.key.id}}\",\n  \"evo_api_host\":\"{{ $json.body.server_url }}\",\n  \"evo_api_instance\":\"{{ $json.body.instance }}\",\n  \"evo_api_key\": \"{{ $json.body.apikey }}\",\n  \"body\": {{ $json.body }},\n  \"db_identity_key\": {{ $('Webhook').item.json.body.instance }}\n}\n ",
+        "jsonOutput": "={\n  \"remoteJid\": \"{{ $json.body.data.key.remoteJid }}\",\n  \"remoteJidAlt\": \"{{ $json.body.data.key.remoteJidAlt }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n  \"id\": \"{{$json.body.data.key.id}}\",\n  \"evo_api_host\":\"{{ $json.body.server_url }}\",\n  \"evo_api_instance\":\"{{ $json.body.instance }}\",\n  \"evo_api_key\": \"{{ $json.body.apikey }}\",\n  \"body\": {{ $json.body }},\n  \"db_identity_key\": \"postgres\"\n}\n \n ",
         "options": {}
       },
       "type": "n8n-nodes-base.set",
@@ -295,29 +254,6 @@
       ],
       "id": "bd51b871-9422-4e4b-87bf-3ab58de6e6f3",
       "name": "MergePostgres-DataNorm"
-    },
-    {
-      "parameters": {
-        "operation": "executeQuery",
-        "query": "SELECT db_name\nFROM tenants\nWHERE db_identify = $1\n  AND status = 'active'\nLIMIT 1;\n",
-        "options": {
-          "queryReplacement": "={{$json.db_identity_key}}"
-        }
-      },
-      "type": "n8n-nodes-base.postgres",
-      "typeVersion": 2.6,
-      "position": [
-        -2480,
-        1008
-      ],
-      "id": "c9d0ff70-2b3f-45f8-862e-88e4288a75fc",
-      "name": "Tenant",
-      "credentials": {
-        "postgres": {
-          "id": "zgjgMcykoy2dacf3",
-          "name": "Postgres account 2"
-        }
-      }
     },
     {
       "parameters": {
@@ -349,7 +285,7 @@
     {
       "parameters": {
         "schemaType": "manual",
-        "inputSchema": "{\n  \"type\": \"object\",\n  \"additionalProperties\": false,\n  \"required\": [\"message\", \"next_action\", \"collected\", \"missing\", \"handoff_ready\"],\n  \"properties\": {\n    \"message\": { \"type\": \"string\", \"minLength\": 1 },\n    \"next_action\": { \"type\": \"string\", \"enum\": [\"ask\", \"schedule\", \"handoff\", \"none\", \"error\"] },\n    \"collected\": { \"type\": \"object\" },\n    \"missing\": { \"type\": \"array\", \"items\": { \"type\": \"string\", \"minLength\": 1 } },\n    \"handoff_ready\": { \"type\": \"boolean\" }\n  }\n}\n",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"additionalProperties\": false,\n  \"required\": [\"message\", \"next_action\", \"collected\", \"missing\", \"handoff_ready\"],\n  \"properties\": {\n    \"message\": { \"type\": \"string\", \"minLength\": 1 },\n    \"next_action\": { \"type\": \"string\", \"enum\": [\"ask\", \"schedule\", \"handoff\", \"none\", \"error\"] },\n    \"collected\": { \"type\": \"object\" },\n    \"missing\": { \"type\": \"array\", \"items\": { \"type\": \"string\", \"minLength\": 1 } },\n    \"handoff_ready\": { \"type\": \"boolean\" }\n  }\n}",
         "autoFix": true
       },
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
@@ -481,31 +417,31 @@
           "parameters": [
             {
               "name": "message",
-              "value": "={{ $('AI Agent').item.json.output.message.toJsonString() }}"
+              "value": "={{ $('AI Agent').item.json.output.message }}"
             },
             {
               "name": "remoteJid",
-              "value": "={{ $('AI Agent').item.json.output.message.toJsonString() }}"
+              "value": "={{ $('Data normalize').item.json.remoteJid }}"
             },
             {
               "name": "sender",
-              "value": "={{ $('Data normalize').item.json.sender.toJsonString() }}"
+              "value": "={{ $('Data normalize').item.json.sender }}"
             },
             {
               "name": "evo_api_host",
-              "value": "={{ $('Data normalize').item.json.evo_api_host.toJsonString() }}"
+              "value": "={{ $('Data normalize').item.json.evo_api_host }}"
             },
             {
               "name": "evo_api_instance",
-              "value": "={{ $('Data normalize').item.json.evo_api_instance.toJsonString() }}"
+              "value": "={{ $('Data normalize').item.json.evo_api_instance }}"
             },
             {
               "name": "evo_api_key",
-              "value": "={{ $('Data normalize').item.json.evo_api_key.toJsonString() }}"
+              "value": "={{ $('Data normalize').item.json.evo_api_key }}"
             },
             {
               "name": "db_identity_key",
-              "value": "={{ $('Data normalize').item.json.db_identity_key.toJsonString() }}"
+              "value": "={{ $('Data normalize').item.json.db_identity_key }}"
             }
           ]
         },
@@ -733,11 +669,6 @@
             "index": 0
           }
         ]
-      ]
-    },
-    "Tenant": {
-      "main": [
-        []
       ]
     },
     "Redis memory endpoint1": {
@@ -1011,8 +942,8 @@
       }
     ]
   },
-  "versionId": "e8d01dcc-7417-4b6f-a5cb-81840b84bafd",
-  "activeVersionId": "d0e8252a-7fa0-407c-90a0-ab7e6868659e",
+  "versionId": "5f24aedd-7085-4c49-8ce1-280324ce951a",
+  "activeVersionId": "cf17d854-8715-40a3-aec2-a46a5da6e85c",
   "triggerCount": 1,
   "shared": [
     {
@@ -1024,9 +955,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-07T15:07:01.000Z",
-    "createdAt": "2026-01-07T15:06:58.082Z",
-    "versionId": "d0e8252a-7fa0-407c-90a0-ab7e6868659e",
+    "updatedAt": "2026-01-09T01:11:27.000Z",
+    "createdAt": "2026-01-09T01:11:24.248Z",
+    "versionId": "cf17d854-8715-40a3-aec2-a46a5da6e85c",
     "workflowId": "GfgcdVG5VN8tJXo7",
     "nodes": [
       {
@@ -1103,47 +1034,6 @@
         ],
         "id": "01ea5ae9-8ef6-4a2e-ad6c-6e54137cedd8",
         "name": "If Filtrar fromMe"
-      },
-      {
-        "parameters": {
-          "method": "POST",
-          "url": "={{ $('Data normalize').item.json.evo_api_host }}/message/sendText/{{ $('Data normalize').item.json.evo_api_instance }}\n",
-          "sendHeaders": true,
-          "headerParameters": {
-            "parameters": [
-              {
-                "name": "apikey",
-                "value": "={{ $('Data normalize').item.json.evo_api_key.trim() }}"
-              },
-              {
-                "name": "Content-Type",
-                "value": "application/json; charset=UTF-8"
-              }
-            ]
-          },
-          "sendBody": true,
-          "bodyParameters": {
-            "parameters": [
-              {
-                "name": "number",
-                "value": "={{ $('Data normalize').item.json.remoteJid.split(\"@\")[0] }}"
-              },
-              {
-                "name": "text",
-                "value": "={{$json.data.message}}"
-              }
-            ]
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.3,
-        "position": [
-          752,
-          640
-        ],
-        "id": "1f071a64-d5c7-444d-8ec2-48fe9adc2dc9",
-        "name": "HTTP Request"
       },
       {
         "parameters": {
@@ -1321,29 +1211,6 @@
       },
       {
         "parameters": {
-          "operation": "executeQuery",
-          "query": "SELECT db_name\nFROM tenants\nWHERE db_identify = $1\n  AND status = 'active'\nLIMIT 1;\n",
-          "options": {
-            "queryReplacement": "={{$json.db_identity_key}}"
-          }
-        },
-        "type": "n8n-nodes-base.postgres",
-        "typeVersion": 2.6,
-        "position": [
-          -2480,
-          1008
-        ],
-        "id": "c9d0ff70-2b3f-45f8-862e-88e4288a75fc",
-        "name": "Tenant",
-        "credentials": {
-          "postgres": {
-            "id": "zgjgMcykoy2dacf3",
-            "name": "Postgres account 2"
-          }
-        }
-      },
-      {
-        "parameters": {
           "method": "POST",
           "url": "https://n8n.hitofusion.frandev.com.ar/webhook/redis_endpoint_for_whatsapp",
           "sendQuery": true,
@@ -1499,10 +1366,56 @@
         "parameters": {
           "method": "POST",
           "url": "=https://n8n.hitofusion.frandev.com.ar/webhook/send_message_for_whatsapp",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "content-type",
+                "value": "application/json"
+              }
+            ]
+          },
           "sendBody": true,
-          "specifyBody": "json",
-          "jsonBody": "={\n  \"message\": {{ $json.output.message.toJsonString() }},\n  \"remoteJid\": {{ $('Data normalize').item.json.remoteJid.toJsonString() }},\n  \"sender\": {{ $('Data normalize').item.json.sender.toJsonString() }},\n\n  \"evo_api_host\": {{ $('Data normalize').item.json.evo_api_host.toJsonString() }},\n  \"evo_api_instance\": {{ $('Data normalize').item.json.evo_api_instance.toJsonString() }},\n  \"evo_api_key\": {{ $('Data normalize').item.json.evo_api_key.toJsonString() }},\n\n  \"db_identity_key\": {{ $('Data normalize').item.json.db_identity_key.toJsonString() }}\n}\n",
-          "options": {}
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "message",
+                "value": "={{ $('AI Agent').item.json.output.message.toJsonString() }}"
+              },
+              {
+                "name": "remoteJid",
+                "value": "={{ $('Data normalize').item.json.remoteJid.toJsonString() }}"
+              },
+              {
+                "name": "sender",
+                "value": "={{ $('Data normalize').item.json.sender.toJsonString() }}"
+              },
+              {
+                "name": "evo_api_host",
+                "value": "={{ $('Data normalize').item.json.evo_api_host.toJsonString() }}"
+              },
+              {
+                "name": "evo_api_instance",
+                "value": "={{ $('Data normalize').item.json.evo_api_instance.toJsonString() }}"
+              },
+              {
+                "name": "evo_api_key",
+                "value": "={{ $('Data normalize').item.json.evo_api_key.toJsonString() }}"
+              },
+              {
+                "name": "db_identity_key",
+                "value": "={{ $('Data normalize').item.json.db_identity_key.toJsonString() }}"
+              }
+            ]
+          },
+          "options": {
+            "response": {
+              "response": {
+                "fullResponse": true,
+                "responseFormat": "text"
+              }
+            }
+          }
         },
         "type": "n8n-nodes-base.httpRequest",
         "typeVersion": 4.2,
@@ -1561,9 +1474,9 @@
       {
         "parameters": {
           "operation": "executeQuery",
-          "query": "INSERT INTO public.agent_conversation_state\n(instance, remote_jid, config_ref, state_collected, updated_at)\nVALUES ($1, $2, $3, $4::jsonb, now())\nON CONFLICT (instance, remote_jid, config_ref)\nDO UPDATE SET\n  state_collected = public.agent_conversation_state.state_collected || EXCLUDED.state_collected,\n  updated_at = now();\n",
+          "query": "INSERT INTO public.agent_conversation_state\n(instance, remote_jid, config_ref, state_collected, updated_at)\nVALUES ($1, $2, $3, $4::jsonb, now())\nON CONFLICT (instance, remote_jid, config_ref)\nDO UPDATE SET\n  state_collected = public.agent_conversation_state.state_collected || EXCLUDED.state_collected,\n  updated_at = now();",
           "options": {
-            "queryReplacement": "={{ $('Data normalize').item.json.body.instance }},{{ $('Data normalize').item.json.remoteJid }},{{$json.config_ref}},{{ JSON.stringify($json.output.collected || {}) }}"
+            "queryReplacement": "={{ $('Data normalize').item.json.body.instance }},{{ $('Data normalize').item.json.remoteJid }},{{ $json.config_ref || 'default' }},{{ JSON.stringify($json.output.collected || {}) }}"
           }
         },
         "type": "n8n-nodes-base.postgres",
@@ -1581,6 +1494,27 @@
           }
         },
         "notes": "Guarda o actualiza los datos detectados (collected) para ese chat.\nAsí el estado se actualiza y pisa keys repetidas con lo nuevo. Eso es lo que evita repreguntas.\n"
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $('Data normalize').item.json.body.data.key.remoteJid }}",
+          "contextWindowLength": 100
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+        "typeVersion": 1.3,
+        "position": [
+          -80,
+          560
+        ],
+        "id": "d02012b6-921a-4da6-9a82-72d22e05a8e0",
+        "name": "Postgres Chat Memory",
+        "credentials": {
+          "postgres": {
+            "id": "b4afdLbWtbWNdNMp",
+            "name": "Postgres account"
+          }
+        }
       }
     ],
     "connections": {
@@ -1707,11 +1641,6 @@
           ]
         ]
       },
-      "Tenant": {
-        "main": [
-          []
-        ]
-      },
       "Redis memory endpoint1": {
         "main": [
           [
@@ -1820,10 +1749,21 @@
             }
           ]
         ]
+      },
+      "Postgres Chat Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "authors": "Francisco Fiorentino",
-    "name": "Version d0e8252a",
+    "name": "Version cf17d854",
     "description": ""
   },
   "tags": [
