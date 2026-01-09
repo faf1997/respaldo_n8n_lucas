@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-07T14:22:58.426Z",
+  "updatedAt": "2026-01-08T13:01:47.077Z",
   "createdAt": "2025-12-26T17:44:17.314Z",
   "id": "c1XDmCsXI0JVI8O0",
   "name": "send message for whatsapp - endpoint",
@@ -565,8 +565,8 @@
           "headers": {
             "host": "n8n.hitofusion.frandev.com.ar",
             "user-agent": "axios/1.12.0",
-            "content-length": "918",
-            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "content-length": "499",
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, */*;q=0.1",
             "accept-encoding": "gzip, compress, deflate, br",
             "content-type": "application/json",
             "x-forwarded-for": "172.18.0.1",
@@ -579,13 +579,13 @@
           "params": {},
           "query": {},
           "body": {
-            "message": "Perfecto! Aquí tienes la planilla Excel (xlsx) con los casos de conversación para el Agente de Tickets Etapa 1. Esta planilla contiene 15 casos de prueba que cubren todos los flujos principales del sistema.\n\n**📋 Contenido del archivo:**\n- 15 casos de conversación detallados\n- Columnas: Hilo de conversación, Pregunta, Respuesta esperada, Aclaraciones/Observaciones\n- Casos que cubren: registro, consultas, creación de tickets, manejo de grupos, sincronización con Odoo\n\n**📥 Para descargar:** [casos_conversacion_agente_tickets.xlsx]\n\n¿Necesitas que agregue algún caso adicional o modifique alguno existente?",
-            "remoteJid": "5491150023292@s.whatsapp.net",
-            "sender": "5491157389737@s.whatsapp.net",
-            "evo_api_host": "https://evolutionapi.easypanel.frandev.com.ar",
-            "evo_api_instance": "mi_numero_de_hito_agente",
-            "evo_api_key": "679817054255-4166-A114-15DC0737F0C9",
-            "db_identity_key": "postgres"
+            "message": "\"Hola, ¿cómo estás? Soy parte del equipo de ventas de Hitofusion.\\n\\nContame, ¿en qué puedo ayudarte?\"",
+            "remoteJid": "\"Hola, ¿cómo estás? Soy parte del equipo de ventas de Hitofusion.\\n\\nContame, ¿en qué puedo ayudarte?\"",
+            "sender": "\"5493446544882@s.whatsapp.net\"",
+            "evo_api_host": "\"https://produ-evolution-api.qojds3.easypanel.host\"",
+            "evo_api_instance": "\"Agente Ventas\"",
+            "evo_api_key": "\"6B07C0F41179-446D-A843-661F35B4F4BD\"",
+            "db_identity_key": "\"Agente Ventas\""
           },
           "webhookUrl": "https://n8n.hitofusion.frandev.com.ar/webhook/send_message_for_whatsapp",
           "executionMode": "production"
