@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-08T04:38:09.300Z",
+  "updatedAt": "2026-01-08T13:11:58.191Z",
   "createdAt": "2025-12-22T18:38:30.372Z",
   "id": "NFWoraW2iUhGKYcb",
   "name": "agente de requerimientos",
@@ -1004,6 +1004,19 @@
       "typeVersion": 1,
       "id": "eb9cce4e-8efc-4e56-b691-9eb6fd7d7216",
       "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "command": "ssh root@ip -puerto"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        2032,
+        -800
+      ],
+      "id": "695f347f-f254-4bb2-8966-6858de2c504a",
+      "name": "Execute Command"
     }
   ],
   "connections": {
@@ -1372,7 +1385,7 @@
           "headers": {
             "host": "n8n.hitofusion.frandev.com.ar",
             "user-agent": "axios/1.13.2",
-            "content-length": "1835",
+            "content-length": "1741",
             "accept": "application/json, text/plain, */*",
             "accept-encoding": "gzip, compress, deflate, br",
             "content-type": "application/json",
@@ -1391,11 +1404,11 @@
             "data": {
               "key": {
                 "remoteJid": "5491150023292@s.whatsapp.net",
-                "remoteJidAlt": "94940336013435@lid",
+                "remoteJidAlt": "5491150023292@s.whatsapp.net",
                 "fromMe": false,
-                "id": "3EB0A100808F6AD9AD04AD",
+                "id": "ACF5D0B1478BF259EFE5BF3A393560B6",
                 "participant": "",
-                "addressingMode": "pn"
+                "addressingMode": "lid"
               },
               "pushName": "Francisco Fiorentino",
               "status": "DELIVERY_ACK",
@@ -1422,8 +1435,6 @@
                       "high": 0,
                       "unsigned": true
                     },
-                    "senderAccountType": 0,
-                    "receiverAccountType": 0,
                     "recipientKeyHash": {
                       "0": 188,
                       "1": 235,
@@ -1444,68 +1455,57 @@
                   },
                   "deviceListMetadataVersion": 2,
                   "messageSecret": {
-                    "0": 165,
-                    "1": 171,
-                    "2": 64,
-                    "3": 196,
-                    "4": 58,
-                    "5": 71,
-                    "6": 173,
-                    "7": 254,
-                    "8": 142,
-                    "9": 78,
-                    "10": 147,
-                    "11": 252,
-                    "12": 105,
-                    "13": 115,
-                    "14": 66,
-                    "15": 226,
-                    "16": 202,
-                    "17": 111,
-                    "18": 196,
-                    "19": 91,
-                    "20": 166,
-                    "21": 149,
-                    "22": 191,
-                    "23": 253,
-                    "24": 162,
-                    "25": 0,
-                    "26": 84,
-                    "27": 39,
-                    "28": 201,
-                    "29": 160,
-                    "30": 87,
-                    "31": 18
-                  },
-                  "limitSharingV2": {
-                    "trigger": 0,
-                    "initiatedByMe": false
+                    "0": 250,
+                    "1": 89,
+                    "2": 170,
+                    "3": 38,
+                    "4": 101,
+                    "5": 98,
+                    "6": 99,
+                    "7": 50,
+                    "8": 18,
+                    "9": 98,
+                    "10": 211,
+                    "11": 186,
+                    "12": 5,
+                    "13": 4,
+                    "14": 101,
+                    "15": 243,
+                    "16": 189,
+                    "17": 216,
+                    "18": 5,
+                    "19": 148,
+                    "20": 104,
+                    "21": 219,
+                    "22": 119,
+                    "23": 241,
+                    "24": 206,
+                    "25": 170,
+                    "26": 206,
+                    "27": 180,
+                    "28": 20,
+                    "29": 165,
+                    "30": 81,
+                    "31": 114
                   }
                 },
-                "conversation": "dame los hitos/objetivos del proyecto"
+                "conversation": "Dame los hitos en texto plano"
               },
               "contextInfo": {
                 "mentionedJid": [],
                 "groupMentions": [],
                 "statusAttributions": [],
-                "ephemeralSettingTimestamp": {
-                  "low": 1767558652,
-                  "high": 0,
-                  "unsigned": false
-                },
-                "disappearingMode": {
-                  "initiator": 0,
-                  "trigger": 1,
-                  "initiatedByMe": false
-                }
+                "entryPointConversionSource": "global_search_new_chat",
+                "entryPointConversionApp": "whatsapp",
+                "entryPointConversionDelaySeconds": 233456
               },
               "messageType": "conversation",
-              "messageTimestamp": 1767743231,
+              "messageTimestamp": 1767877224,
               "instanceId": "56f84f78-0d56-4592-b848-b01b0c254241",
-              "source": "web"
+              "source": "android"
             },
             "destination": "https://n8n.hitofusion.frandev.com.ar/webhook/203fcfc0-23db-47da-8fac-01db5ed482bc",
-            "date_time": "2026-01-06T20:47:11.759Z",
+            "date_time": "2026-01-08T10:00:25.147Z",
             "sender": "5491157389737@s.whatsapp.net",
             "server_url": "https://evolutionapi.easypanel.frandev.com.ar",
             "apikey": "679817054255-4166-A114-15DC0737F0C9"
@@ -1519,8 +1519,8 @@
       }
     ]
   },
-  "versionId": "565e9a76-ff35-42ea-a60d-33829c36ca20",
-  "activeVersionId": "565e9a76-ff35-42ea-a60d-33829c36ca20",
+  "versionId": "e5104147-5fd4-421d-bd16-bb068d5522b9",
+  "activeVersionId": "e5104147-5fd4-421d-bd16-bb068d5522b9",
   "triggerCount": 2,
   "shared": [
     {
@@ -1532,9 +1532,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-08T04:38:12.000Z",
-    "createdAt": "2026-01-08T04:38:09.311Z",
-    "versionId": "565e9a76-ff35-42ea-a60d-33829c36ca20",
+    "updatedAt": "2026-01-08T05:21:16.000Z",
+    "createdAt": "2026-01-08T05:21:13.834Z",
+    "versionId": "e5104147-5fd4-421d-bd16-bb068d5522b9",
     "workflowId": "NFWoraW2iUhGKYcb",
     "nodes": [
       {
@@ -2535,6 +2535,19 @@
         "typeVersion": 1,
         "id": "eb9cce4e-8efc-4e56-b691-9eb6fd7d7216",
         "name": "Sticky Note2"
+      },
+      {
+        "parameters": {
+          "command": "ssh root@ip -puerto"
+        },
+        "type": "n8n-nodes-base.executeCommand",
+        "typeVersion": 1,
+        "position": [
+          2032,
+          -800
+        ],
+        "id": "695f347f-f254-4bb2-8966-6858de2c504a",
+        "name": "Execute Command"
       }
     ],
     "connections": {
@@ -2886,7 +2899,7 @@
       }
     },
     "authors": "Francisco Fiorentino",
-    "name": "Version 565e9a76",
+    "name": "Version e5104147",
     "description": ""
   },
   "tags": []
