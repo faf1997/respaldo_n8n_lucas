@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-08T13:01:47.077Z",
+  "updatedAt": "2026-01-09T12:49:48.265Z",
   "createdAt": "2025-12-26T17:44:17.314Z",
   "id": "c1XDmCsXI0JVI8O0",
   "name": "send message for whatsapp - endpoint",
@@ -27,7 +27,7 @@
     {
       "parameters": {
         "mode": "raw",
-        "jsonOutput": "={\n  \"message\": \"{{ $json.body.message }}\",\n  \"remoteJid\": \"{{ $json.body.remoteJid }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n\n  \"evo_api_host\":\"https://evolutionapi.easypanel.frandev.com.ar\",\n  \"evo_api_instance\":\"{{ $json.body.evo_api_instance }}\",\n  \"evo_api_key\": \"{{ $json.body.evo_api_key }}\",\n  \"db_identity_key\": \"{{ $json.body.db_identity_key }}\"\n}",
+        "jsonOutput": "={\n  \"message\": \"{{ $json.body.message }}\",\n  \"remoteJid\": \"{{ $json.body.remoteJid }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n\n  \"evo_api_host\": \"{{$json.body.evo_api_host}}\",\n  \"evo_api_instance\":\"{{ $json.body.evo_api_instance }}\",\n  \"evo_api_key\": \"{{ $json.body.evo_api_key }}\",\n  \"db_identity_key\": \"{{ $json.body.db_identity_key }}\"\n}",
         "options": {}
       },
       "type": "n8n-nodes-base.set",
@@ -596,8 +596,8 @@
       }
     ]
   },
-  "versionId": "52d914ae-514d-440c-93ce-1467839ec140",
-  "activeVersionId": "52d914ae-514d-440c-93ce-1467839ec140",
+  "versionId": "d2f10fc1-4d24-4003-9780-b9742933702b",
+  "activeVersionId": "d2f10fc1-4d24-4003-9780-b9742933702b",
   "triggerCount": 1,
   "shared": [
     {
@@ -609,9 +609,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-07T14:23:01.000Z",
-    "createdAt": "2026-01-07T14:22:58.427Z",
-    "versionId": "52d914ae-514d-440c-93ce-1467839ec140",
+    "updatedAt": "2026-01-09T12:50:00.000Z",
+    "createdAt": "2026-01-09T12:49:48.268Z",
+    "versionId": "d2f10fc1-4d24-4003-9780-b9742933702b",
     "workflowId": "c1XDmCsXI0JVI8O0",
     "nodes": [
       {
@@ -635,7 +635,7 @@
       {
         "parameters": {
           "mode": "raw",
-          "jsonOutput": "={\n  \"message\": \"{{ $json.body.message }}\",\n  \"remoteJid\": \"{{ $json.body.remoteJid }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n\n  \"evo_api_host\":\"https://evolutionapi.easypanel.frandev.com.ar\",\n  \"evo_api_instance\":\"{{ $json.body.evo_api_instance }}\",\n  \"evo_api_key\": \"{{ $json.body.evo_api_key }}\",\n  \"db_identity_key\": \"{{ $json.body.db_identity_key }}\"\n}",
+          "jsonOutput": "={\n  \"message\": \"{{ $json.body.message }}\",\n  \"remoteJid\": \"{{ $json.body.remoteJid }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n\n  \"evo_api_host\": \"{{$json.body.evo_api_host}}\",\n  \"evo_api_instance\":\"{{ $json.body.evo_api_instance }}\",\n  \"evo_api_key\": \"{{ $json.body.evo_api_key }}\",\n  \"db_identity_key\": \"{{ $json.body.db_identity_key }}\"\n}",
           "options": {}
         },
         "type": "n8n-nodes-base.set",
@@ -1160,7 +1160,7 @@
       }
     },
     "authors": "Francisco Fiorentino",
-    "name": "Version 52d914ae",
+    "name": "Version d2f10fc1",
     "description": ""
   },
   "tags": [
