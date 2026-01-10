@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-09T03:29:30.555Z",
+  "updatedAt": "2026-01-09T12:58:41.200Z",
   "createdAt": "2025-12-23T13:51:51.854Z",
   "id": "GfgcdVG5VN8tJXo7",
   "name": "Agente Ventas",
@@ -410,54 +410,6 @@
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "=https://n8n.hitofusion.frandev.com.ar/webhook/send_message_for_whatsapp",
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            {
-              "name": "message",
-              "value": "={{ $('AI Agent').item.json.output.message }}"
-            },
-            {
-              "name": "remoteJid",
-              "value": "={{ $('Data normalize').item.json.remoteJid }}"
-            },
-            {
-              "name": "sender",
-              "value": "={{ $('Data normalize').item.json.sender }}"
-            },
-            {
-              "name": "evo_api_host",
-              "value": "={{ $('Data normalize').item.json.evo_api_host }}"
-            },
-            {
-              "name": "evo_api_instance",
-              "value": "={{ $('Data normalize').item.json.evo_api_instance }}"
-            },
-            {
-              "name": "evo_api_key",
-              "value": "={{ $('Data normalize').item.json.evo_api_key }}"
-            },
-            {
-              "name": "db_identity_key",
-              "value": "={{ $('Data normalize').item.json.db_identity_key }}"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        768,
-        352
-      ],
-      "id": "031ae76b-c74f-48d2-8764-819cada2b1a5",
-      "name": "send message4"
-    },
-    {
-      "parameters": {
         "assignments": {
           "assignments": [
             {
@@ -545,6 +497,24 @@
           "name": "Postgres account"
         }
       }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://n8n.hitofusion.frandev.com.ar/webhook/send_message_for_whatsapp",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"message\": {{ $('AI Agent').item.json.output.message.toJsonString() }},\n  \"remoteJid\": {{$('Data normalize').item.json.remoteJid.toJsonString() }},\n  \"sender\": {{ $('Data normalize').item.json.sender.toJsonString() }},\n\n  \"evo_api_host\": {{ $('Data normalize').item.json.evo_api_host.toJsonString() }},\n  \"evo_api_instance\": {{ $('Data normalize').item.json.evo_api_instance.toJsonString() }},\n  \"evo_api_key\": {{$('Data normalize').item.json.evo_api_key.toJsonString() }},\n\n  \"db_identity_key\": {{ $('Data normalize').item.json.db_identity_key.toJsonString() }}\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        736,
+        352
+      ],
+      "id": "1ffc0046-821d-4290-b17b-03295c524a98",
+      "name": "send message"
     }
   ],
   "connections": {
@@ -742,11 +712,6 @@
         ]
       ]
     },
-    "send message4": {
-      "main": [
-        []
-      ]
-    },
     "Default State": {
       "main": [
         [
@@ -773,7 +738,7 @@
       "main": [
         [
           {
-            "node": "send message4",
+            "node": "send message",
             "type": "main",
             "index": 0
           }
@@ -942,7 +907,7 @@
       }
     ]
   },
-  "versionId": "5f24aedd-7085-4c49-8ce1-280324ce951a",
+  "versionId": "37354c7a-2b95-4f1c-b82b-f0cedbe2f3fb",
   "activeVersionId": "cf17d854-8715-40a3-aec2-a46a5da6e85c",
   "triggerCount": 1,
   "shared": [
