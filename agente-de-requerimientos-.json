@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-08T13:11:58.191Z",
+  "updatedAt": "2026-01-09T15:22:51.621Z",
   "createdAt": "2025-12-22T18:38:30.372Z",
   "id": "NFWoraW2iUhGKYcb",
   "name": "agente de requerimientos",
@@ -78,7 +78,8 @@
       ],
       "id": "e6880025-305b-4dc5-916b-5ee34720e743",
       "name": "Webhook",
-      "webhookId": "203fcfc0-23db-47da-8fac-01db5ed482bc"
+      "webhookId": "203fcfc0-23db-47da-8fac-01db5ed482bc",
+      "disabled": true
     },
     {
       "parameters": {
@@ -1519,9 +1520,9 @@
       }
     ]
   },
-  "versionId": "e5104147-5fd4-421d-bd16-bb068d5522b9",
-  "activeVersionId": "e5104147-5fd4-421d-bd16-bb068d5522b9",
-  "triggerCount": 2,
+  "versionId": "d5f07496-b789-4098-b46c-ca7426516d2e",
+  "activeVersionId": "d5f07496-b789-4098-b46c-ca7426516d2e",
+  "triggerCount": 1,
   "shared": [
     {
       "updatedAt": "2025-12-22T18:38:30.377Z",
@@ -1532,9 +1533,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-08T05:21:16.000Z",
-    "createdAt": "2026-01-08T05:21:13.834Z",
-    "versionId": "e5104147-5fd4-421d-bd16-bb068d5522b9",
+    "updatedAt": "2026-01-09T15:22:42.000Z",
+    "createdAt": "2026-01-09T15:22:40.063Z",
+    "versionId": "d5f07496-b789-4098-b46c-ca7426516d2e",
     "workflowId": "NFWoraW2iUhGKYcb",
     "nodes": [
       {
@@ -1609,7 +1610,8 @@
         ],
         "id": "e6880025-305b-4dc5-916b-5ee34720e743",
         "name": "Webhook",
-        "webhookId": "203fcfc0-23db-47da-8fac-01db5ed482bc"
+        "webhookId": "203fcfc0-23db-47da-8fac-01db5ed482bc",
+        "disabled": true
       },
       {
         "parameters": {
@@ -2899,7 +2901,7 @@
       }
     },
     "authors": "Francisco Fiorentino",
-    "name": "Version e5104147",
+    "name": "Version d5f07496",
     "description": ""
   },
   "tags": []
