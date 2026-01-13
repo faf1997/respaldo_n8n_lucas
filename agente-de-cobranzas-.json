@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-02T20:39:23.662Z",
+  "updatedAt": "2026-01-12T14:27:55.172Z",
   "createdAt": "2026-01-02T18:32:47.763Z",
   "id": "bJBC0ZAO8RofFL3E",
   "name": "agente de cobranzas",
@@ -16,6 +16,27 @@
       ],
       "id": "67994889-4fd2-4ba9-9895-15fb6c68914b",
       "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH last_100 AS (\n  SELECT \n    id,\n    message->>'type' AS type,\n    message->>'content' AS content,\n    ROW_NUMBER() OVER (ORDER BY id DESC) as rn\n  FROM n8n_chat_histories\n  ORDER BY id DESC\n  LIMIT 100\n),\nreversed AS (\n  SELECT \n    id, \n    type, \n    content,\n    rn\n  FROM last_100\n  ORDER BY rn ASC\n),\nhuman_until_ai AS (\n  SELECT \n    id, \n    type, \n    content,\n    SUM(CASE WHEN type = 'ai' THEN 1 ELSE 0 END) OVER (ORDER BY rn ASC) as ai_found\n  FROM reversed\n)\nSELECT id, type, content\nFROM human_until_ai\nWHERE ai_found = 0\n  AND type = 'human'\nORDER BY id ASC;\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        16,
+        -160
+      ],
+      "id": "943458b3-aab3-44d5-8bf4-b06f32780574",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "b4afdLbWtbWNdNMp",
+          "name": "Postgres account"
+        }
+      }
     }
   ],
   "connections": {},
@@ -23,9 +44,11 @@
     "executionOrder": "v1"
   },
   "staticData": null,
-  "meta": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
   "pinData": {},
-  "versionId": "2c0cbb9d-f310-46be-af88-247aa0cdcb0f",
+  "versionId": "7e0d5f3c-ec12-460d-ad04-2a0007affe2f",
   "activeVersionId": null,
   "triggerCount": 0,
   "shared": [
