@@ -1,0 +1,371 @@
+{
+  "updatedAt": "2026-01-14T06:04:14.000Z",
+  "createdAt": "2026-01-14T06:04:14.045Z",
+  "id": "kPiLAKMdsfwIaxep",
+  "name": "SmartTrack Agent - Carga de documentación",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -256,
+        -16
+      ],
+      "id": "d3b6aed4-8e84-46c5-b92e-59e4c5bf6030",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Code').first().json.contenido }}",
+        "options": {
+          "systemMessage": "==== COMIENZO DIRECTIVAS GENERALES DEL ASISTENTE ===\n\n## ROL Y OBJETIVO\nEres \"SmartTrack DDBB\", un asistente experto cuyo único objetivo es ayudar al usuario a gestionar la base de conocimiento de SmartTrack utilizando las herramientas que tienes a tu disposición.\n\n## PROTOCOLOS DE OPERACIÓN\nA continuación, se detallan los protocolos que debes seguir de forma estricta.\n\n### Ciclo de Acción Básico\n1.  **Analiza la solicitud del usuario** para determinar su intención (crear, actualizar, buscar, etc.).\n2.  **Seleccion de la herramienta**: Para solucitudes especificas selecciona la más adecuada de tu lista para cumplir con esa intención.\n3.  **Sigue estrictamente las instrucciones, parámetros y lógicas de ejecución** detalladas en la descripción de las herramientas que elijas.\n4.  **Pide siempre confirmación explícita** al usuario antes de ejecutar cualquier herramienta que modifique datos (crear, actualizar o eliminar).\n\n### Regla de interpretación de intención\n- Si la pregunta incluye expresiones como “qué opciones tengo”, “qué alternativas hay”, “qué puedo elegir” o “qué planes existen”, la intención debe clasificarse como **consulta comercial o informativa**, no técnica.\n- En esos casos, prioriza buscar en las bases de datos de **faqs** o **lista de precios**, y no en las de configuración o soporte.\n\n### Protocolo de Búsqueda\n- **Búsquedas Específicas:** Si el usuario pregunta por un dato concreto (ej. \"¿cuál es el precio?\", \"¿cómo se configura?\"), utiliza la herramienta de búsqueda más directa para esa tabla (`buscar_lista_precios`, `buscar_manual_configuracion`, etc.) y responde únicamente con esa información.\n\n- **Búsquedas Completas (Regla Principal):** Si el usuario pide **\"toda la información\"**, un **\"resumen completo\"**, o realiza una pregunta abierta sobre un producto (ej. \"háblame del modelo X\"), DEBES ejecutar una búsqueda secuencial en **TODAS** las tablas:\n    1.  **Búsqueda Maestra:** Primero, usa `buscar_productos_catalogo` para encontrar el producto. Si no existe, detente e informa al usuario.\n    2.  **Búsquedas Secundarias:** Si el producto existe, procede a buscar información adicional sobre el mismo producto en **TODAS las demás herramientas de búsqueda** disponibles (`buscar_lista_precios`, `buscar_faqs`, etc.).\n    3.  **Respuesta Consolidada:** Finalmente, recopila **TODA** la información obtenida de todas las búsquedas y preséntala al usuario en una única respuesta bien estructurada.\n\n### Protocolo de Datos\n- **Codificación y Caracteres:** Todo el texto proporcionado para ser guardado en la base de datos debe ser compatible con el estándar **UTF-8**. Evita el uso de emojis o caracteres gráficos que puedan causar problemas.\n\n### Protocolo de Comunicación con el Usuario\n- **Lenguaje Natural:** Comunícate siempre en un lenguaje claro y sencillo. Tu función es ser un asistente, no una terminal.\n- **Abstracción Técnica:** NUNCA menciones los nombres técnicos de las herramientas (ej. `crear_producto_catalogo`) ni detalles de la base de datos (nombres de tablas o columnas).\n- **Ejemplo INCORRECTO:** \"Entendido. Voy a usar la herramienta `crear_producto_catalogo`.\"\n- **Ejemplo CORRECTO:** \"Entendido. Voy a registrar el nuevo producto en el catálogo.\"\n\n=== FIN DIRECTIVAS GENERALES DEL ASISTENTE ==="
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        208,
+        -16
+      ],
+      "id": "00550e3e-0c9d-4180-8485-26a874088080",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -16,
+        272
+      ],
+      "id": "e175ae64-14b4-4366-91d4-e9c73f223737",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {
+        "sseEndpoint": "https://n8n.devman2.com/mcp/smarttrack_catalogo /sse",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        224,
+        272
+      ],
+      "id": "b05a29ba-091d-4e0c-bdf2-75c22327cc02",
+      "name": "MCP Catalogo"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('When Executed by Another Workflow').item.json.instance.server_url }}/message/sendText/{{ $('When Executed by Another Workflow').item.json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('When Executed by Another Workflow').item.json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('When Executed by Another Workflow').item.json.message.chat_id }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.output }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        576,
+        -16
+      ],
+      "id": "38881fd4-dfb6-49cd-bd12-cad9a315a075",
+      "name": "HTTP Request4"
+    },
+    {
+      "parameters": {
+        "sseEndpoint": "https://n8n.devman2.com/mcp/smarttrack_faqs/sse",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        512,
+        272
+      ],
+      "id": "b4a7ba72-96f2-43b3-8ecb-89068405c491",
+      "name": "MCP Faqs"
+    },
+    {
+      "parameters": {
+        "sseEndpoint": "https://n8n.devman2.com/mcp/smarttrack_soporte/sse",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        512,
+        448
+      ],
+      "id": "13c936c4-ffe5-42ed-8594-31fc8f99b023",
+      "name": "MCP Soporte"
+    },
+    {
+      "parameters": {
+        "sseEndpoint": "https://n8n.devman2.com/mcp/smarttrack_configuracion/sse",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        368,
+        448
+      ],
+      "id": "98495136-6673-4ebf-aa7b-12ed0525de94",
+      "name": "MCP Configuracion"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('When Executed by Another Workflow').item.json.message.chat_id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        112,
+        272
+      ],
+      "id": "21b9afb6-f3dd-42b0-b047-6bfc7aadf641",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "sseEndpoint": "https://n8n.devman2.com/mcp/lista_precios/sse",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        368,
+        272
+      ],
+      "id": "4fb8b8e2-6a8c-49d0-a93f-82a5738cce79",
+      "name": "MCP Lista de precios"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Accedemos directamente al campo 'contenido'.\nlet contenido = $(\"When Executed by Another Workflow\").first().json.message.content;\n\nfunction sanitizeText(input) {\n  // 1. Reemplazar null (\\u0000) por espacio\n  let text = input.replace(/\\u0000/g, ' ');\n\n  // 2. Función para mapear acentos/ñ/ç a ASCII\n  const normalizeMap = {\n    'á':'a','à':'a','ä':'a','â':'a',\n    'é':'e','è':'e','ë':'e','ê':'e',\n    'í':'i','ì':'i','ï':'i','î':'i',\n    'ó':'o','ò':'o','ö':'o','ô':'o',\n    'ú':'u','ù':'u','ü':'u','û':'u',\n    'Á':'A','À':'A','Ä':'A','Â':'A',\n    'É':'E','È':'E','Ë':'E','Ê':'E',\n    'Í':'I','Ì':'I','Ï':'I','Î':'I',\n    'Ó':'O','Ò':'O','Ö':'O','Ô':'O',\n    'Ú':'U','Ù':'U','Ü':'U','Û':'U',\n    'ñ':'n','Ñ':'N','ç':'c','Ç':'C'\n  };\n\n  // 3. Reemplazar caracteres problemáticos, pero mantener \\n y \\t\n  const sanitized = text.replace(/[^ -~\\n\\t]/g, c => normalizeMap[c] || '');\n\n  return sanitized;\n}\n\n// Aplicamos la función\ncontenido = sanitizeText(contenido);\n\n// Retornamos el resultado\nreturn { contenido };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -32,
+        -16
+      ],
+      "id": "f87e9549-630d-40da-b6bb-fb6c142d1d14",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "sseEndpoint": "https://n8n.devman2.com/mcp/smarttrack_funcional/sse",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        224,
+        448
+      ],
+      "id": "9daab23b-7637-4705-940f-6098de5088d2",
+      "name": "MCP Tecnico Funcional"
+    }
+  ],
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Catalogo": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Faqs": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Soporte": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Configuracion": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Lista de precios": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Tecnico Funcional": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "instance": {
+            "server_url": "https://evolution.devman2.com",
+            "name": "smarttrack",
+            "apikey": "403322104F38-4531-BE34-484BB05CAAF6"
+          },
+          "message": {
+            "message_id": "3FD93867ADDC3FF7BEDB",
+            "chat_id": "5493412739739@s.whatsapp.net",
+            "content_type": "text",
+            "content": "Pasame toda la informacion que tengas sobre el modelo LK-20000",
+            "timestamp": "2025-10-15T09:53:24.000-03:00"
+          },
+          "user": {
+            "name": "Genaro García"
+          }
+        }
+      }
+    ]
+  },
+  "versionId": "c0acaab2-2d67-450e-a5b2-2a65fa561f09",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-14T06:04:14.056Z",
+      "createdAt": "2026-01-14T06:04:14.056Z",
+      "role": "workflow:owner",
+      "workflowId": "kPiLAKMdsfwIaxep",
+      "projectId": "Ts2xaK8jD6HfpDh3"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
