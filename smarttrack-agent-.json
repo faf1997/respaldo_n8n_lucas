@@ -1,0 +1,4293 @@
+{
+  "updatedAt": "2026-01-14T06:03:35.043Z",
+  "createdAt": "2026-01-14T06:02:17.021Z",
+  "id": "qoaFaSyszPB10Zhw",
+  "name": "SmartTrack Agent",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "smarttrack",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        224
+      ],
+      "id": "c43f85ad-9577-48bd-b374-1d83c13de2e9",
+      "name": "Webhook WhatsApp",
+      "webhookId": "2af683f8-fc7e-4232-8065-860cb8143c91"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7c3590b8-a248-4722-a8b1-29c8adc0714a",
+              "name": "instance.server_url",
+              "value": "=https://evolutionapi.easypanel.frandev.com.ar",
+              "type": "string"
+            },
+            {
+              "id": "aea56560-183f-4d65-b946-7cdf5701ccb2",
+              "name": "instance.name",
+              "value": "=kelo_bot_de_asistencia_tecnica_y_ventas",
+              "type": "string"
+            },
+            {
+              "id": "34258c5a-07e8-404b-9845-024fe2371700",
+              "name": "instance.apikey",
+              "value": "=943446F0AB1B-4DDA-BEF3-78861AA945BE",
+              "type": "string"
+            },
+            {
+              "id": "041f13eb-7c1d-4263-a335-ddc30a6d37f1",
+              "name": "message.message_id",
+              "value": "={{ $json.body.data.key.id }}",
+              "type": "string"
+            },
+            {
+              "id": "0dcfe79e-ba95-4c35-8796-1d2c5559dece",
+              "name": "message.chat_id",
+              "value": "={{ \n  $json.body.data.key.remoteJid?.includes('@lid')\n    ? $json.body.data.key.remoteJidAlt\n    : $json.body.data.key.remoteJid \n}}",
+              "type": "string"
+            },
+            {
+              "id": "834786fc-883a-4f77-9730-ded7ae767b7b",
+              "name": "message.content_type",
+              "value": "={{ \n  $json.body.data.message.extendedTextMessage ? 'text' :\n  $json.body.data.message.conversation ? 'text' :\n  $json.body.data.message.audioMessage ? 'audio' :\n  $json.body.data.message.imageMessage ? 'image' :\n  ''\n}}",
+              "type": "string"
+            },
+            {
+              "id": "88a2213b-4938-45ff-aa11-79f0e9f538cb",
+              "name": "message.content",
+              "value": "={{ \n  $json.body.data.message.extendedTextMessage?.text ?\n  $json.body.data.message.extendedTextMessage.text :\n  $json.body.data.message.imageMessage?.caption ? \n  $json.body.data.message.imageMessage.caption :\n  $json.body.data.message.conversation ? $json.body.data.message.conversation :\n  ''\n}}",
+              "type": "string"
+            },
+            {
+              "id": "ff0db4e6-02cf-4b2f-9348-b0e19e192ebe",
+              "name": "message.timestamp",
+              "value": "={{ $json.body.data.messageTimestamp.toDateTime('s').toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "2206f6a0-fc70-432f-a31e-90d7452ee140",
+              "name": "user.name",
+              "value": "={{ $json.body.data.pushName }}",
+              "type": "string"
+            },
+            {
+              "id": "45b830f0-42ea-41bd-a83f-89670438bc74",
+              "name": "message.is_ad",
+              "value": "={{   !!$json.body.data.contextInfo?.externalAdReply   || $json.body.data.contextInfo?.entryPointConversionSource === 'ctwa_ad'}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -176,
+        224
+      ],
+      "id": "0fe3aec3-507e-433c-b4e6-e5c596cb98eb",
+      "name": "Data nomalize"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3760,
+        3616
+      ],
+      "id": "28786e0b-e9a9-4d77-98ac-250815a756b3",
+      "name": "OpenAI Chat"
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "list": "={{ $('Data nomalize').item.json.message.chat_id }}_buffer",
+        "messageData": "={{ JSON.stringify($('Data nomalize').item.json.message) }}",
+        "tail": true
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        3136,
+        544
+      ],
+      "id": "db1889b8-b960-46bf-a517-600bf8e780a6",
+      "name": "Redis Push buffer"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ JSON.parse($('Redis Get buffer').item.json.message.last()).message_id }}",
+                    "rightValue": "={{ $('Data nomalize').item.json.message.message_id }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEquals"
+                    },
+                    "id": "225fe3a9-0fc4-4fb0-b78f-5f22ade1bc3b"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Stop"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "e5d3afb6-e92a-4c3f-83c3-2c870d912dd3",
+                    "leftValue": "={{ JSON.parse($('Redis Get buffer').item.json.message.last()).timestamp }}",
+                    "rightValue": "={{ $now.minus(10, 'seconds') }}",
+                    "operator": {
+                      "type": "dateTime",
+                      "operation": "before"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Continue"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Espera"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        3616,
+        544
+      ],
+      "id": "7899b0c5-2aec-4217-8b9a-9b36fa681fb7",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "message",
+        "key": "={{ $('Data nomalize').item.json.message.chat_id }}_buffer",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        3392,
+        544
+      ],
+      "id": "bed7784a-3b95-4a4b-b7a5-9789aa87b791",
+      "name": "Redis Get buffer"
+    },
+    {
+      "parameters": {
+        "amount": 8
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3488,
+        752
+      ],
+      "id": "0daa0e8e-1c83-4be2-b78a-ecdbc81bd2ae",
+      "name": "Wait buffer",
+      "webhookId": "cae2ee0f-a9cb-4e73-9d0f-50501b086d27"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "message",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        4032,
+        544
+      ],
+      "id": "ab3d49f6-1570-48cb-94d0-4417631470b9",
+      "name": "Split Buffer"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ $('Split Buffer').item.json.message }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        4192,
+        544
+      ],
+      "id": "b1ee882e-dae7-470c-8f08-e70aa19e143a",
+      "name": "JSON parse Buffer"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "79816eea-bdc1-4190-b30a-1ac11f143cf4",
+              "name": "content",
+              "value": "={{ $('JSON parse Buffer').item.json.content }}",
+              "type": "string"
+            },
+            {
+              "id": "035cb6d4-7c7d-4378-8856-f6ec1b6c6e03",
+              "name": "timestamp",
+              "value": "={{$('JSON parse Buffer').item.json.timestamp}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5136,
+        816
+      ],
+      "id": "7a4ae40c-c9fe-425a-a0cc-8608c6589688",
+      "name": "Text content"
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "timestamp"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        5936,
+        544
+      ],
+      "id": "8066b783-3bcc-4fd6-b959-438b287abc38",
+      "name": "Sort"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "content",
+              "renameField": true,
+              "outputFieldName": "messages"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        6192,
+        544
+      ],
+      "id": "aa8b7fd5-1c51-4e51-ad15-8ce23b2b1225",
+      "name": "Content merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "05d989ed-4821-4371-a10f-042f44621b40",
+              "name": "chat_input",
+              "value": "={{ $json.messages.join(\"\\n\") }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -176,
+        2880
+      ],
+      "id": "5a66af09-1e84-48cf-96ed-2155dfcc2ccc",
+      "name": "Chat input"
+    },
+    {
+      "parameters": {
+        "content": "## 🟣 Etapa 1: Recepción y Normalización del Mensaje\n",
+        "height": 1500,
+        "width": 1620,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -192,
+        -48
+      ],
+      "typeVersion": 1,
+      "id": "e35d5d4a-50a6-4ae6-88ad-3cdf72b8f2e6",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Data nomalize').first().json.message.chat_id }}",
+        "tableName": "SmartTrack",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        3872,
+        3616
+      ],
+      "id": "ef32383c-2c45-4163-8346-cd3a1fc95e2f",
+      "name": "Postgres Chat Memory"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "={{ $('Data nomalize').item.json.message.chat_id }}_buffer"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        3856,
+        544
+      ],
+      "id": "b0ef6c73-2469-4cf0-a606-c5586f28917e",
+      "name": "Redis Delete",
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.content_type }}",
+                    "rightValue": "audio",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "0aec5143-ed0e-42dd-9f51-36b237b2a7b7"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2a7136f6-b23a-44fb-b96b-e6e8b103124f",
+                    "leftValue": "={{ $json.content_type }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Image"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "05ef4aec-a954-4e27-9021-16c12fbbceb6",
+                    "leftValue": "={{ $json.content_type }}",
+                    "rightValue": "text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Other"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        4400,
+        512
+      ],
+      "id": "ba6359aa-42a3-4d2b-89df-294d4b980038",
+      "name": "Switch Type"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').item.json.instance.server_url }}/chat/getBase64FromMediaMessage/{{ $('Data nomalize').item.json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').item.json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message.key.id",
+              "value": "={{ $('Data nomalize').item.json.message.message_id }}"
+            },
+            {
+              "name": "convertToMp4",
+              "value": "={{ Boolean(false) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4848,
+        336
+      ],
+      "id": "a14c84e8-020f-4f76-bbb6-2a11be7775df",
+      "name": "Get Audio",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "base64",
+        "options": {
+          "mimeType": "={{ $json.mimetype }}"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        5072,
+        336
+      ],
+      "id": "a64360a6-7511-4cf8-aaa6-fa8499e18800",
+      "name": "Convert Audio",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        5296,
+        336
+      ],
+      "id": "669b0b69-b90f-401e-b961-134b42edc094",
+      "name": "OpenAI Audio Transcribe",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').item.json.instance.server_url }}/chat/getBase64FromMediaMessage/{{ $('Data nomalize').item.json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').item.json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "message.key.id",
+              "value": "={{ $('Data nomalize').item.json.message.message_id }}"
+            },
+            {
+              "name": "convertToMp4",
+              "value": "={{ Boolean(false) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4848,
+        544
+      ],
+      "id": "48192a8f-d996-4a4e-a10e-e5f1499d31e8",
+      "name": "Get Image",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "base64",
+        "options": {
+          "mimeType": "={{ $json.mimetype }}"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        5072,
+        544
+      ],
+      "id": "9b54f5d5-a5bd-4625-835d-745733957501",
+      "name": "Convert Image",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "text": "Describe la Imagen",
+        "inputType": "base64",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        5296,
+        544
+      ],
+      "id": "65bba75d-f770-4004-92ac-c575ef9913f4",
+      "name": "OpenAI Describe Image",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "79816eea-bdc1-4190-b30a-1ac11f143cf4",
+              "name": "content",
+              "value": "=<audio>\n{{ $json.text }}\n</audio>",
+              "type": "string"
+            },
+            {
+              "id": "035cb6d4-7c7d-4378-8856-f6ec1b6c6e03",
+              "name": "timestamp",
+              "value": "={{$('JSON parse Buffer').item.json.timestamp}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5472,
+        336
+      ],
+      "id": "069834fb-509e-467c-ac1a-697c50524d0a",
+      "name": "Audio content"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "79816eea-bdc1-4190-b30a-1ac11f143cf4",
+              "name": "content",
+              "value": "={{ $('Get Image').item.json.caption }}\n<image>\n{{ $json.content }}\n</image>",
+              "type": "string"
+            },
+            {
+              "id": "035cb6d4-7c7d-4378-8856-f6ec1b6c6e03",
+              "name": "timestamp",
+              "value": "={{$('JSON parse Buffer').item.json.timestamp}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        5472,
+        544
+      ],
+      "id": "70613cfb-ee90-4452-b45a-f9423f4014f5",
+      "name": "Image content"
+    },
+    {
+      "parameters": {
+        "content": "\n## 🔵 Etapa 2: Gestión del Buffer y Antispam\n",
+        "height": 1160,
+        "width": 980,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        3056,
+        176
+      ],
+      "id": "9d90d57e-60e1-4817-bcdc-64abbdc279ed",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## 🟠 Etapa 3: Construcción del Contexto Conversacional\n",
+        "height": 1160,
+        "width": 2260,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        4048,
+        176
+      ],
+      "id": "9cf5c027-6161-4297-ad0e-ee38e132d1b0",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"response\": {\n      \"part_1\": \"Parte uno de la respuesta\",\n      \"part_2\": \"Parte dos de la respuesta (opcional).\",\n      \"part_3\": \"Parte tres de la respuesta (opcional).\"\n    }\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        4448,
+        3616
+      ],
+      "id": "e14fb669-7bd2-432c-9ca4-06ba9976dbc0",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        4240,
+        3616
+      ],
+      "id": "05fd8330-3179-4538-85dc-8ed62eb8bee7",
+      "name": "4o mini Verificador"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4b92a1f4-d4bc-4689-87cf-1be40aa49c27",
+              "leftValue": "={{ $('AI Agent Verificador').item.json.output.response.part_2 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4848,
+        3424
+      ],
+      "id": "5a20fc9d-b939-4988-9f0d-1a0ad677dab7",
+      "name": "If Parte 2"
+    },
+    {
+      "parameters": {
+        "amount": "={{ $('AI Agent Verificador').item.json.output.response.part_2.length*0.01 }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        5072,
+        3552
+      ],
+      "id": "09d8556b-3016-406f-80c6-98672079ebee",
+      "name": "Wait",
+      "webhookId": "2942c090-bb38-4759-970c-8bfbbf533336"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4b92a1f4-d4bc-4689-87cf-1be40aa49c27",
+              "leftValue": "={{ $('AI Agent Verificador').item.json.output.response.part_3 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5488,
+        3424
+      ],
+      "id": "03770790-ab9b-4b3c-8d47-fc16427745f2",
+      "name": "If Parte 3"
+    },
+    {
+      "parameters": {
+        "amount": "={{ 2+$('AI Agent Verificador').item.json.output.response.part_3.length*0.01 }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        5712,
+        3552
+      ],
+      "id": "ee902f91-0c10-40ea-a6a8-a11e49b8be5f",
+      "name": "Wait2",
+      "webhookId": "0180f729-50db-40d2-b5ca-361ccb837097"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        6112,
+        3424
+      ],
+      "id": "9e124699-9d07-48b4-87d4-59a4c3bcdc7d",
+      "name": "No Operation, do nothing1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json; charset=UTF-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Data nomalize').first().json.message.chat_id.replace('@s.whatsapp.net', '') }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.output.response.part_1 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4640,
+        3424
+      ],
+      "id": "ee730a72-90fb-4f45-b347-20f42e82b20a",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Data nomalize').first().json.message.chat_id }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $('AI Agent Verificador').first().json.output.response.part_2 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5280,
+        3552
+      ],
+      "id": "dbc2760b-6832-4b71-ba4a-dfea772ace4e",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}\n\n",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Data nomalize').first().json.message.chat_id }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $('AI Agent Verificador').first().json.output.response.part_3 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5920,
+        3552
+      ],
+      "id": "aca5767f-8059-415d-b691-7ec35e191173",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=user name: {{ $('Data nomalize').first().json.user.name }}\nMensaje del Usuario: {{ $('Chat input').first().json.chat_input }}",
+        "options": {
+          "systemMessage": "==== COMIENZO DEL PROMPT ===\n\n# ROL Y OBJETIVO\nSos Julieta, la asistente AI oficial de SmartTrack.\nTu objetivo es interactuar con el cliente de una manera natural, humana, clara y cercana, brindando respuestas comerciales, técnicas y funcionales sin sonar robótica.\nTu tono debe ser conversacional, amable, profesional y cálido, similar a como respondería un agente humano o ChatGPT, pero adaptado al rubro\n\n# PRINCIPIO FUNDAMENTAL: CONTEXTO CERRADO\nTu conocimiento está ESTRICTAMENTE LIMITADO a la información proporcionada a continuación. NO tienes acceso a bases de datos, herramientas de búsqueda ni a ningún conocimiento externo. Tu única tarea es analizar el contexto que se te entrega y formular la mejor respuesta posible basándote exclusivamente en él.\n** La Unica herramienta que tendras a dispocicion sera \"MCP Soporte\" la cual solo podra ser utilizada unicamente cuando el \"PROTOCOLO DE ASISTENCIA TÉCNICA INTERACTIVA\" lo habilite. **\n\n---\n# INFORMACIÓN PARA ESTA RESPUESTA\n\n## CONTEXTO DE LA CONVERSACIÓN\n- Historial de la Conversación:\n{{ $('History Formater').first().json.historial }}\n\n## FUENTES DE CONOCIMIENTO (Recibidas del Flujo)\n{{ $('AI Agent').first().json.output }}\n---\n\n# REGLAS DE DECISIÓN Y PRIORIDAD (¡SEGUIR EN ORDEN ESTRICTO!)\n\n### 1. SÍNTESIS DE CONTEXTO GENERAL\n- Tu objetivo es construir la mejor respuesta posible **SINTETIZANDO** la información proporcionada en las **FUENTES DE CONOCIMINETO**\n- La fuente principial de conocimineto sera siempre que exista la seccion FAQs. ** Esta Regla no aplica para \"PROTOCOLO DE ASISTENCIA TÉCNICA INTERACTIVA\". **\n- Combina la información de estas fuentes para dar una respuesta completa y coherente.\n\n### 2. PROTOCOLO DE ASISTENCIA TÉCNICA INTERACTIVA\n- **SI** la consulta del usuario es de naturaleza técnica (menciona fallas, problemas de instalación, mal funcionamiento, \"no funciona\", etc.) deberas seguir los siguientes pasos para intertar ofrecer una solucion.\n\n- **Paso A: Verificación de Contexto Existente.** \nRevisa el `Historial de la Conversación` para determinar si ya posees los siguientes datos:\n  - El modelo del equipo SmartTrack en cuestión.\n  - El tipo de vehículo donde está instalado (ej: auto, moto, camión).\n  - Si el usuario es cliente del la aplicacion Smarttrack o utiliza TrackarManager\n  - El problema que reporta o lo que desee hacer el usuario.\nEl el caso de de que no puedas determinar los datos anteriores deberan ser solicitados al cliente antes de avanzar. **no solicitar mayor informacion que la solicitada anteriormente\n\nAdemás de fallas y problemas, este protocolo también debe activarse cuando el usuario solicite: instalación, configuración, activación del equipo, emparejamiento, uso inicial, o cualquier acción técnica que dependa del modelo del dispositivo.\n\nIncluso si el usuario menciona voluntariamente uno de los datos (por ejemplo solo el modelo del equipo), igualmente deberás solicitar los datos faltantes.\n\nSi ya posees alguno de los datos en el Historial de la Conversación, deberás presentarlos al usuario para confirmar si siguen siendo correctos antes de continuar.**\n\n- **Paso B: Presentar los datos al cliente.** \nDeberas presentar los datos recolectados al cliente para que verifique si la recopilacion de los mismos ha sido correcta.Una vez que el cliente confirme podras analizar la informacion proporcionada en la **FUENTES DE CONOCIMIENTO**. Para ofrecer la solucion que mas se adecue al caso.\n    \n- **Paso C: Resolucion de problema o continuacion de la asistencia tecnica**\nEn el caso de que el cliente manifieste que el problema ha sido solucionado daras por finalizado este protocolo.\nEn el caso de que el cliente informe que el problema continua deberas recolectar la siguiente  informacion y **solo utilizaras como conocimiento hasta que finalice el protocolo la herramienta \"MCP Soporte\" ignorando completamente \"FUENTES DE CONOCIMIENTO\" hasta el final del proceso**\n  - El modelo del equipo SmartTrack en cuestión.\n  - El tipo de vehículo donde está instalado (ej: auto, moto, camión).\n  - Si el usuario es cliente del la aplicacion Smarttrack o utiliza TrackarManager\n  - El problema que reporta el usuario.  \n  - Estado de las luces del equipo \n\n- **Paso D: Resolucion de prolema Utilizando la Herramienta \"MCP Soporte\"**\nUtiliza esta herramienta para encontrar la solucion que mas se ajuste a los datos proporcionados por el cliente.\n** En caso de que se puedan encontrar varias formas de solucionar el problema deberas informar al usuario las soluciones encontradas comenzando desde las que posea mayor coincidencia hasta la de menor conincidencia de una en una.**\n** PRODRAS OFRECER HASTA 2 SOLUCIONES. SI EL PROBLEMA PERSISTE DARAS POR FINALIZADO ESTE PROTOCO Y CONTINUARAS CON EL SIGUIENTE PUNTO **\n\n### 3. REGLA DE ESCALAMIENTO A HUMANO (ÚLTIMO RECURSO)\n- **DEBES** activar esta regla en cualquiera de los siguientes casos:\n    a) Si después de analizar todas las `FUENTES DE CONOCIMIENTO`, no encuentras información relevante para responder la pregunta del usuario.\n    b) Si el `Último Mensaje del Usuario` expresa claramente insatisfacción, frustración o confusión con tu respuesta anterior (ej: \"no me sirve\", \"no es lo que pregunté\", \"no me estás entendiendo\").\n    c) Si el \"PROTOCOLO DE ASISTENCIA TÉCNICA INTERACTIVA\" no soluciono el Problema.\n    d) Si el Usuario manifiesta que ya a adquirido un equipo de la empresa y necesita registrar el producto.\n\n- **Al activar esta regla, sigue estos pasos:**\n    1. **Analiza el `Historial de la Conversación`** para determinar la naturaleza del problema que no puedes resolver.\n    2. **Clasifícalo internamente:** Si la consulta se relaciona con comprar, precios o características comerciales, es un caso de **'ventas'**. Si se relaciona con instalación, fallas, configuración o problemas técnicos, es un caso de **'soporte'**.\n    3. **Informa al usuario** con el mensaje correspondiente:\n    - **Si clasificaste el caso como 'ventas'**, usa un texto similar a este:\n    \"Veo que mi respuesta no fue suficiente. Para darte una atención más personalizada, puedo notificar a un asesor del equipo de ventas para que se ponga en contacto contigo. Si quieres que lo haga, solo tienes que confirmármelo.\"\n\n    - **Si clasificaste el caso como 'soporte'** usa un texto similar a este:\n      \"Entiendo que esta consulta requiere una atención más especializada. Puedo derivar tu caso a un especialista del equipo de soporte para que te contacte a la brevedad. Avísame si quieres que proceda.\"\n\n# FORMATO PARA RESPUESTAS (OBLIGATORIO)\n- Utiliza solo los siguientes estilos soportados por WhatsApp: *Negrita*, _Cursiva_, ~Tachado~.\n- NUNCA uses Markdown (#, listas, etc.).\n- Para enlaces, escribe SIEMPRE la URL completa en texto plano. Puedes usar el emoji 🔗 antes.\n- **Ejemplo de formato para productos (si lo construyes desde `DATOS DE CATÁLOGO`):**\n🚗 *Modelo:* *ST-GT01*\n🔧 *Tipo:* 2G, estanco, batería integrada\n📍 *Funciones:* Rastreo en tiempo real, historial de recorridos\n🔗 *URL:* https://www.smarttrack.com.ar/shop/stgt01-smarttrack-gps-gt01-99\n\n### 4.REGLAS DE COMUNICACIÓN CON EL USUARIO \nCuando uses información proveniente de alguna fuente interna, referite a ella de forma genérica:\n  Ejemplo: \"Consulté nuestros manuales técnicos internos\".\n\n=== FIN PROMPT ==="
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        3776,
+        3424
+      ],
+      "id": "8dea8c83-9cc0-49d6-9373-1ebe43fa4d86",
+      "name": "AI Agent SmartTrack",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT *\nFROM (\n  SELECT \n    id,\n    message->>'type' AS role,\n    message->>'content' AS content\n  FROM \n    SmartTrack\n  WHERE \n    session_id = '{{ $(\"JSON parse Buffer\").first().json.chat_id }}'\n    AND message->>'content' IS NOT NULL\n    AND message->>'type' IN ('human', 'ai')\n  ORDER BY id DESC\n  LIMIT 20\n) ultimos\nORDER BY id ASC;\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        48,
+        2880
+      ],
+      "id": "8ac5ef2d-fd15-48de-8989-9c96b7e57e9a",
+      "name": "Postgres History Getter",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Entrada: array de items [{ role, content }, ...]\nconst mensajes = $input.all().map(item => item.json);\n\n// Formateamos el historial: solo rol + mensaje, uno por línea\nconst historial = mensajes.map(msg => {\n  if (msg.role === \"human\") {\n    // Extrae solo el texto real del usuario después de \"Mensaje del Usuario:\", si existe\n    let match = msg.content.match(/Mensaje del Usuario:(.*)/s);\n    let userMsg = match ? match[1].trim() : msg.content.trim();\n    return `Usuario: ${userMsg}`;\n  }\n  if (msg.role === \"ai\") {\n    return `Bot: ${msg.content.trim()}`;\n  }\n  return '';\n}).join('\\n');\n\n// Output final para el siguiente nodo\nreturn [\n  {\n    json: {\n      historial: historial\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        320,
+        2880
+      ],
+      "id": "4b3b5ac4-4edf-48bf-a2b9-afd8e834aae0",
+      "name": "History Formater"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Texto:  {{ $('AI Agent SmartTrack').first().json.output }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=# ROL Y OBJETIVO\nSos un experto en procesamiento de texto. Tu única tarea es recibir un texto final y **reformatearlo** para la legibilidad de WhatsApp, y luego **dividirlo** de manera inteligente en un máximo de 3 partes para ser enviado secuencialmente.\n\n# REGLAS DE FORMATO Y ESTILO (NUEVAS REGLAS DE WHATSAPP)\n- **ESTILO DE NEGRITA:** Para aplicar **negrita**, utiliza **SOLO UN ASTERISCO** al inicio y al final del texto a resaltar. Corrige cualquier doble asterisco (**texto**) a un solo asterisco (*texto*).\n- **TÍTULOS Y SECCIONES:** Para diferenciar títulos o secciones, utiliza **MAYÚSCULAS** y envuélvelos en **negrita**. (Ejemplo: *RESUMEN DE TU SOLICITUD*).\n- **ESPACIADO:** Deja un **salto de línea vacío** (`\\n\\n`) después de cada título o subtítulo para mejorar la separación.\n\n# REGLAS DE DIVISIÓN\n1.  **División Lógica:** No cortes ideas, frases o listas por la mitad. Cada parte debe tener sentido por sí misma.\n2.  **Prioridad:** La `part_1` debe contener la respuesta más directa o el resumen inicial. `part_2` y `part_3` son para detalles, listas o información complementaria.\n3.  **No Forzar División:** Si el texto es corto, pon todo en `part_1` y deja las otras partes como strings vacíos.\n\n# REGLAS DE CONTENIDO Y FORMATO\n- **NO ALTERES EL CONTENIDO:** Tu función es dividir. No puedes reescribir, añadir ni eliminar información. Preserva los precios (ej: `$ 45.599`) intactos.\n- **PRESERVA EL FORMATO:** Es fundamental que mantengas intactos todos los saltos de línea (`\\n`), espacios y emojis del texto original, **siempre y cuando no contradigan las REGLAS DE FORMATO Y ESTILO**.\n\n# FORMATO DE SALIDA OBLIGATORIO\nTu respuesta DEBE ser ÚNICAMENTE un objeto JSON válido, sin texto antes ni después, con la siguiente estructura:\n{\n  \"response\": {\n    \"part_1\": \"El contenido de la primera parte aquí.\",\n    \"part_2\": \"El contenido de la segunda parte aquí (o string vacío).\",\n    \"part_3\": \"El contenido de la tercera parte aquí (o string vacío).\"\n  }\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        4256,
+        3424
+      ],
+      "id": "1d5644fc-5e06-4495-94be-49294d7a8192",
+      "name": "AI Agent Verificador",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=- Historial de la Conversación:\n{{ $('History Formater').first().json.historial }}\n\n- Último Mensaje del Usuario:\n{{ $('Code').first().json.contenido }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "==== COMIENZO DEL PROMPT ===\n\n# ROL Y OBJETIVO\nEres un motor de clasificación de intenciones altamente especializado y con memoria de estado. Tu única tarea es analizar una conversación y devolver UNA SOLA PALABRA que represente la intención del usuario. Tu lógica prioriza continuación y finalización conversaciones y procesos ya iniciados.\n\n# DESCRIPCIÓN DE LAS RUTAS DE ASISTENCIA\n- `asistencia_ventas`: Activa a un agente para recolectar los datos de un cliente que ya ha comprado.\n- `asistencia_tecnica`: Activa a un agente que documenta un problema técnico y lo valida con el usuario antes de escalarlo.\n- `derivar_a_humano`: Activa a un agente que intenta comprender una consulta ambigua, la resume y la valida con el usuario para su derivación.\n- `informacion`: Es la ruta por defecto. Activa al asistente principal para responder preguntas generales.\n\n# LÓGICA DE CLASIFICACIÓN SECUENCIAL (SEGUIR EN ORDEN ESTRICTO)\n\n### PASO 1: ANÁLISIS DE FINALIZACIÓN DE PROCESO (MÁXIMA PRIORIDAD)\nRevisa el último mensaje del bot en el `Historial de la Conversación`.\n- **SI** el bot acaba de confirmar que un proceso de asistencia ha finalizado (ej: \"He enviado tus datos al área de ventas\", \"Ya he enviado tu consulta al equipo de soporte\"), significa que esa tarea está completa.\n- En este caso, **DEBES devolver `informacion`** para que el asistente principal tome el control de la conversación. Detén el análisis aquí.\n\n#### 2. asistencia_tecnica\nPara seleccionar esta intención, se deben cumplir AMBAS condiciones siguientes en orden:\n\n- **A) VERIFICACIÓN DE ESTADO:** Primero, verifica el último mensaje del bot en el `Historial de la Conversación`. Este DEBE contener una oferta explícita de derivación a soporte (ej: \"puedo derivar tu caso a un especialista\").\n- **B) VERIFICACIÓN DE INTENCIÓN:** Si y solo si la condición A se cumple, analiza el `Último Mensaje del Usuario`. Este debe ser una aceptación a esa oferta o una consulta relacionada con un problema, falla, o ayuda con la configuración/instalación.\n\n**REGLA DE ORO:** Si la condición A no se cumple, esta intención NUNCA debe ser seleccionada, incluso si el usuario menciona un problema técnico. En ese caso, la intención correcta es `informacion`, para que el asistente principal intente resolverlo primero con la base de conocimiento.\n\n### PASO 3: CLASIFICACIÓN ESTÁNDAR (SI NO HAY ESTADO PREVIO)\nSi los pasos 1 y 2 no aplican, evalúa el `Último Mensaje del Usuario` y su `Historial de la Conversación` para asignarle la ruta más adecuada.\n\n#### 1. asistencia_ventas\n- **CONDICIÓN OBLIGATORIA:** Para que esta intención sea una opción válida, el último mensaje del bot en el `Historial de la Conversación` DEBE contener una oferta explícita para derivar al asistente de ventas: (ej: \"puedo derivar tu caso a un especialista\"). \n- **Si la condición no se cumple, esta intención NO DEBE ser seleccionada.**\n- **Si la condición se cumple,** selecciona esta intención si el usuario necesita dar de alta algun producto ya adquirido.\n\n\n#### 2. asistencia_tecnica\n- **CONDICIÓN OBLIGATORIA:** Para que esta intención sea una opción válida, el último mensaje del bot en el `Historial de la Conversación` DEBE contener una oferta explícita para derivar a soporte técnico (ej: \"puedo derivar tu caso a un especialista\"). \n- **Si la condición no se cumple, esta intención NO DEBE ser seleccionada.**\n- **Si la condición se cumple,** selecciona esta intención si el usuario reporta un problema, falla o necesita ayuda directa para realizar una acción de configuración/instalación.\n\n#### 3. derivar_a_humano\n- El usuario pide hablar con una persona, está frustrado, enojado, o su consulta es demasiado ambigua.\n\n#### 4. informacion (INTENCIÓN POR DEFECTO)\n- El usuario realiza consultas sobre precios, características de productos, métodos de pago, o expresa interés en comprar pero aún está en fase de informarse (ej: \"¿cuánto cuesta?\", \"¿qué modelo me recomiendan?\", \"¿cómo puedo comprar?\").\n- **SI NINGUNA** de las otras condiciones (`asistencia_ventas`, `asistencia_tecnica`, `derivar_a_humano`) se cumple de manera estricta, devuelve este valor.\n\n# FORMATO DE SALIDA\n- Tu respuesta debe ser ÚNICAMENTE una de las cuatro palabras clave: `asistencia_ventas`, `asistencia_tecnica`, `informacion`, `derivar_a_humano`.\n- No incluyas explicaciones ni ningún otro texto.\n\n=== FIN DEL PROMPT ==="
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        832,
+        2880
+      ],
+      "id": "3d8f7e0c-3502-4bb2-9253-eb7c06abb642",
+      "name": "AI Agent Clasificador de Intención"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        832,
+        3120
+      ],
+      "id": "0bab6d21-f75b-492b-9688-535ca1248543",
+      "name": "OpenAI Chat Model1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3072,
+        2752
+      ],
+      "id": "c698b6f7-43f0-4c55-b41c-0f5e0f26e850",
+      "name": "OpenAI Chat Model2"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"response\": {\n    \"part_1\": \"Contenido de la primera parte de la respuesta.\",\n    \"part_2\": \"Contenido de la segunda parte (puede ser un resumen o una pregunta).\",\n    \"part_3\": \"Contenido de la tercera parte, como la solicitud de confirmación o un cierre.\"\n  },\n  \"completo\": false\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        3360,
+        2752
+      ],
+      "id": "e05254f6-a044-4529-910e-9566ccf18879",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "=5491126718874"
+            },
+            {
+              "name": "text",
+              "value": "=El Usuario Solicito ({{ $('AI Agent Clasificador de Intención').first().json.output }})\n\nResumen del problema:\n{{ JSON.parse($('Edit Fields').first().json.response).part_2 }}\n\n\nConversacion con usuario:\nhttps://wa.me/{{ $('Data nomalize').first().json.message.chat_id}}\n\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5008,
+        2976
+      ],
+      "id": "7d3ba577-cf07-484a-a3aa-c9d469582900",
+      "name": "HTTP Request Asistencia"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5491126718874@s.whatsapp.net"
+            },
+            {
+              "name": "text",
+              "value": "={{ $('AI Agent Verificador').first().json.output.response.part_1 }}\n{{ $('AI Agent Verificador').first().json.output.response.part_2 }}\n{{ $('AI Agent Verificador').first().json.output.response.part_3 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5232,
+        3424
+      ],
+      "id": "fcd5b9d9-4434-4edd-9b02-5dccf5a3396f",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "10d97a55-70f4-4583-bb46-0ceb963987f4",
+              "leftValue": "={{[\"5491126718874@s.whatsapp.net\", \"5491138171850@s.whatsapp.net\"]}}",
+              "rightValue": "={{ $('Data nomalize').first().json.message.chat_id }}",
+              "operator": {
+                "type": "array",
+                "operation": "contains",
+                "rightType": "any"
+              }
+            },
+            {
+              "id": "c517fcfe-f9c0-4905-984e-ffa8273b2f4a",
+              "leftValue": "={{ $('Data nomalize').first().json.message.content[0] || \"\"}}",
+              "rightValue": "=+",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        848,
+        544
+      ],
+      "id": "cd2d4590-97f6-4bcc-bff5-225cf798a573",
+      "name": "If ADD User Block"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "smarttrack_blocklist",
+          "mode": "list",
+          "cachedResultName": "smarttrack_blocklist"
+        },
+        "limit": 1,
+        "where": {
+          "values": [
+            {
+              "column": "session_id",
+              "value": "={{ \n  $('Data nomalize').item.json.message.content\n    .replace(/[^0-9]/g, '')\n    + '@s.whatsapp.net'\n}}\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        512,
+        784
+      ],
+      "id": "a81d5aef-6040-4f99-a87d-3ea2d8e4ef43",
+      "name": "Postgres Check Users block",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5491126718874@s.whatsapp.net"
+            },
+            {
+              "name": "text",
+              "value": "=El usuario Numero +{{ $('Data nomalize').first().json.message.chat_id.split('@')[0] }}\nYa se encuentra en la Block List\nMotivo: {{ $('Postgres Check Users block').first().json.reason || \"\"}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        800,
+        1216
+      ],
+      "id": "d0205126-d8a3-4d98-9c7b-16912a0b60ec",
+      "name": "HTTP Request En BLOCK LIST"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "smarttrack_blocklist",
+          "mode": "list",
+          "cachedResultName": "smarttrack_blocklist"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "session_id": "={{ \n  $('Data nomalize').item.json.message.content\n    .replace(/[^0-9]/g, '')\n    + '@s.whatsapp.net'\n}}",
+            "reason": "={{ $('Data nomalize').first().json.message.content.split(' ')[1] || \"assist\"   }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reason",
+              "displayName": "reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1008,
+        784
+      ],
+      "id": "ff91dffa-3696-4eed-ae2c-000baa75ca8e",
+      "name": "Postgres ADD User Block Assit"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5491126718874@s.whatsapp.net"
+            },
+            {
+              "name": "text",
+              "value": "=Usuario Auditado Agregado\nUsuario {{ $('Data nomalize').first().json.instance.name }}\nNumero +{{ $('Data nomalize').first().json.message.chat_id.split('@')[0] }}\nMotivo: {{ $('Postgres Check Users block').first().json.reason }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1216,
+        784
+      ],
+      "id": "727ed597-4f80-47d6-ac26-36c5a6af0c16",
+      "name": "HTTP Agregado En BLOCK LIST Asist"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ \n  $('Data nomalize').item.json.message.content\n    .replace(/[^0-9]/g, '')\n}}\n"
+            },
+            {
+              "name": "text",
+              "value": "=Hola. Me comunico del equipo de soporte de Smarttrack, estamos monitoreando su conversacion con el asistente virtual, en breve nos pondremos en contacto con usted para asistirlo en su consulta."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1216,
+        976
+      ],
+      "id": "b1c93fe4-2f45-425f-b36f-549936f31471",
+      "name": "HTTP Notification Assist"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "smarttrack_blocklist",
+          "mode": "list",
+          "cachedResultName": "smarttrack_blocklist"
+        },
+        "limit": 1,
+        "where": {
+          "values": [
+            {
+              "column": "session_id",
+              "value": "={{ $('If ADD User Block').first().json.message.chat_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1056,
+        544
+      ],
+      "id": "51ab389b-ea41-4687-a113-d5845d43d9fd",
+      "name": "Postgres Block List check",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d15991d1-e9ba-45da-b300-401344e6dc3a",
+              "leftValue": "={{ $json.keys().isEmpty() }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        720,
+        784
+      ],
+      "id": "51fff4ba-5b8f-4775-ad33-385fb6d146ce",
+      "name": "If Check in Block List"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c8f47bd6-f556-4298-bd11-a0fa43065937",
+                    "leftValue": "={{ $('Data nomalize').item.json.message.content.split(' ')[1] || '' }}",
+                    "rightValue": "ok",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        512,
+        1024
+      ],
+      "id": "783fc947-9dda-47fd-b5ac-8d2379d75a02",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5491126718874@s.whatsapp.net"
+            },
+            {
+              "name": "text",
+              "value": "=El usuario Numero +{{ $('Data nomalize').first().json.message.chat_id.split('@')[0] }}\nEliminado de lista"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        736,
+        1024
+      ],
+      "id": "b7c15d3a-e1c9-496e-a526-de0c03b5bc70",
+      "name": "HTTP Request Remove BLOCK LIST"
+    },
+    {
+      "parameters": {
+        "operation": "deleteTable",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "smarttrack_blocklist",
+          "mode": "list",
+          "cachedResultName": "smarttrack_blocklist"
+        },
+        "deleteCommand": "delete",
+        "where": {
+          "values": [
+            {
+              "column": "session_id",
+              "value": "={{ $('Switch1').item.json.session_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        960,
+        1024
+      ],
+      "id": "ead176d7-5a1c-4915-b3bf-52e4626d1a3c",
+      "name": "Postgres"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3072,
+        2400
+      ],
+      "id": "fc516be4-bc1e-4e58-ad6d-b4c4f52db330",
+      "name": "OpenAI Chat Model3"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"response\": {\n    \"part_1\": \"Contenido de la primera parte de la respuesta.\",\n    \"part_2\": \"Contenido de la segunda parte (puede ser un resumen o una pregunta).\",\n    \"part_3\": \"Contenido de la tercera parte, como la solicitud de confirmación o un cierre.\"\n  },\n  \"completo\": false\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        3360,
+        2400
+      ],
+      "id": "3e58502b-2c5c-47b2-b1e0-4a54210fcb04",
+      "name": "Structured Output Parser3"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# CONTEXTO DEL TURNO ACTUAL\n- Nombre del Usuario: {{ $('Data nomalize').first().json.user.name }}\n- Mensaje del Usuario: {{ $('Chat input').first().json.chat_input }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=# ROL Y OBJETIVO\nEres un **Especialista en Documentación de Casos de Soporte** de SmartTrack. Tu misión principal NO es resolver problemas, sino:\n1.  **Documentar** el inconveniente técnico del usuario de forma clara.\n2.  **Obtener la validación explícita** del usuario sobre el resumen del caso.\n3.  **Preparar una derivación** efectiva para el equipo de soporte humano.\n\nTu rol **NO** es resolver el problema directamente ni responder a preguntas sobre ventas, precios u otros temas. Tu único foco es la correcta documentación del ticket de soporte.\n\n# LÓGICA DE COMPORTAMIENTO SECUENCIAL\n\n### REGLA DE ENFOQUE ESTRICTO (MÁXIMA PRIORIDAD)\n- **SI** el `Último Mensaje del Usuario` contiene una pregunta que se desvía del proceso actual de documentación (ej: \"¿cuánto sale un equipo nuevo?\", \"¿y si intento reiniciarlo?\"), **NO DEBES RESPONDER A ESA PREGUNTA**.\n- Tu única acción en ese caso es reenfocar al usuario amablemente en el proceso de validación o descripción del problema.\n- **Ejemplo de respuesta:** _\"Entiendo tu punto, pero para asegurarme de que el equipo de soporte reciba la información correcta, ¿podrías confirmarme si el resumen que te presenté es adecuado?\"_\n- Aplica esta regla en todo momento.\n\n### PASO 1: ANÁLISIS DE CONTEXTO\n- Revisa el `Historial de la Conversación` para determinar si el usuario ya ha explicado su problema técnico.\n- **Contexto Suficiente:** El usuario ha descrito el problema (ej: \"mi equipo no reporta\", \"no puedo instalar el corta corriente\").\n- **Contexto Insuficiente:** La conversación aún no revela un problema técnico claro.\n\n### PASO 2: EJECUTAR ACCIÓN SEGÚN EL CONTEXTO\n\n#### A) SI EL CONTEXTO ES SUFICIENTE (O EL USUARIO ACABA DE RESPONDER A TU PREGUNTA)\n- Tu tarea es crear una \"Vista Previa\" del ticket de soporte y pedir la conformidad del usuario.\n- **Construye la Respuesta:**\n    - **part_1:** \"Enviaremos la siguiente consulta a nuestro equipo de soporte técnico:\"\n    - **part_2:** Crea un resumen conciso y claro del problema técnico del usuario basándote en la conversación (ej: \"El usuario informa que su modelo ST-903 no actualiza la ubicación.\").\n    - **part_3:** \"Por favor, confírmame si estás de acuerdo para enviarlo, o si prefieres modificar o añadir algo.\"\n- En este estado, tu salida JSON **SIEMPRE** debe tener `\"completo\": false`.\n\n#### B) SI EL CONTEXTO ES INSUFICIENTE\n- Esta situación es menos probable en esta rama del flujo, pero si ocurre, tu tarea es solicitar la información que falta.\n- **Construye la Respuesta:**\n    - **part_1:** \"Entendido, te comunicaré con un especialista.\"\n    - **part_2:** \"Para poder ayudarlos a resolver tu problema más rápido, ¿podrías describirme brevemente el inconveniente técnico que estás teniendo?\"\n    - **part_3:** (Puedes dejar este campo vacío).\n- En este estado, tu salida JSON **SIEMPRE** debe tener `\"completo\": false`.\n\n### PASO 3: GESTIÓN DE LA CONFORMIDAD DEL USUARIO\n- Revisa el `Historial de la Conversación`. Si tu último mensaje fue una propuesta de resumen (Paso 2A), analiza la respuesta del usuario.\n- **SI EL USUARIO DA SU CONFORMIDAD** (ej: \"sí, está bien\", \"perfecto\", \"envíalo\"):\n    - **Construye la Respuesta Final:**\n        - **part_1:** \"¡Perfecto! Hemos enviado tu consulta al equipo de soporte.\"\n        - **part_2:** (Opcional) Puedes repetir el resumen aprobado: \"Resumen enviado: [Resumen que el usuario aprobó]\".\n        - **part_3:** \"Se pondrán en contacto contigo a la brevedad para ayudarte.\"\n    - En este estado, tu salida JSON **DEBE** tener `\"completo\": true`.\n\n- **SI EL USUARIO PIDE MODIFICACIONES:**\n    - Agradece la información adicional.\n    - Vuelve al **PASO 2A**, pero esta vez, crea un **nuevo resumen** que incorpore los cambios solicitados por el usuario y preséntalo de nuevo para su validación.\n    - La salida JSON debe seguir teniendo `\"completo\": false`.\n\n# FORMATO DE SALIDA OBLIGATORIO (JSON)\nTu respuesta debe ser únicamente un objeto JSON con dos claves: `response` (un objeto con part_1, part_2, part_3) y `completo` (un booleano).\n\n## Ejemplo de Salida (Proponiendo Resumen):\n{\n  \"response\": {\n    \"part_1\": \"Enviaremos la siguiente consulta a nuestro equipo de soporte técnico:\",\n    \"part_2\": \"El usuario indica que su equipo no reporta la ubicación desde ayer.\",\n    \"part_3\": \"Por favor, confírmame si estás de acuerdo para enviarlo.\"\n  },\n  \"completo\": false\n}\n\n## Ejemplo de Salida (Derivación Confirmada):\n{\n  \"response\": {\n    \"part_1\": \"¡Perfecto! Hemos enviado tu consulta al equipo.\",\n    \"part_2\": \"\",\n    \"part_3\": \"Se pondrán en contacto contigo a la brevedad.\"\n  },\n  \"completo\": true\n}\n\n### POLÍTICA DE COMUNICACIÓN CON EL USUARIO FINAL\n- No uses nunca expresiones como “consultar MCP Soporte” ni “usar la herramienta MCP”.\n- Si el flujo requiere usar internamente esas herramientas, hacelo sin mencionarlas al usuario final.\n- - Si necesitás indicar que vas a escalar o derivar el caso, usá frases naturales como:\n  - \"Puedo hacer búsquedas mas exhaustiva.\"\n  - \"Puedo consultar nuestros manuales internos.\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        3136,
+        2560
+      ],
+      "id": "3b962c8d-f9f2-426f-a313-3b084120bc96",
+      "name": "AI Agent Asistencia Tecnica",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# CONTEXTO DEL TURNO ACTUAL\n- Nombre del Usuario: {{ $('Data nomalize').first().json.user.name }}\n- Mensaje del Usuario: {{ $('Chat input').first().json.chat_input }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "====PROMPT PRINCIPAL===\n# ROL Y OBJETIVO\nEres un **especialista en activación de cuentas** de SmartTrack. Tu ÚNICA función es gestionar el proceso de alta de servicio para clientes que ya han decidido comprar o que acaban de hacerlo. Tienes dos tareas exclusivas:\n1.  **Informar** a los clientes interesados sobre los datos que se requerirán post-venta.\n2.  **Recolectar y validar** secuencialmente los datos de los clientes que ya compraron.\nTu rol **NO** es responder preguntas sobre precios, características de productos o soporte técnico. Tu tono es siempre amable, eficiente y enfocado en el proceso de alta.\n\n# CAMPOS DE DATOS REQUERIDOS PARA LA ACTIVACIÓN\n- Nombre completo\n- DNI\n- Email\n- Teléfono\n- Dirección completa (incluyendo Provincia, Localidad, Calle, Altura/número, Piso y Depto si aplica)\n\n# LÓGICA DE COMPORTAMIENTO SECUENCIAL\n\n### REGLA DE ENFOQUE ESTRICTO (MÁXIMA PRIORIDAD)\n- **SI** el `Último Mensaje del Usuario` es una pregunta sobre cualquier tema que no sea proporcionar los datos que se le están solicitando (ej: precios, otras funciones, soporte técnico), **NO DEBES RESPONDER A ESA PREGUNTA**.\n- Tu única acción en ese caso es reiterar amablemente el dato que necesitas para continuar el proceso de alta.\n- **Ejemplo de respuesta:** _\"Entiendo tu consulta, pero para poder completar el alta de tu servicio, necesitaría que me indiques tu [Dato Faltante], por favor.\"_\n- Aplica esta regla en todo momento.\n\n### PASO 1: ANÁLISIS DEL ESTADO DEL CLIENTE\n- Revisa el `Historial de la Conversación` para determinar si el cliente ya ha realizado la compra o si solo está expresando su interés en hacerlo.\n- **Pista de Post-venta:** El cliente usa frases como \"ya compré\", \"realicé el pago\", \"acabo de pagar\".\n- **Pista de Pre-Compra:** El cliente usa frases como \"quiero comprar\", \"¿cómo pago?\", \"me interesa\".\n\n### PASO 2: EJECUTAR EL MODO CORRESPONDIENTE\n\n#### MODO 1: INFORMATIVO (Cliente en Pre-Compra)\n- Si determinas que el cliente aún no ha comprado, tu tarea es informarle los datos que se requerirán.\n- **Construye la Respuesta:**\n    - **part_1:** \"¡Excelente decisión! Para ir adelantando, te comento que una vez que realices la compra, necesitaremos los siguientes datos para dar de alta el servicio:\"\n    - **part_2:** \"- Nombre completo\\n- DNI\\n- Email\\n- Teléfono\\n- Dirección completa (Provincia, Localidad, Calle, Altura/número, Piso, Depto)\"\n    - **part_3:** \"Cuando nos pases los datos, te daremos de alta el servicio, te enviaremos el link para la suscripción mensual y coordinaremos el envío del chip.\"\n- En este modo, tu salida JSON **SIEMPRE** debe tener `\"completo\": false`.\n\n#### MODO 2: RECOLECCIÓN Y VALIDACIÓN (Cliente en Post-Venta)\n- Si determinas que el cliente ya compró, tu objetivo es recolectar y validar los `# CAMPOS DE DATOS REQUERIDOS`.\n\n- **A) ANÁLISIS DE DATOS:** Revisa la conversación completa para identificar qué campos de la lista ya ha proporcionado el cliente.\n\n- **B) GESTIÓN DE LA CONFORMIDAD FINAL:** Si tu último mensaje fue una propuesta de resumen final (ver paso C.2) y el usuario responde afirmativamente (ej: \"sí, está todo correcto\", \"perfecto\", \"envialo\"), tu tarea es:\n    - **Construir la Respuesta de Cierre:**\n        - **part_1:** \"¡Confirmado! He enviado tus datos al área de ventas.\"\n        - **part_2:** \"Se pondrán en contacto contigo a la brevedad para finalizar el proceso.\"\n        - **part_3:** \"\"\n    - En este único caso, tu salida JSON **DEBE** tener `\"completo\": true`.\n\n- **C) ACCIÓN PRINCIPAL (SI NO APLICA B):**\n    - **1. Si FALTA información:**\n        - Identifica el **primer** campo de la lista que aún no ha sido completado.\n        - **Construye la Respuesta con Resumen Progresivo:**\n            - **part_1:** Crea un breve resumen de los datos que ya tienes (ej: \"¡Perfecto, Juan! Ya registré tu nombre.\"). Si no tienes datos aún, deja esta parte vacía.\n            - **part_2:** Solicita el siguiente dato faltante (ej: \"Ahora, ¿podrías indicarme tu DNI, por favor?\").\n            - **part_3:** \"\"\n        - Tu salida JSON **SIEMPRE** debe tener `\"completo\": false`.\n\n    - **2. Si YA tienes TODA la información (pero falta la validación final):**\n        - **Construye la Respuesta de Validación Final:**\n            - **part_1:** \"¡Genial, ya tenemos toda la información necesaria! Por favor, revisa que los datos sean correctos:\"\n            - **part_2:** Crea un resumen final, claro y formateado, de **TODOS** los datos que recolectaste.\n            - **part_3:** \"¿Está todo correcto para que enviemos esta información al área de ventas?\"\n        - Tu salida JSON **DEBE** tener `\"completo\": false`.\n\n# FORMATO DE SALIDA OBLIGATORIO (JSON)\nTu respuesta debe ser únicamente un objeto JSON con dos claves: `response` (un objeto con part_1, part_2, part_3) y `completo` (un booleano).\n\n===FIN PROMPT PRINCIPAL==="
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        3136,
+        2192
+      ],
+      "id": "2e9d517b-a999-4d7f-887b-10234dddb1b6",
+      "name": "AI Agent Asistencia Ventas",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        3072,
+        3120
+      ],
+      "id": "b59813e9-8ae9-4935-8cc7-f63fa38e324e",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"response\": {\n    \"part_1\": \"Contenido de la primera parte de la respuesta.\",\n    \"part_2\": \"Contenido de la segunda parte (puede ser un resumen o una pregunta).\",\n    \"part_3\": \"Contenido de la tercera parte, como la solicitud de confirmación o un cierre.\"\n  },\n  \"completo\": false\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        3360,
+        3120
+      ],
+      "id": "c1f2d65d-ac23-4316-b356-5eab27f8cad9",
+      "name": "Structured Output Parser5"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# CONTEXTO DEL TURNO ACTUAL\n- Nombre del Usuario: {{ $('Data nomalize').first().json.user.name }}\n- Mensaje del Usuario: {{ $('Chat input').first().json.chat_input }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=# ROL Y OBJETIVO\nEres un **Coordinador de Derivaciones**. Tu única misión es actuar como un puente entre el usuario y un especialista humano. Tus tareas son exclusivamente:\n1.  **Entender** por qué el usuario necesita asistencia humana. Si no está claro, debes preguntarlo.\n2.  **Documentar** la solicitud en un resumen claro y conciso.\n3.  **Obtener la validación** explícita del usuario sobre ese resumen.\n4.  **Confirmar** la derivación una vez validada.\n\nTu rol **NO** es resolver el problema, responder la consulta, ni ofrecer alternativas. Eres un gestor de procesos de escalada.\n\n# LÓGICA DE COMPORTAMIENTO SECUENCIAL\n\n### REGLA DE ENFOQUE ESTRICTO (MÁXIMA PRIORIDAD)\n- **SI** durante el proceso de validación el usuario te hace otra pregunta o añade detalles para que tú los resuelvas, **NO DEBES RESPONDER NI INTENTAR AYUDAR**.\n- Tu única acción es reenfocar la conversación hacia la confirmación del resumen para agilizar la derivación.\n- **Ejemplo de respuesta:** _\"Aprecio la información adicional. Para asegurarnos de que el especialista que te contacte la tenga, ¿me confirmas si el resumen que te envié es correcto para proceder con la derivación?\"_\n- Aplica esta regla rigurosamente.\n\n### PASO 1: ANÁLISIS DE CONTEXTO\n- Revisa el `Historial de la Conversación`. ¿Ha explicado ya el usuario cuál es su problema o el motivo de su consulta?\n- **Contexto Suficiente:** El usuario ya ha descrito su problema (ej: \"quiero hablar con alguien sobre mi factura\", \"no me funciona el GPS\").\n- **Contexto Insuficiente:** El usuario solo ha pedido hablar con una persona de forma genérica (ej: \"quiero hablar con un humano\", \"ayuda\", \"soporte\").\n\n### PASO 2: EJECUTAR ACCIÓN SEGÚN EL CONTEXTO\n\n#### A) SI EL CONTEXTO ES SUFICIENTE (O EL USUARIO ACABA DE RESPONDER A TU PREGUNTA)\n- Tu tarea es crear una \"Vista Previa\" del ticket de soporte y pedir la conformidad del usuario.\n- **Construye la Respuesta:**\n    - **part_1:** \"Enviaremos la siguiente consulta a nuestro equipo:\"\n    - **part_2:** Crea un resumen conciso y claro del problema del usuario basándote en la conversación.\n    - **part_3:** \"Por favor, confírmame si estás de acuerdo para enviarlo, o si prefieres modificar o añadir algo.\"\n- En este estado, tu salida JSON **SIEMPRE** debe tener `\"completo\": false`.\n\n#### B) SI EL CONTEXTO ES INSUFICIENTE\n- Tu tarea es solicitar la información que falta.\n- **Construye la Respuesta:**\n    - **part_1:** \"¡Por supuesto! Para poder derivarte con el especialista correcto, necesito entender un poco mejor tu consulta.\"\n    - **part_2:** \"¿Podrías describirme brevemente cuál es el motivo o el problema por el que necesitas ayuda?\"\n    - **part_3:** (Puedes dejar este campo vacío).\n- En este estado, tu salida JSON **SIEMPRE** debe tener `\"completo\": false`.\n\n### PASO 3: GESTIÓN DE LA CONFORMIDAD DEL USUARIO\n- Revisa el `Historial de la Conversación`. Si tu último mensaje fue una propuesta de resumen (Paso 2A), analiza la respuesta del usuario.\n- **SI EL USUARIO DA SU CONFORMIDAD** (ej: \"sí, está bien\", \"perfecto\", \"envíalo\"):\n    - **Construye la Respuesta Final:**\n        - **part_1:** \"¡Perfecto! Hemos enviado tu consulta al equipo.\"\n        - **part_2:** (Opcional, puedes repetir el resumen) \"Resumen enviado: [Resumen que el usuario aprobó]\".\n        - **part_3:** \"Se pondrán en contacto contigo a la brevedad para ayudarte.\"\n    - En este estado, tu salida JSON **DEBE** tener `\"completo\": true`.\n\n- **SI EL USUARIO PIDE MODIFICACIONES:**\n    - Agradece la información adicional.\n    - Vuelve al **PASO 2A**, pero esta vez, crea un **nuevo resumen** que incorpore los cambios solicitados por el usuario y preséntalo de nuevo para su validación.\n    - La salida JSON debe seguir teniendo `\"completo\": false`.\n\n# FORMATO DE SALIDA OBLIGATORIO (JSON)\nTu respuesta debe ser únicamente un objeto JSON con dos claves: `response` (un objeto con part_1, part_2, part_3) y `completo` (un booleano).\n\n## Ejemplo de Salida (Proponiendo Resumen):\n{\n  \"response\": {\n    \"part_1\": \"Enviaremos la siguiente consulta a nuestro equipo:\",\n    \"part_2\": \"El usuario indica que su equipo no reporta la ubicación desde ayer.\",\n    \"part_3\": \"Por favor, confírmame si estás de acuerdo para enviarlo.\"\n  },\n  \"completo\": false\n}\n\n## Ejemplo de Salida (Derivación Confirmada):\n{\n  \"response\": {\n    \"part_1\": \"¡Perfecto! Hemos enviado tu consulta al equipo.\",\n    \"part_2\": \"\",\n    \"part_3\": \"Se pondrán en contacto contigo a la brevedad.\"\n  },\n  \"completo\": true\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        3136,
+        2912
+      ],
+      "id": "9a85829e-e564-42fe-996d-86c9a3cf7255",
+      "name": "AI Agent Derivar Humano",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "asistencia_ventas",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "b006c56a-48e3-4be7-88a5-55431238c2b1"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "ventas"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8d290360-16a1-406d-b286-6f30324ffb5d",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "asistencia_tecnica",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "tecnica"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "da95d26c-e965-4168-bddb-5e1896323df1",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "derivar_a_humano",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "humano"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "info"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1456,
+        2864
+      ],
+      "id": "60802092-7669-477d-b1fb-55f5aa58dd01",
+      "name": "Switch2"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"response\": {\n      \"part_1\": \"Parte uno de la respuesta\",\n      \"part_2\": \"Parte dos de la respuesta (opcional).\",\n      \"part_3\": \"Parte tres de la respuesta (opcional).\"\n    }\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        4448,
+        2736
+      ],
+      "id": "986eaf7b-dd79-45c7-8f9e-0b13244ae128",
+      "name": "Structured Output Parser4"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        4272,
+        2736
+      ],
+      "id": "12b862f1-19da-46da-93fa-0eed49679e47",
+      "name": "4o mini Verificador3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4b92a1f4-d4bc-4689-87cf-1be40aa49c27",
+              "leftValue": "={{ $('AI Agent Verificador Asistencia').item.json.output.response.part_2 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5232,
+        2560
+      ],
+      "id": "d070420a-4021-43e2-8126-a6535882f0bf",
+      "name": "If Parte "
+    },
+    {
+      "parameters": {
+        "amount": "={{ $('AI Agent Verificador Asistencia').item.json.output.response.part_2.length*0.01 }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        5456,
+        2704
+      ],
+      "id": "2e950002-ee81-4103-beec-438e1340f787",
+      "name": "Wait1",
+      "webhookId": "2942c090-bb38-4759-970c-8bfbbf533336"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "4b92a1f4-d4bc-4689-87cf-1be40aa49c27",
+              "leftValue": "={{ $('AI Agent Verificador Asistencia').item.json.output.response.part_3 }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        5872,
+        2560
+      ],
+      "id": "d6df09b7-4eae-43ee-8b2f-5108c64a050c",
+      "name": "If Parte 4"
+    },
+    {
+      "parameters": {
+        "amount": "={{ 2+$('AI Agent Verificador Asistencia').item.json.output.response.part_3.length*0.01 }}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        6096,
+        2704
+      ],
+      "id": "ed35f5ac-f892-47b2-a815-339e1b2d8905",
+      "name": "Wait3",
+      "webhookId": "0180f729-50db-40d2-b5ca-361ccb837097"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        6496,
+        2560
+      ],
+      "id": "b222e958-5e38-4ef2-8d31-3af7f164f64e",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Data nomalize').first().json.message.chat_id }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.output.response.part_1 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5008,
+        2560
+      ],
+      "id": "3341355a-0997-4ca0-a8f0-16ee1aba9d57",
+      "name": "HTTP Request4"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Data nomalize').first().json.message.chat_id }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $('AI Agent Verificador Asistencia').first().json.output.response.part_2 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        5648,
+        2704
+      ],
+      "id": "24080d38-d5fe-4304-82ec-5a336640a2cc",
+      "name": "HTTP Request5"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Data nomalize').first().json.message.chat_id }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $('AI Agent Verificador Asistencia').first().json.output.response.part_3 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6288,
+        2704
+      ],
+      "id": "9fafb286-7ade-4fae-a884-fab535cd5a03",
+      "name": "HTTP Request6"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5491126718874@s.whatsapp.net"
+            },
+            {
+              "name": "text",
+              "value": "={{ $('AI Agent Verificador Asistencia').first().json.output.response.part_1 }}\n{{ $('AI Agent Verificador Asistencia').first().json.output.response.part_2 }}\n{{ $('AI Agent Verificador Asistencia').first().json.output.response.part_3 }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        6720,
+        2560
+      ],
+      "id": "af46e0be-02a3-4fb2-9c87-86b0438a7f4b",
+      "name": "HTTP Request7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9e1df76f-c3c3-4ce5-ab4b-06cfbf6914fb",
+              "name": "response",
+              "value": "={{ $json.output.response }}",
+              "type": "string"
+            },
+            {
+              "id": "474bdd8b-bac3-4456-a011-965b06cde7ff",
+              "name": "completo",
+              "value": "={{ $json.output.completo }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        3920,
+        2560
+      ],
+      "id": "02ae5230-5275-43b0-9e64-05fc98414ddc",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "98f1a171-ab9d-4a33-8308-8b0f73d54e21",
+              "leftValue": "={{ $('Edit Fields').item.json.completo }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "false",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4640,
+        2560
+      ],
+      "id": "0caf674f-7b0d-49cc-bfcc-da025778c2de",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "10d97a55-70f4-4583-bb46-0ceb963987f4",
+              "leftValue": "={{ $('Data nomalize').first().json.message.chat_id }}",
+              "rightValue": "5491126718874@s.whatsapp.net",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "c517fcfe-f9c0-4905-984e-ffa8273b2f4a",
+              "leftValue": "={{ $('Data nomalize').first().json.message.content}}",
+              "rightValue": "=Gracias por tu mensaje.",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1280,
+        544
+      ],
+      "id": "fbc0f128-93e3-41fc-81b2-30d3cec1c076",
+      "name": "If ADD User Block1"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Data nomalize').first().json.message.chat_id }}",
+        "tableName": "SmartTrack",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        3216,
+        2400
+      ],
+      "id": "73a5f066-74e8-4a67-a60b-49dd5a5f0707",
+      "name": "Postgres Chat Memory1"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Data nomalize').first().json.message.chat_id }}",
+        "tableName": "SmartTrack",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        3216,
+        2752
+      ],
+      "id": "16def6a8-00bf-49b5-aad1-654df2189dbe",
+      "name": "Postgres Chat Memory2"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Data nomalize').first().json.message.chat_id }}",
+        "tableName": "SmartTrack",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        3216,
+        3120
+      ],
+      "id": "083fc4f7-39df-41ff-9dfa-d7a949548fba",
+      "name": "Postgres Chat Memory3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0acf1df6-dac2-4119-9599-a1c5d8c1abc8",
+              "leftValue": "=\n{{ $('Data nomalize').item.json.message.is_ad }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        368,
+        512
+      ],
+      "id": "658d8a19-38b5-40d2-a67e-36b78592c0df",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5491126718874@s.whatsapp.net"
+            },
+            {
+              "name": "text",
+              "value": "=Usuario Auditado Agregado\nUsuario {{ $('Data nomalize').first().json.instance.name }} contactando desde anuncio.\n\nMensaje: {{ $('Data nomalize').first().json.message.content }}\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        528,
+        320
+      ],
+      "id": "16485c82-e43d-453d-898b-66f98c0cbfdc",
+      "name": "HTTP Contacto desde Anuncio",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Texto:  {{ $json.response }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=# ROL Y OBJETIVO\nSos un experto en procesamiento de texto. Tu única tarea es recibir un texto final y dividirlo de manera inteligente en un máximo de 3 partes para ser enviado secuencialmente por WhatsApp, asegurando la legibilidad.\n\n# REGLAS DE DIVISIÓN\n\n1.  **División Lógica:** No cortes ideas, frases o listas por la mitad. Cada parte debe tener sentido por sí misma.\n\n2.  **Prioridad de Contenido:** `part_1` siempre debe contener la respuesta más directa o el resumen inicial. `part_2` y `part_3` son para detalles, listas o información complementaria.\n\n3.  **Orden Secuencial Obligatorio:** Debes llenar las partes en orden numérico. `part_2` solo puede tener contenido si `part_1` está lleno. `part_3` solo puede tener contenido si `part_2` también lo tiene. **NUNCA dejes `part_2` vacía si `part_3` tiene contenido.**\n\n4.  **No Forzar División:** Si el texto es corto y cabe en una sola parte, pon todo en `part_1` y deja `part_2` y `part_3` como strings vacíos.\n\n# REGLAS DE CONTENIDO Y FORMATO (¡MUY IMPORTANTE!)\n- **NO ALTERES EL CONTENIDO:** Tu función es dividir. No puedes reescribir, añadir ni eliminar información, especialmente los precios. Si en el texto de entrada hay un precio numérico (ej: `$ 45.599`), ese mismo precio DEBE estar en la salida.\n- **PRESERVA EL FORMATO:** Es fundamental que mantengas intactos todos los saltos de línea (`\\n`), espacios, emojis, asteriscos para negritas/cursivas y la estructura visual general del texto original.\n\n# FORMATO DE SALIDA OBLIGATORIO\nTu respuesta DEBE ser ÚNICAMENTE un objeto JSON válido, sin texto antes ni después, con la siguiente estructura:\n{\n  \"response\": {\n    \"part_1\": \"El contenido de la primera parte aquí.\",\n    \"part_2\": \"El contenido de la segunda parte aquí (o string vacío).\",\n    \"part_3\": \"El contenido de la tercera parte aquí (o string vacío).\"\n  }\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        4272,
+        2560
+      ],
+      "id": "b96029c7-edbf-4c6d-bcfd-eb719ded5bb5",
+      "name": "AI Agent Verificador Asistencia",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "ZAmPDStEZceTrOq3",
+          "mode": "list",
+          "cachedResultName": "Carga de documentacion"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        256
+      ],
+      "id": "98f5bebe-1f20-41b8-9f72-7de7c807bd33",
+      "name": "Execute Workflow"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5491138171850@s.whatsapp.net"
+            },
+            {
+              "name": "text",
+              "value": "=Usuario Auditado Agregado\nUsuario {{ $('Data nomalize').first().json.instance.name }} contactando desde anuncio.\n\nMensaje: {{ $('Data nomalize').first().json.message.content }}\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        672,
+        320
+      ],
+      "id": "1de6557e-dbf5-489e-80dd-3440b23c590c",
+      "name": "HTTP Contacto desde Anuncio1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0acf1df6-dac2-4119-9599-a1c5d8c1abc8",
+              "leftValue": "={{ $json.message.chat_id }}",
+              "rightValue": "5491151178200@s.whatsapp.",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "ebde2846-227c-48f7-a575-c677292d50a8",
+              "leftValue": "={{ $json.message.chat_id }}",
+              "rightValue": "5491138171850@s.whatsapp.net",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "a54dd2fa-dc71-4438-8420-05424e787972",
+              "leftValue": "={{ $json.message.chat_id }}",
+              "rightValue": "5491156320376@s.whatsapp.",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        160,
+        544
+      ],
+      "id": "ab99b0f5-a836-48d2-af6d-4c16d5660e84",
+      "name": "If2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=- Historial de la Conversación:\n{{ $('History Formater').first().json.historial }}\n\n- Último Mensaje del Usuario:\n{{ $('Code').first().json.contenido }}",
+        "options": {
+          "systemMessage": "==== COMIENZO DEL PROMPT ===\n---\n## ROL Y OBJETIVO\nEres el \"Especialista en la Base de Conocimiento de SmartTrack\". Tu única función es actuar como un motor de consulta interno. Analizas las conversaciones y recuperas la información más precisa y relevante de tus dominios de conocimiento para entregarla, en un formato estructurado, al agente de respuesta final.\n\nNO interactúas con el usuario final. Tu única salida es un reporte de datos.\n---\n\n---\n## DOMINIOS DE CONOCIMIENTO\nTu pericia está estrictamente limitada a las siguientes 5 fuentes de información, accesibles a través de tus herramientas:\n\n- Catálogo de Productos: Contiene la lista completa de equipos, sus características principales, tipo y funciones generales. Es la fuente principal para preguntas sobre \"qué productos tienen\" o comparativas a alto nivel. \n** El campo `disponibilidad` solo sera usado a modo interno y no sera enviado como informacion. En caso de que el campo sea `false` el equipo no estara disponible, si el campo es `true` el equipo esta disponible para la venta.**\n\n- Base de Conocimiento de FAQs: Un repositorio de preguntas y respuestas comunes sobre todos los aspectos del servicio: instalación, costos, uso de la app, problemas conocidos, etc. Es ideal para preguntas directas y problemas frecuentes.\n\n- Lista de Precios: La única fuente de verdad para toda la información monetaria. Contiene los precios actualizados de todos los productos y servicios.\n\n- Manuales Técnico-Funcionales: Documentación en profundidad sobre las capacidades, especificaciones eléctricas, rangos de operación y detalles técnicos de cada equipo. Se utiliza para responder preguntas complejas sobre \"cómo funciona\" un equipo.\n\n- Manuales de Configuración: Guías paso a paso, incluyendo comandos SMS y procedimientos para la puesta en marcha inicial de los equipos. Es la fuente principal para problemas o dudas durante la instalación y configuración.\n---\n\n---\n## LÓGICA DE SELECCIÓN DE FUENTES (RAZONAMIENTO)\nTu tarea principal es aplicar la siguiente lógica para decidir qué dominio de conocimiento consultar:\n\n- **En todas las consultas Siempre deberas verificar las FAQ's**d\n\n- SI la consulta es general sobre los productos disponibles, sus tipos o características básicas (\"¿qué modelos 4G tienen?\", \"busco un equipo portátil\"):\nENTONCES tu fuente primaria y obligatoria es el Catálogo de Productos y la Base de Conocimiento de FAQs.\n\n- SI la consulta es sobre costos, precios o valor de productos y servicios (\"¿cuánto cuesta el servicio mensual?\", \"precio del ST-CY06\"):\nENTONCES tus fuentes primarias son la Lista de Precios (para el valor numérico) y la Base de Conocimiento de FAQs (para contexto sobre qué incluye el servicio).\n\n- SI la consulta es sobre un problema, error o duda durante la instalación o configuración inicial (\"no toma señal\", \"cómo configuro el APN\"):\nENTONCES tus fuentes primarias son los Manuales de Configuración y la Base de Conocimiento de FAQs para encontrar soluciones rápidas.\n\n- SI la consulta es sobre una especificación técnica detallada o una función avanzada (\"qué voltaje soporta\", \"cómo funciona el micrófono espía\"):\nENTONCES tu fuente primaria es el Manual Técnico-Funcional del equipo en cuestión y la Base de Conocimiento de FAQs.\n\nREGLA DE EXHAUSTIVIDAD: Si una pregunta es compuesta (ej: \"¿cuánto cuesta el ST-GT01 y cómo se instala?\"), debes consultar múltiples dominios (Lista de Precios, Manuales de Configuración, FAQs) y consolidar toda la información relevante en tu reporte de salida.\n---\n\n---\n## FORMATO DE SALIDA Y REGLAS FINALES\n- Tu salida debe ser únicamente el texto plano con los datos, estructurado con encabezados como [CATÁLOGO DE PRODUCTOS], [LISTA DE PRECIOS], etc.\n- NO incluyas saludos, explicaciones ni texto conversacional.\n- Si una pregunta es demasiado genérica (\"hola\", \"ok\") y no se puede asociar a ningún dominio, tu única salida debe ser el texto: [INFO: Consulta demasiado general, no requiere investigación].\n---\n\n=== FIN DEL PROMPT ==="
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        3136,
+        3424
+      ],
+      "id": "859c175d-d6ae-44fd-893c-74cda20684ef",
+      "name": "AI Agent",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "sseEndpoint": "https://n8n.devman2.com/mcp/smarttrack_catalogo /sse",
+        "include": "selected",
+        "includeTools": [
+          "buscar_productos_catalogo"
+        ],
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        3152,
+        3696
+      ],
+      "id": "f40d4bcb-e3dc-4dc4-adf1-3cfc020c9fe1",
+      "name": "MCP Catalogo"
+    },
+    {
+      "parameters": {
+        "sseEndpoint": "https://n8n.devman2.com/mcp/smarttrack_faqs/sse",
+        "include": "selected",
+        "includeTools": [
+          "buscar_faqs"
+        ],
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        3440,
+        3696
+      ],
+      "id": "1fc3f746-9762-4b3e-9632-ff033d0c4f95",
+      "name": "MCP Faqs"
+    },
+    {
+      "parameters": {
+        "sseEndpoint": "https://n8n.devman2.com/mcp/smarttrack_configuracion/sse",
+        "include": "selected",
+        "includeTools": [
+          "buscar_manual_configuracion"
+        ],
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        3376,
+        3872
+      ],
+      "id": "7eae4948-9e03-4b9b-8e19-bbea44506378",
+      "name": "MCP Configuracion"
+    },
+    {
+      "parameters": {
+        "sseEndpoint": "https://n8n.devman2.com/mcp/lista_precios/sse",
+        "include": "selected",
+        "includeTools": [
+          "buscar_lista_precios"
+        ],
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        3296,
+        3696
+      ],
+      "id": "8beeb90d-7013-4aac-b8c3-e7c772bee149",
+      "name": "MCP Lista de precios"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 1. Accedemos directamente al campo 'contenido'.\nlet contenido = $(\"Chat input\").first().json.chat_input\n\nfunction sanitizeText(input) {\n  // 1. Reemplazar null (\\u0000) por espacio\n  let text = input.replace(/\\u0000/g, ' ');\n\n  // 2. Función para mapear acentos/ñ/ç a ASCII\n  const normalizeMap = {\n    'á':'a','à':'a','ä':'a','â':'a',\n    'é':'e','è':'e','ë':'e','ê':'e',\n    'í':'i','ì':'i','ï':'i','î':'i',\n    'ó':'o','ò':'o','ö':'o','ô':'o',\n    'ú':'u','ù':'u','ü':'u','û':'u',\n    'Á':'A','À':'A','Ä':'A','Â':'A',\n    'É':'E','È':'E','Ë':'E','Ê':'E',\n    'Í':'I','Ì':'I','Ï':'I','Î':'I',\n    'Ó':'O','Ò':'O','Ö':'O','Ô':'O',\n    'Ú':'U','Ù':'U','Ü':'U','Û':'U',\n    'ñ':'n','Ñ':'N','ç':'c','Ç':'C'\n  };\n\n  // 3. Reemplazar caracteres problemáticos, pero mantener \\n y \\t\n  const sanitized = text.replace(/[^ -~\\n\\t]/g, c => normalizeMap[c] || '');\n\n  return sanitized;\n}\n\n// Aplicamos la función\ncontenido = sanitizeText(contenido);\n\n// Retornamos el resultado\nreturn { contenido };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        528,
+        2880
+      ],
+      "id": "65d1b2e8-787c-40b8-9eee-a651c2a14f13",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "sseEndpoint": "https://n8n.devman2.com/mcp/smarttrack_funcional/sse",
+        "include": "selected",
+        "includeTools": [
+          "buscar_manual_tecnico_funcional"
+        ],
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        3216,
+        3872
+      ],
+      "id": "85b0c312-8633-46b1-83c7-a9eccdbf0812",
+      "name": "MCP Tecnico Funcional"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2992,
+        3696
+      ],
+      "id": "3d65a363-295d-4d02-91ce-58b580d9d36a",
+      "name": "OpenAI Chat Model4"
+    },
+    {
+      "parameters": {
+        "sseEndpoint": "https://n8n.devman2.com/mcp/smarttrack_soporte/sse",
+        "include": "selected",
+        "includeTools": [
+          "buscar_guia_soporte"
+        ],
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1,
+      "position": [
+        4016,
+        3616
+      ],
+      "id": "939d8ddf-599c-4ce6-b689-177bd836c373",
+      "name": "MCP Soporte"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7c3590b8-a248-4722-a8b1-29c8adc0714a",
+              "name": "instance.server_url",
+              "value": "={{ $json.body.server_url }}",
+              "type": "string"
+            },
+            {
+              "id": "aea56560-183f-4d65-b946-7cdf5701ccb2",
+              "name": "instance.name",
+              "value": "={{ $json.body.instance }}",
+              "type": "string"
+            },
+            {
+              "id": "34258c5a-07e8-404b-9845-024fe2371700",
+              "name": "instance.apikey",
+              "value": "={{ $json.body.apikey }}",
+              "type": "string"
+            },
+            {
+              "id": "041f13eb-7c1d-4263-a335-ddc30a6d37f1",
+              "name": "message.message_id",
+              "value": "={{ $json.body.data.key.id }}",
+              "type": "string"
+            },
+            {
+              "id": "0dcfe79e-ba95-4c35-8796-1d2c5559dece",
+              "name": "message.chat_id",
+              "value": "={{ $json.body.data.key.remoteJid }}",
+              "type": "string"
+            },
+            {
+              "id": "834786fc-883a-4f77-9730-ded7ae767b7b",
+              "name": "message.content_type",
+              "value": "={{ \n  $json.body.data.message.extendedTextMessage ? 'text' :\n  $json.body.data.message.conversation ? 'text' :\n  $json.body.data.message.audioMessage ? 'audio' :\n  $json.body.data.message.imageMessage ? 'image' :\n  ''\n}}",
+              "type": "string"
+            },
+            {
+              "id": "88a2213b-4938-45ff-aa11-79f0e9f538cb",
+              "name": "message.content",
+              "value": "={{ \n  $json.body.data.message.extendedTextMessage?.text ?\n  $json.body.data.message.extendedTextMessage.text :\n  $json.body.data.message.imageMessage?.caption ? \n  $json.body.data.message.imageMessage.caption :\n  $json.body.data.message.conversation ? $json.body.data.message.conversation :\n  ''\n}}",
+              "type": "string"
+            },
+            {
+              "id": "ff0db4e6-02cf-4b2f-9348-b0e19e192ebe",
+              "name": "message.timestamp",
+              "value": "={{ $json.body.data.messageTimestamp.toDateTime('s').toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "2206f6a0-fc70-432f-a31e-90d7452ee140",
+              "name": "user.name",
+              "value": "={{ $json.body.data.pushName }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -160,
+        720
+      ],
+      "id": "b849f127-62ba-41ab-9ae8-1c636bd309d2",
+      "name": "Data nomalize1",
+      "notes": "Este nodo esta de respaldo."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "e41aebb7-0166-4a93-9490-35b15ae6627d",
+              "leftValue": "={{ $json[\"last_msg\"] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "87991b0e-9a9c-4538-b85a-0bbb6e0c0f05",
+      "name": "IF has previous1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1856,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "0976e938-df3c-4ac5-a10e-61b4a1b258e5",
+              "leftValue": "={{ Number($json.hours ?? 0) }}\n\n\n\n\n",
+              "rightValue": 12,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "looseTypeValidation": true
+        }
+      },
+      "id": "69cac3df-1637-4a6f-b892-29995c09c3b2",
+      "name": "IF >= 12h1",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2272,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "last_msg",
+        "key": "={{ \"last_msg:\" + $(\"Data nomalize\").first().json.message.chat_id }}\n\n",
+        "keyType": "string",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        1632,
+        336
+      ],
+      "id": "7318097d-f4bd-4927-bb9e-cec02cd38aec",
+      "name": "Redis Get last_msg"
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "={{ \"last_msg:\" + $(\"Data nomalize\").first().json.message.chat_id }}\n",
+        "value": "={{ $('Data nomalize').first().json.message.timestamp }}\n\n\n",
+        "keyType": "string"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        2752,
+        144
+      ],
+      "id": "5498b18a-d79d-47ea-a94f-9da4f560356e",
+      "name": "Redis Set last_msg (NO)1"
+    },
+    {
+      "parameters": {
+        "operation": "set",
+        "key": "={{ \"last_msg:\" + $(\"Data nomalize\").first().json.message.chat_id }}\n\n",
+        "value": "={{ $('Data nomalize').first().json.message.timestamp }}\n\n",
+        "keyType": "string"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        2752,
+        352
+      ],
+      "id": "0f7711fd-074f-4bf5-9bee-a3aa90ff80b0",
+      "name": "Redis Set last_msg (YES)2"
+    },
+    {
+      "parameters": {
+        "operation": "getTimeBetweenDates",
+        "startDate": "={{ new Date(($json.last_msg ?? \"1970-01-01T00:00:00.000Z\").toString().trim()).toISOString() }}",
+        "endDate": "={{ new Date(($('Data nomalize').item.json.message.timestamp).toString().trim()).toISOString() }}",
+        "units": [
+          "hour"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dateTime",
+      "typeVersion": 2,
+      "position": [
+        2080,
+        112
+      ],
+      "id": "6acf8788-5dc7-4b71-a4ef-53dadb2c1c4e",
+      "name": "Date & Time1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Data nomalize').first().json.instance.server_url }}/message/sendText/{{ $('Data nomalize').first().json.instance.name }}\n",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{ $('Data nomalize').first().json.instance.apikey }}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json; charset=UTF-8"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $('Data nomalize').first().json.message.chat_id\n    .replace('@s.whatsapp.net','')\n    .replace('@lid','')\n}}"
+            },
+            {
+              "name": "text",
+              "value": "=¡Gracias por comunicarte con Smarttrack!\n\nSoy un Asistente Inteligente.\n\nEstoy aquí en todo momento para ayudarte con lo que necesites:\n  -Modelos de GPS.\n  -Servicio mensual.\n  -Instalación y configuración.\n  -Chips, app, envíos y más.\n\n\nAnalizo tu mensaje y en breve te estaré respondiendo..."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2496,
+        352
+      ],
+      "id": "bcdd16d6-565f-4a8e-879f-01a7cb3c2c4f",
+      "name": "HTTP sendText (Evolution)2"
+    },
+    {
+      "parameters": {
+        "content": "## para Gena de fran\nagregué el server_url nuevo en el data normalize para que no se le caiga el bot a kelo:\nantes:\n    {{ $json.body.server_url }}\nahora:\n    https://evolutionapi.easypanel.frandev.com.ar/ \n",
+        "height": 220,
+        "width": 640,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -896,
+        480
+      ],
+      "typeVersion": 1,
+      "id": "278fbc57-0137-4fe3-ba6f-30b56a10fb66",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "## Desconecto el webhook para hacer pruebas con la campaña\n",
+        "height": 360,
+        "width": 580
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1120,
+        96
+      ],
+      "typeVersion": 1,
+      "id": "dcf6cdf6-3eae-44cc-9946-3cf43d3c8485",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8eab2d58-46eb-4bbf-b768-3b38949842bd",
+              "leftValue": "={{$json.body.data.key.fromMe}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -432,
+        224
+      ],
+      "id": "4bcdfeb2-3d07-4ff6-bff3-878993bbc1fa",
+      "name": "If Filtrar fromMe"
+    },
+    {
+      "parameters": {
+        "content": "Esto es lo que se hizo para filtrar eventos.\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        32
+      ],
+      "id": "7a4a5535-32a9-4bb9-b47a-ebce6ea0d4af",
+      "name": "Sticky Note5"
+    }
+  ],
+  "connections": {
+    "Webhook WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "If Filtrar fromMe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data nomalize": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent SmartTrack",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Push buffer": {
+      "main": [
+        [
+          {
+            "node": "Redis Get buffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Redis Delete",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait buffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Get buffer": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait buffer": {
+      "main": [
+        [
+          {
+            "node": "Redis Get buffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Buffer": {
+      "main": [
+        [
+          {
+            "node": "JSON parse Buffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JSON parse Buffer": {
+      "main": [
+        [
+          {
+            "node": "Switch Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text content": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort": {
+      "main": [
+        [
+          {
+            "node": "Content merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content merge": {
+      "main": [
+        [
+          {
+            "node": "Chat input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat input": {
+      "main": [
+        [
+          {
+            "node": "Postgres History Getter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent SmartTrack",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Delete": {
+      "main": [
+        [
+          {
+            "node": "Split Buffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch Type": {
+      "main": [
+        [
+          {
+            "node": "Get Audio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Text content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Audio": {
+      "main": [
+        [
+          {
+            "node": "Convert Audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Audio": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Audio Transcribe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Audio Transcribe": {
+      "main": [
+        [
+          {
+            "node": "Audio content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Image": {
+      "main": [
+        [
+          {
+            "node": "Convert Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Image": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Describe Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Describe Image": {
+      "main": [
+        [
+          {
+            "node": "Image content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audio content": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Image content": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent Verificador",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4o mini Verificador": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent Verificador",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Parte 2": {
+      "main": [
+        [
+          {
+            "node": "If Parte 3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Parte 3": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "If Parte 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "If Parte 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent SmartTrack": {
+      "main": [
+        [
+          {
+            "node": "AI Agent Verificador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres History Getter": {
+      "main": [
+        [
+          {
+            "node": "History Formater",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "History Formater": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Verificador": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Clasificador de Intención": {
+      "main": [
+        [
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent Clasificador de Intención",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent Asistencia Tecnica",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent Asistencia Tecnica",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If ADD User Block": {
+      "main": [
+        [
+          {
+            "node": "Postgres Check Users block",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Postgres Block List check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Check Users block": {
+      "main": [
+        [
+          {
+            "node": "If Check in Block List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres ADD User Block Assit": {
+      "main": [
+        [
+          {
+            "node": "HTTP Agregado En BLOCK LIST Asist",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Notification Assist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Block List check": {
+      "main": [
+        [
+          {
+            "node": "If ADD User Block1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Check in Block List": {
+      "main": [
+        [
+          {
+            "node": "Postgres ADD User Block Assit",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request Remove BLOCK LIST",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request En BLOCK LIST",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request Remove BLOCK LIST": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent Asistencia Ventas",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser3": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent Asistencia Ventas",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Asistencia Tecnica": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Asistencia Ventas": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent Derivar Humano",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser5": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent Derivar Humano",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Derivar Humano": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent Asistencia Ventas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent Asistencia Tecnica",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent Derivar Humano",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser4": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent Verificador Asistencia",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4o mini Verificador3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent Verificador Asistencia",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Parte ": {
+      "main": [
+        [
+          {
+            "node": "If Parte 4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Parte 4": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request4": {
+      "main": [
+        [
+          {
+            "node": "If Parte ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request5": {
+      "main": [
+        [
+          {
+            "node": "If Parte 4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request6": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent Verificador Asistencia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request Asistencia",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If ADD User Block1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Redis Push buffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent Asistencia Ventas",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory2": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent Asistencia Tecnica",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory3": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent Derivar Humano",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Contacto desde Anuncio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If ADD User Block",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Contacto desde Anuncio": {
+      "main": [
+        [
+          {
+            "node": "HTTP Contacto desde Anuncio1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Verificador Asistencia": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Contacto desde Anuncio1": {
+      "main": [
+        [
+          {
+            "node": "If ADD User Block",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execute Workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "AI Agent SmartTrack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Catalogo": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Faqs": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Configuracion": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Lista de precios": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "AI Agent Clasificador de Intención",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Tecnico Funcional": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Soporte": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent SmartTrack",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF has previous1": {
+      "main": [
+        [
+          {
+            "node": "Date & Time1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP sendText (Evolution)2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IF >= 12h1": {
+      "main": [
+        [
+          {
+            "node": "HTTP sendText (Evolution)2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Redis Set last_msg (NO)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis Get last_msg": {
+      "main": [
+        [
+          {
+            "node": "IF has previous1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date & Time1": {
+      "main": [
+        [
+          {
+            "node": "IF >= 12h1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP sendText (Evolution)2": {
+      "main": [
+        [
+          {
+            "node": "Redis Set last_msg (YES)2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Filtrar fromMe": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Data nomalize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {
+    "Webhook WhatsApp": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.devman2.com",
+            "user-agent": "axios/1.12.2",
+            "content-length": "1478",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, compress, deflate, br",
+            "content-type": "application/json",
+            "x-forwarded-for": "147.93.147.173",
+            "x-forwarded-host": "n8n.devman2.com",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "7cdb6f408a87",
+            "x-real-ip": "147.93.147.173"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "event": "messages.upsert",
+            "instance": "numero_de_kelo_atencion_al_cliente_no_conectar_con_agente",
+            "data": {
+              "key": {
+                "remoteJid": "5493416615390@s.whatsapp.net",
+                "remoteJidAlt": "22905178079377@lid",
+                "fromMe": false,
+                "id": "A53804633A212CB6B5B953F3D341E106",
+                "participant": "",
+                "addressingMode": "pn"
+              },
+              "pushName": "Brian Castillo",
+              "status": "DELIVERY_ACK",
+              "message": {
+                "conversation": "Si",
+                "messageContextInfo": {
+                  "deviceListMetadata": {
+                    "senderKeyIndexes": [],
+                    "recipientKeyIndexes": [],
+                    "senderKeyHash": {
+                      "0": 239,
+                      "1": 57,
+                      "2": 148,
+                      "3": 230,
+                      "4": 138,
+                      "5": 7,
+                      "6": 136,
+                      "7": 197,
+                      "8": 207,
+                      "9": 82
+                    },
+                    "senderTimestamp": {
+                      "low": 1762791295,
+                      "high": 0,
+                      "unsigned": true
+                    },
+                    "recipientKeyHash": {
+                      "0": 142,
+                      "1": 193,
+                      "2": 124,
+                      "3": 102,
+                      "4": 39,
+                      "5": 51,
+                      "6": 106,
+                      "7": 188,
+                      "8": 30,
+                      "9": 218
+                    },
+                    "recipientTimestamp": {
+                      "low": 1762365140,
+                      "high": 0,
+                      "unsigned": true
+                    }
+                  },
+                  "deviceListMetadataVersion": 2,
+                  "messageSecret": {
+                    "0": 151,
+                    "1": 201,
+                    "2": 248,
+                    "3": 168,
+                    "4": 108,
+                    "5": 167,
+                    "6": 92,
+                    "7": 151,
+                    "8": 25,
+                    "9": 121,
+                    "10": 128,
+                    "11": 160,
+                    "12": 222,
+                    "13": 162,
+                    "14": 87,
+                    "15": 103,
+                    "16": 157,
+                    "17": 187,
+                    "18": 103,
+                    "19": 240,
+                    "20": 65,
+                    "21": 0,
+                    "22": 238,
+                    "23": 162,
+                    "24": 126,
+                    "25": 161,
+                    "26": 195,
+                    "27": 94,
+                    "28": 89,
+                    "29": 19,
+                    "30": 1,
+                    "31": 136
+                  }
+                }
+              },
+              "messageType": "conversation",
+              "messageTimestamp": 1763490394,
+              "instanceId": "a2bfb134-4153-43b2-9464-735a56ea152a",
+              "source": "android"
+            },
+            "destination": "https://n8n.devman2.com/webhook/smarttrack",
+            "date_time": "2025-11-18T15:26:34.492Z",
+            "sender": "5491126718874@s.whatsapp.net",
+            "server_url": "https://whatsapp-evolution-api-evolution-api.no8na1.easypanel.host",
+            "apikey": "31884A073D61-46F6-84CC-A8CF9FF48010"
+          },
+          "webhookUrl": "https://n8n.devman2.com/webhook/smarttrack",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "versionId": "6a93fea0-79ee-4776-8093-59fdca6440a4",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-14T06:02:17.035Z",
+      "createdAt": "2026-01-14T06:02:17.035Z",
+      "role": "workflow:owner",
+      "workflowId": "qoaFaSyszPB10Zhw",
+      "projectId": "Ts2xaK8jD6HfpDh3"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
