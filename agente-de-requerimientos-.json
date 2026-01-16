@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-09T15:22:51.621Z",
+  "updatedAt": "2026-01-15T13:26:54.689Z",
   "createdAt": "2025-12-22T18:38:30.372Z",
   "id": "NFWoraW2iUhGKYcb",
   "name": "agente de requerimientos",
@@ -78,8 +78,7 @@
       ],
       "id": "e6880025-305b-4dc5-916b-5ee34720e743",
       "name": "Webhook",
-      "webhookId": "203fcfc0-23db-47da-8fac-01db5ed482bc",
-      "disabled": true
+      "webhookId": "203fcfc0-23db-47da-8fac-01db5ed482bc"
     },
     {
       "parameters": {
@@ -779,7 +778,8 @@
       ],
       "id": "568aacc9-687a-4d2a-a983-e125f684bac7",
       "name": "When chat message received",
-      "webhookId": "cc6eb4f7-ed1a-4519-b03f-6e4489e9cf26"
+      "webhookId": "cc6eb4f7-ed1a-4519-b03f-6e4489e9cf26",
+      "disabled": true
     },
     {
       "parameters": {
@@ -1520,8 +1520,8 @@
       }
     ]
   },
-  "versionId": "d5f07496-b789-4098-b46c-ca7426516d2e",
-  "activeVersionId": "d5f07496-b789-4098-b46c-ca7426516d2e",
+  "versionId": "64d3a1b9-7fab-4b79-9b65-9c5d43c9e5ef",
+  "activeVersionId": "64d3a1b9-7fab-4b79-9b65-9c5d43c9e5ef",
   "triggerCount": 1,
   "shared": [
     {
@@ -1533,9 +1533,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-09T15:22:42.000Z",
-    "createdAt": "2026-01-09T15:22:40.063Z",
-    "versionId": "d5f07496-b789-4098-b46c-ca7426516d2e",
+    "updatedAt": "2026-01-16T00:44:46.000Z",
+    "createdAt": "2026-01-15T13:26:54.693Z",
+    "versionId": "64d3a1b9-7fab-4b79-9b65-9c5d43c9e5ef",
     "workflowId": "NFWoraW2iUhGKYcb",
     "nodes": [
       {
@@ -1610,8 +1610,7 @@
         ],
         "id": "e6880025-305b-4dc5-916b-5ee34720e743",
         "name": "Webhook",
-        "webhookId": "203fcfc0-23db-47da-8fac-01db5ed482bc",
-        "disabled": true
+        "webhookId": "203fcfc0-23db-47da-8fac-01db5ed482bc"
       },
       {
         "parameters": {
@@ -2311,7 +2310,8 @@
         ],
         "id": "568aacc9-687a-4d2a-a983-e125f684bac7",
         "name": "When chat message received",
-        "webhookId": "cc6eb4f7-ed1a-4519-b03f-6e4489e9cf26"
+        "webhookId": "cc6eb4f7-ed1a-4519-b03f-6e4489e9cf26",
+        "disabled": true
       },
       {
         "parameters": {
@@ -2901,7 +2901,7 @@
       }
     },
     "authors": "Francisco Fiorentino",
-    "name": "Version d5f07496",
+    "name": "Version 64d3a1b9",
     "description": ""
   },
   "tags": []
