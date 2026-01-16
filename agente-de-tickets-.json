@@ -1,0 +1,435 @@
+{
+  "updatedAt": "2026-01-15T13:04:25.954Z",
+  "createdAt": "2026-01-15T05:11:23.943Z",
+  "id": "V0lOkuUYP2h1Rkfg",
+  "name": "agente de tickets",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        608,
+        -560
+      ],
+      "id": "ccbcb9fb-7e36-4fb7-b184-c7173658ea0f",
+      "name": "grupo"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        800,
+        -688
+      ],
+      "id": "c510d58d-74d7-4502-a30c-35b770a0c37f",
+      "name": "chunk de mensajes"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        -688
+      ],
+      "id": "d46f0f09-55ea-4228-81d9-212359eb1d10",
+      "name": "IA - aggregator - responde o no"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        368,
+        -512
+      ],
+      "id": "0a58f39d-59a2-4266-8313-56c1dd7d5f91",
+      "name": "redis de los mensajes del grupo"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        608,
+        -256
+      ],
+      "id": "e5573598-1af7-46bf-af72-74f5284e67e9",
+      "name": "flujo estandar con agente"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1552,
+        -816
+      ],
+      "id": "c561a7ad-adbd-4fb3-baa4-75a73fef579b",
+      "name": "responde"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1552,
+        -608
+      ],
+      "id": "59eeb9bd-f3ac-4e0d-891e-94c9cc06f059",
+      "name": "no responde"
+    },
+    {
+      "parameters": {
+        "path": "2dc73b3e-f806-49f4-9bf1-19872e1c5808",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -240,
+        128
+      ],
+      "id": "f23557b2-c946-414e-8258-fc66accb8376",
+      "name": "Webhook",
+      "webhookId": "2dc73b3e-f806-49f4-9bf1-19872e1c5808"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -80,
+        -400
+      ],
+      "id": "2b0cb63a-0941-41ff-a34c-9882995c28db",
+      "name": "webhook whatsapp"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        128,
+        -400
+      ],
+      "id": "e8e3633a-41f1-4fec-a4fa-a63652dc890c",
+      "name": "mensaje de whatsapp"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        368,
+        -288
+      ],
+      "id": "2d3e17da-a3a4-4066-a911-ed355723c1b5",
+      "name": "mensaje directo"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        416,
+        144
+      ],
+      "id": "d365c2e6-dcd6-4848-937d-eecf174b9859",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "hasOutputParser": true,
+        "needsFallback": true,
+        "messages": {
+          "messageValues": [
+            {
+              "type": "HumanMessagePromptTemplate"
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        800,
+        16
+      ],
+      "id": "ecf6d4b9-b9e2-4009-a8eb-a123c2e8f80d",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"answer\": \"\"\n}",
+        "autoFix": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        896,
+        224
+      ],
+      "id": "721e6641-5ce5-4a69-b203-ddf57d027953",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "typeVersion": 1,
+      "position": [
+        896,
+        432
+      ],
+      "id": "17aa8d57-193d-4eec-b832-ee8cd36c6d43",
+      "name": "DeepSeek Chat Model",
+      "credentials": {
+        "deepSeekApi": {
+          "id": "1WRUh77hDpUB41ry",
+          "name": "DeepSeek fran"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1056,
+        -848
+      ],
+      "id": "6e479950-df49-45b7-b0fa-73c4527d032e",
+      "name": "identificar cliente"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1056,
+        -688
+      ],
+      "id": "aa876c17-53b5-4fa5-a83d-9abbe248595a",
+      "name": "IA - identificar contexto"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1056,
+        -512
+      ],
+      "id": "16907973-d803-4250-ba1b-76efdefee2f8",
+      "name": "IA - identificar sentimiento"
+    },
+    {
+      "parameters": {
+        "content": "## I'm a note \n1. se necesita poder identificar grupos y responder en los mismos\n2. se necesita poder leer archivos y poder extraer información de los mismos.\n3. La información extraida de archivos debe poder ser dada al agente.\n4. se deben poder hacer chunks de mensajes para analizar e identificar a quien responder.\n5. se debe poder responder los mensajes especificos"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -176,
+        -992
+      ],
+      "typeVersion": 1,
+      "id": "8d7fa4ca-5a1f-4c53-9344-bd25c361c9f9",
+      "name": "Sticky Note"
+    }
+  ],
+  "connections": {
+    "grupo": {
+      "main": [
+        [
+          {
+            "node": "chunk de mensajes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "chunk de mensajes": {
+      "main": [
+        [
+          {
+            "node": "IA - identificar contexto",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "IA - identificar sentimiento",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "identificar cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "redis de los mensajes del grupo": {
+      "main": [
+        [
+          {
+            "node": "grupo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IA - aggregator - responde o no": {
+      "main": [
+        [
+          {
+            "node": "responde",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "no responde",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "webhook whatsapp": {
+      "main": [
+        [
+          {
+            "node": "mensaje de whatsapp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mensaje de whatsapp": {
+      "main": [
+        [
+          {
+            "node": "mensaje directo",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "redis de los mensajes del grupo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mensaje directo": {
+      "main": [
+        [
+          {
+            "node": "flujo estandar con agente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Structured Output Parser",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "identificar cliente": {
+      "main": [
+        [
+          {
+            "node": "IA - aggregator - responde o no",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IA - identificar contexto": {
+      "main": [
+        [
+          {
+            "node": "IA - aggregator - responde o no",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "IA - identificar sentimiento": {
+      "main": [
+        [
+          {
+            "node": "IA - aggregator - responde o no",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "timezone": "America/Argentina/Buenos_Aires",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "4b997346-1e13-4dc1-80f3-02ef4c45be10",
+  "activeVersionId": null,
+  "triggerCount": 0,
+  "shared": [
+    {
+      "updatedAt": "2026-01-15T05:11:23.954Z",
+      "createdAt": "2026-01-15T05:11:23.954Z",
+      "role": "workflow:owner",
+      "workflowId": "V0lOkuUYP2h1Rkfg",
+      "projectId": "Ts2xaK8jD6HfpDh3"
+    }
+  ],
+  "activeVersion": null,
+  "tags": []
+}
