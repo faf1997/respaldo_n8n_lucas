@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-12T14:16:15.795Z",
+  "updatedAt": "2026-01-15T20:54:32.617Z",
   "createdAt": "2025-12-23T13:51:51.854Z",
   "id": "GfgcdVG5VN8tJXo7",
   "name": "Agente Ventas",
@@ -18,8 +18,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3,
       "position": [
-        -96,
-        352
+        -80,
+        336
       ],
       "id": "f8eac5db-c70a-4e71-83af-2a039d5b9611",
       "name": "AI Agent"
@@ -75,7 +75,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        -3808,
+        -3824,
         400
       ],
       "id": "01ea5ae9-8ef6-4a2e-ad6c-6e54137cedd8",
@@ -212,8 +212,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -3280,
-        288
+        -3264,
+        272
       ],
       "id": "7756833c-0679-42d8-8f48-d997b87cd2ae",
       "name": "Devuelve Config",
@@ -347,7 +347,7 @@
       "typeVersion": 2.6,
       "position": [
         -768,
-        368
+        352
       ],
       "id": "bd05bb84-7e17-419e-8440-5b2683ed5134",
       "name": "Load State",
@@ -403,7 +403,7 @@
       "typeVersion": 3.4,
       "position": [
         -1104,
-        368
+        352
       ],
       "id": "39f2747c-f12b-4e9f-96f1-438d54859af2",
       "name": "Campos requeridos"
@@ -433,7 +433,7 @@
       "typeVersion": 3.4,
       "position": [
         -768,
-        192
+        144
       ],
       "id": "b8680670-0e0e-4604-b7f8-b5faf0d2a544",
       "name": "Default State"
@@ -448,7 +448,7 @@
       "typeVersion": 3.2,
       "position": [
         -368,
-        352
+        336
       ],
       "id": "79f6e9a6-c2c0-4968-bdb1-5573d76508dc",
       "name": "Merge State"
@@ -464,8 +464,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        480,
-        352
+        432,
+        336
       ],
       "id": "2708f95c-00e8-418c-af16-457c9f46b5b3",
       "name": "Upsert State",
@@ -510,11 +510,11 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        736,
-        352
+        704,
+        336
       ],
-      "id": "1ffc0046-821d-4290-b17b-03295c524a98",
-      "name": "send message"
+      "id": "f90b7416-f349-49b1-9cfc-9c209e460de0",
+      "name": "send message1"
     }
   ],
   "connections": {
@@ -738,7 +738,7 @@
       "main": [
         [
           {
-            "node": "send message",
+            "node": "send message1",
             "type": "main",
             "index": 0
           }
@@ -922,7 +922,7 @@
       }
     ]
   },
-  "versionId": "3fbb4409-cec9-4c23-a11f-0e6e63bb16ea",
+  "versionId": "fb1be299-4b71-41cf-bb1c-793af0167666",
   "activeVersionId": "cf17d854-8715-40a3-aec2-a46a5da6e85c",
   "triggerCount": 1,
   "shared": [
