@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-15T13:24:50.945Z",
+  "updatedAt": "2026-01-16T15:03:20.471Z",
   "createdAt": "2025-12-26T17:44:17.314Z",
   "id": "c1XDmCsXI0JVI8O0",
   "name": "send message for whatsapp - endpoint",
@@ -211,7 +211,8 @@
                     "rightValue": "",
                     "operator": {
                       "type": "string",
-                      "operation": "equals"
+                      "operation": "empty",
+                      "singleValue": true
                     }
                   }
                 ],
@@ -233,7 +234,8 @@
                     "rightValue": "",
                     "operator": {
                       "type": "string",
-                      "operation": "equals"
+                      "operation": "empty",
+                      "singleValue": true
                     }
                   }
                 ],
@@ -255,7 +257,8 @@
                     "rightValue": "",
                     "operator": {
                       "type": "string",
-                      "operation": "equals"
+                      "operation": "empty",
+                      "singleValue": true
                     }
                   }
                 ],
@@ -277,7 +280,8 @@
                     "rightValue": "",
                     "operator": {
                       "type": "string",
-                      "operation": "equals"
+                      "operation": "empty",
+                      "singleValue": true
                     }
                   }
                 ],
@@ -299,7 +303,8 @@
                     "rightValue": "",
                     "operator": {
                       "type": "string",
-                      "operation": "equals"
+                      "operation": "empty",
+                      "singleValue": true
                     }
                   }
                 ],
@@ -321,7 +326,8 @@
                     "rightValue": "",
                     "operator": {
                       "type": "string",
-                      "operation": "equals"
+                      "operation": "empty",
+                      "singleValue": true
                     }
                   }
                 ],
@@ -600,8 +606,8 @@
       }
     ]
   },
-  "versionId": "d2f10fc1-4d24-4003-9780-b9742933702b",
-  "activeVersionId": "d2f10fc1-4d24-4003-9780-b9742933702b",
+  "versionId": "8c08c823-efa5-43ff-9542-ca0565275262",
+  "activeVersionId": "8c08c823-efa5-43ff-9542-ca0565275262",
   "triggerCount": 1,
   "shared": [
     {
@@ -613,9 +619,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-09T12:50:00.000Z",
-    "createdAt": "2026-01-09T12:49:48.268Z",
-    "versionId": "d2f10fc1-4d24-4003-9780-b9742933702b",
+    "updatedAt": "2026-01-16T15:03:23.000Z",
+    "createdAt": "2026-01-16T15:03:20.475Z",
+    "versionId": "8c08c823-efa5-43ff-9542-ca0565275262",
     "workflowId": "c1XDmCsXI0JVI8O0",
     "nodes": [
       {
@@ -823,7 +829,8 @@
                       "rightValue": "",
                       "operator": {
                         "type": "string",
-                        "operation": "equals"
+                        "operation": "empty",
+                        "singleValue": true
                       }
                     }
                   ],
@@ -845,7 +852,8 @@
                       "rightValue": "",
                       "operator": {
                         "type": "string",
-                        "operation": "equals"
+                        "operation": "empty",
+                        "singleValue": true
                       }
                     }
                   ],
@@ -867,7 +875,8 @@
                       "rightValue": "",
                       "operator": {
                         "type": "string",
-                        "operation": "equals"
+                        "operation": "empty",
+                        "singleValue": true
                       }
                     }
                   ],
@@ -889,7 +898,8 @@
                       "rightValue": "",
                       "operator": {
                         "type": "string",
-                        "operation": "equals"
+                        "operation": "empty",
+                        "singleValue": true
                       }
                     }
                   ],
@@ -911,7 +921,8 @@
                       "rightValue": "",
                       "operator": {
                         "type": "string",
-                        "operation": "equals"
+                        "operation": "empty",
+                        "singleValue": true
                       }
                     }
                   ],
@@ -933,7 +944,8 @@
                       "rightValue": "",
                       "operator": {
                         "type": "string",
-                        "operation": "equals"
+                        "operation": "empty",
+                        "singleValue": true
                       }
                     }
                   ],
@@ -1164,7 +1176,7 @@
       }
     },
     "authors": "Francisco Fiorentino",
-    "name": "Version d2f10fc1",
+    "name": "Version 8c08c823",
     "description": ""
   },
   "tags": [
