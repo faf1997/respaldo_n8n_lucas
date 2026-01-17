@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-02T19:11:09.637Z",
+  "updatedAt": "2026-01-16T18:32:04.689Z",
   "createdAt": "2025-12-23T18:57:15.525Z",
   "id": "oNYwBccMtuS0hoVA",
   "name": "Redis endpoint for whatsapp - endpoint",
@@ -309,7 +309,7 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.5,
       "position": [
-        912,
+        944,
         96
       ],
       "id": "ff989d65-5995-4032-9b83-87720f865b08",
@@ -322,7 +322,7 @@
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 3,
       "position": [
-        240,
+        272,
         240
       ],
       "id": "069c4502-5725-4052-9f28-f271bb2f0def",
@@ -388,7 +388,7 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        912,
+        944,
         304
       ],
       "id": "234a4bf8-7cce-46b8-9f58-eb75a2bafd85",
@@ -420,7 +420,7 @@
       "type": "@n8n/n8n-nodes-langchain.guardrails",
       "typeVersion": 2,
       "position": [
-        640,
+        672,
         304
       ],
       "id": "4db83336-56e1-4228-84c3-291af98f826a",
@@ -434,7 +434,7 @@
       "type": "n8n-nodes-base.splitOut",
       "typeVersion": 1,
       "position": [
-        -32,
+        48,
         240
       ],
       "id": "22e194e7-fb0f-4659-95c1-8e2272095327",
@@ -442,12 +442,12 @@
     },
     {
       "parameters": {
-        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nlet body = JSON.parse($('Redis Delete1').first().json.messages[$('Redis Delete1').first().json.messages.length - 1])\nbody.should_reply = true\nreturn {\"body\": body};\n  \n  // .toJsonString()"
+        "jsCode": "const messages = $('Redis Delete1').first().json.messages || [];\n\n// Extraer texto de cada evento y concatenar\nconst mergedText = messages\n  .map(m => {\n    try {\n      const parsed = JSON.parse(m);\n      return parsed?.data?.message?.conversation || '';\n    } catch {\n      return '';\n    }\n  })\n  .filter(Boolean)\n  .join('\\n');\n\n// Tomo el ultimo mensaje como base (para conservar estructura/keys)\nconst last = messages.length ? JSON.parse(messages[messages.length - 1]) : {};\n\n// Piso SOLO el texto conversacional con el mergeado\nif (!last.data) last.data = {};\nif (!last.data.message) last.data.message = {};\nlast.data.message.conversation = mergedText;\n\n// Mantengo compatibilidad con tu subflujo\nlast.should_reply = true;\n\nreturn [{ json: { body: last } }];"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        640,
+        672,
         96
       ],
       "id": "69fda3c1-b05d-40e3-bfc0-4f8c2bb9de8e",
@@ -765,8 +765,8 @@
       }
     ]
   },
-  "versionId": "b2a41d7b-6fc7-4347-9a6b-871644c8b762",
-  "activeVersionId": "a117abf8-6763-4389-83cb-fd9f0d8d8c13",
+  "versionId": "4e8b3695-c970-42c4-bb69-d8721f0aca3a",
+  "activeVersionId": "4e8b3695-c970-42c4-bb69-d8721f0aca3a",
   "triggerCount": 1,
   "shared": [
     {
@@ -778,9 +778,9 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2025-12-30T17:49:30.000Z",
-    "createdAt": "2025-12-30T17:49:27.712Z",
-    "versionId": "a117abf8-6763-4389-83cb-fd9f0d8d8c13",
+    "updatedAt": "2026-01-16T18:32:10.000Z",
+    "createdAt": "2026-01-16T18:32:04.691Z",
+    "versionId": "4e8b3695-c970-42c4-bb69-d8721f0aca3a",
     "workflowId": "oNYwBccMtuS0hoVA",
     "nodes": [
       {
@@ -988,7 +988,7 @@
         "type": "n8n-nodes-base.stickyNote",
         "position": [
           -1232,
-          -1296
+          -1328
         ],
         "typeVersion": 1,
         "id": "80b93af1-34af-4c41-a93c-6141a63d8940",
@@ -1086,7 +1086,7 @@
         "type": "n8n-nodes-base.respondToWebhook",
         "typeVersion": 1.5,
         "position": [
-          912,
+          944,
           96
         ],
         "id": "ff989d65-5995-4032-9b83-87720f865b08",
@@ -1099,7 +1099,7 @@
         "type": "n8n-nodes-base.splitInBatches",
         "typeVersion": 3,
         "position": [
-          240,
+          272,
           240
         ],
         "id": "069c4502-5725-4052-9f28-f271bb2f0def",
@@ -1165,7 +1165,7 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          912,
+          944,
           304
         ],
         "id": "234a4bf8-7cce-46b8-9f58-eb75a2bafd85",
@@ -1197,7 +1197,7 @@
         "type": "@n8n/n8n-nodes-langchain.guardrails",
         "typeVersion": 2,
         "position": [
-          640,
+          672,
           304
         ],
         "id": "4db83336-56e1-4228-84c3-291af98f826a",
@@ -1211,7 +1211,7 @@
         "type": "n8n-nodes-base.splitOut",
         "typeVersion": 1,
         "position": [
-          -32,
+          48,
           240
         ],
         "id": "22e194e7-fb0f-4659-95c1-8e2272095327",
@@ -1219,12 +1219,12 @@
       },
       {
         "parameters": {
-          "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nlet body = JSON.parse($('Redis Delete1').first().json.messages[$('Redis Delete1').first().json.messages.length - 1])\nbody.should_reply = true\nreturn {\"body\": body};\n  \n  // .toJsonString()"
+          "jsCode": "const messages = $('Redis Delete1').first().json.messages || [];\n\n// Extraer texto de cada evento y concatenar\nconst mergedText = messages\n  .map(m => {\n    try {\n      const parsed = JSON.parse(m);\n      return parsed?.data?.message?.conversation || '';\n    } catch {\n      return '';\n    }\n  })\n  .filter(Boolean)\n  .join('\\n');\n\n// Tomo el ultimo mensaje como base (para conservar estructura/keys)\nconst last = messages.length ? JSON.parse(messages[messages.length - 1]) : {};\n\n// Piso SOLO el texto conversacional con el mergeado\nif (!last.data) last.data = {};\nif (!last.data.message) last.data.message = {};\nlast.data.message.conversation = mergedText;\n\n// Mantengo compatibilidad con tu subflujo\nlast.should_reply = true;\n\nreturn [{ json: { body: last } }];"
         },
         "type": "n8n-nodes-base.code",
         "typeVersion": 2,
         "position": [
-          640,
+          672,
           96
         ],
         "id": "69fda3c1-b05d-40e3-bfc0-4f8c2bb9de8e",
@@ -1397,7 +1397,7 @@
       }
     },
     "authors": "Francisco Fiorentino",
-    "name": "Version a117abf8",
+    "name": "Version 4e8b3695",
     "description": ""
   },
   "tags": [
