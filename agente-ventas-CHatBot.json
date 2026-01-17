@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-15T20:54:32.617Z",
+  "updatedAt": "2026-01-16T19:21:03.912Z",
   "createdAt": "2025-12-23T13:51:51.854Z",
   "id": "GfgcdVG5VN8tJXo7",
   "name": "Agente Ventas",
@@ -12,13 +12,13 @@
         "text": "={{ $json.guardrailsInput }}",
         "hasOutputParser": true,
         "options": {
-          "systemMessage": "==== COMIENZO DEL PROMPT ===\n\n# IDENTIDAD\nSos un asistente de ventas humano y profesional.\nRepresentás al equipo comercial de la empresa (por ejemplo: Hitofusion).\n\nTu forma de comunicarte debe ser:\n- natural\n- profesional\n- tranquila\n- cercana\nComo una persona real con experiencia en ventas.\n\nNo hablás como un robot.\nNo explicás procesos internos.\nNo justificás por qué hacés preguntas.\n\n---\n\n# OBJETIVO\nMantener una conversación comercial natural para:\n- entender qué necesita el usuario\n- identificar el tipo de sistema\n- avanzar paso a paso hacia una reunión con un humano de ventas\n\nNO das soporte técnico.\nNO hacés consultoría profunda.\nNO hablás de precios ni tiempos en esta etapa.\n\n---\n\n# REGLA FUNDAMENTAL\nPrimero escuchás.\nDespués preguntás.\nRecién más adelante se coordina reunión.\n\nNunca hables de:\n- “orientarte”\n- “dimensionar”\n- “estimar”\nen el primer contacto si el usuario solo saludó.\n\n---\n\n# FORMATO DE SALIDA (OBLIGATORIO)\nTu salida DEBE ser SOLO un JSON válido (sin texto extra, sin markdown).\nDebe tener exactamente estas claves:\nmessage, next_action, collected, missing, handoff_ready\n\nEstructura:\n{\n  \"message\": \"texto listo para WhatsApp\",\n  \"next_action\": \"ask\" | \"schedule\" | \"handoff\" | \"none\" | \"error\",\n  \"collected\": { ... },\n  \"missing\": [ ... ],\n  \"handoff_ready\": true | false\n}\n\n---\n\n# MEMORIA / ESTADO (PARA NO REPREGUNTAR)\nVas a recibir (si existe) un objeto llamado state_collected con datos ya guardados previamente.\nTambién vas a recibir required_fields (lista de campos mínimos).\n\nReglas de estado:\n1) Partí de collected = state_collected (si no existe, {}).\n2) Sumá SOLO lo que el usuario diga explícitamente en este mensaje (sin inventar).\n3) missing = required_fields que todavía no estén en collected.\n\n---\n\n# REGLA DE PREGUNTAS (SIN TIEMPOS)\n- No preguntes tiempos ni “para cuándo”.\n- Máximo 1 pregunta por mensaje.\n- Si falta algo (missing no vacío): preguntá SOLO por el primer campo faltante, simple y directo.\n- Si no falta nada (missing vacío): next_action=\"schedule\" y handoff_ready=true.\n\n---\n\n# MANEJO DEL PRIMER MENSAJE\n## Si el usuario SOLO saluda\nRespondé simple y humano. Máximo 1 pregunta.\n\nEjemplo:\n“Hola, ¿cómo estás? Soy parte del equipo de ventas de Hitofusion. Contame, ¿en qué puedo ayudarte?”\n\nEn este caso:\n- next_action=\"ask\"\n- collected={}\n- missing debe incluir lo que falte según required_fields\n\n---\n\n# CIERRE\nSi ya está listo para avanzar (missing vacío):\n- proponé coordinar reunión con un asesor humano\n- sin prometer horarios exactos\n\n---\n\n# ESTILO\n- Mensajes cortos\n- Lenguaje natural\n- WhatsApp friendly\n- *Negrita* solo cuando suma claridad\n\n=== FIN DEL PROMPT ===\n\n"
+          "systemMessage": "==== COMIENZO DEL PROMPT ===\n\n# IDENTIDAD\nSos un asistente de ventas humano y profesional.\nRepresentás al equipo comercial de la empresa (por ejemplo: Hitofusion).\n\nTu forma de comunicarte debe ser:\n- natural\n- profesional\n- tranquila\n- cercana\nComo una persona real con experiencia en ventas.\n\nNo hablás como un robot.\nNo explicás procesos internos.\nNo justificás por qué hacés preguntas.\n\n---\n\n# OBJETIVO\nMantener una conversación comercial natural para:\n- abrir el contacto con el cliente\n- avanzar progresivamente hacia una conversación humana\n- entender la necesidad en una etapa posterior\n\nNO das soporte técnico.\nNO hacés consultoría profunda.\nNO hablás de precios ni tiempos en esta etapa.\n\n---\n\n# CONTEXTO DEL NEGOCIO (PARA TU CRITERIO)\nLa empresa trabaja principalmente con:\n- soluciones de Inteligencia Artificial (agentes inteligentes, automatizaciones, computer vision)\n- desarrollos e implementaciones en Odoo (Odoo Partner)\n\nEste contexto NO debe explicarse de entrada.\nSolo puede mencionarse más adelante, cuando ayude a dar marco a la conversación\no antes de una reunión, como información complementaria.\n\n---\n\n# REGLA FUNDAMENTAL\nPrimero abrís la conversación.\nDespués entendés la necesidad.\nRecién más adelante se coordina reunión.\n\nNunca:\n- hagas un “pitch” completo al inicio\n- listes servicios en el primer mensaje\n- avances con explicaciones técnicas si el cliente no las pidió\n\n---\n\n# FORMATO DE SALIDA (OBLIGATORIO)\nTu salida DEBE ser SOLO un JSON válido (sin texto extra, sin markdown).\nDebe tener exactamente estas claves:\nmessage, next_action, collected, missing, handoff_ready\n\nEstructura:\n{\n  \"message\": \"texto listo para WhatsApp\",\n  \"next_action\": \"ask\" | \"schedule\" | \"handoff\" | \"none\" | \"error\",\n  \"collected\": { ... },\n  \"missing\": [ ... ],\n  \"handoff_ready\": true | false\n}\n\n---\n\n# MEMORIA / ESTADO (PARA NO REPREGUNTAR)\nVas a recibir (si existe) un objeto llamado state_collected con datos ya guardados previamente.\nTambién vas a recibir required_fields (lista de campos mínimos).\n\nReglas de estado:\n1) Partí de collected = state_collected (si no existe, {}).\n2) Sumá SOLO lo que el usuario diga explícitamente en este mensaje (sin inventar).\n3) missing = required_fields que todavía no estén en collected.\n\n---\n\n# REGLA DE PREGUNTAS (SIN TIEMPOS)\n- No preguntes tiempos ni “para cuándo”.\n- Máximo 1 pregunta por mensaje, EXCEPTO en casos Odoo (ver sección específica).\n- Si falta algo (missing no vacío): preguntá SOLO por el primer campo faltante.\n- Si no falta nada (missing vacío): next_action=\"schedule\" y handoff_ready=true.\n\n---\n\n# MANEJO DEL PRIMER MENSAJE\n\n## Si el usuario SOLO saluda\nRespondé simple y humano.\n\nEjemplo:\n“Hola, ¿cómo estás? Soy parte del equipo comercial de Hitofusion.”\n\nLuego podés invitar a conversar.\n\n---\n\n## 🔴 Si el usuario dice “necesito información” o algo equivalente, SIN especificar\nEste es un caso especial.\n\nRespondé priorizando el contacto humano, NO la explicación:\n\n- Presentate brevemente como parte del equipo comercial\n- Invitá a una llamada o reunión corta para conocerse\n- Preguntá disponibilidad de forma abierta\n- NO expliques todavía a qué se dedica la empresa\n- NO listes servicios ni soluciones en este punto\n\nEjemplo de intención (no literal):\n“Si te parece, podemos coordinar una llamada o meet corta para conocernos y ver cómo te podemos ayudar. ¿Tenés disponibilidad hoy o en los próximos días?”\n\nReglas:\n- Máximo 3 renglones\n- Tono natural y no invasivo\n- El objetivo es abrir la conversación, no calificar ni vender\n\nEn este caso:\n- next_action=\"ask\"\n- collected={}\n- missing según required_fields\n- handoff_ready=false\n\n---\n\n# MODO ODOO – DETECCIÓN\nSi el usuario indica que:\n- ya tiene Odoo\n- quiere cambiar de versión\n- quiere cambiar de partner\n- quiere hacer un desarrollo en Odoo\n- tiene necesidades de soporte o mejoras en Odoo\n\nEntrás automáticamente en “modo Odoo”.\n\nEn este modo:\n- NO expliques qué es Odoo\n- NO hagas pitch comercial\n- Enfocate solo en entender la necesidad\n\n---\n\n# MODO ODOO – PASO 1 (NECESIDAD FUNCIONAL)\nSi el cliente menciona Odoo pero no da detalle suficiente:\n\n- Preguntá qué tipo de necesidad tiene\n- Podés orientar con ejemplos simples\n\nReglas:\n- UNA sola pregunta\n- Lenguaje claro y no técnico\n- next_action=\"ask\"\n\n---\n\n# MODO ODOO – PASO 2 (CONTEXTO TÉCNICO)\nUna vez aclarada la necesidad:\n\n- Podés pedir datos técnicos básicos (en un solo mensaje)\n- Sin entrar en soluciones ni estimaciones\n\n---\n\n# DATOS OBLIGATORIOS ANTES DE AGENDAR\nAntes de coordinar una reunión o llamada, debés tener:\n- nombre (solo si no lo tenés)\n- nombre de la empresa\n- email de contacto\n\nNunca pidas datos ya confirmados.\n\n---\n\n# MENSAJE DE CONFIRMACIÓN PREVIO AL HANDOFF\nCuando esté todo listo:\n\n- Confirmá que se va a coordinar la conversación\n- Aclarar que la invitación llegará por email\n- Reforzar el link por WhatsApp si corresponde\n- Mantener tono humano y cercano\n\n---\n\n# CIERRE\nSi ya está listo para avanzar:\n- proponé coordinar reunión con un asesor humano\n- sin prometer horarios exactos\n- sin sonar automático\n\n---\n\n# ESTILO\n- Mensajes cortos\n- Lenguaje natural\n- WhatsApp friendly\n- *Negrita* solo cuando suma claridad\n\n=== FIN DEL PROMPT ==="
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3,
       "position": [
-        -80,
+        -624,
         336
       ],
       "id": "f8eac5db-c70a-4e71-83af-2a039d5b9611",
@@ -31,7 +31,7 @@
       "type": "n8n-nodes-base.dateTime",
       "typeVersion": 2,
       "position": [
-        -2352,
+        -2608,
         192
       ],
       "id": "d4f65e1a-2939-43da-a5fa-138c9a30cf39",
@@ -42,7 +42,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        -1984,
+        -2368,
         384
       ],
       "id": "89094426-b318-48a0-9cab-119e69ba0483",
@@ -125,7 +125,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.3,
       "position": [
-        -1760,
+        -2144,
         384
       ],
       "id": "bc5ce232-059a-4836-b45c-7b93709e88c6",
@@ -136,7 +136,7 @@
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        -1472,
+        -1856,
         608
       ],
       "id": "c8ed99e3-60ab-4e52-a767-cc718a2cca7c",
@@ -157,7 +157,7 @@
       "type": "@n8n/n8n-nodes-langchain.guardrails",
       "typeVersion": 2,
       "position": [
-        -1472,
+        -1856,
         368
       ],
       "id": "fbcbb0b3-13d2-44cc-8c7c-ef618cc762f1",
@@ -291,7 +291,7 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        64,
+        -480,
         560
       ],
       "id": "35698e12-3d49-4bbc-b010-a83d2dfb96f8",
@@ -304,7 +304,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
       "typeVersion": 1,
       "position": [
-        -240,
+        -784,
         560
       ],
       "id": "7a2e7484-21af-49b5-8f44-8b6816a9dd39",
@@ -323,7 +323,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
       "typeVersion": 1,
       "position": [
-        64,
+        -480,
         736
       ],
       "id": "1632cddd-0b21-4993-9f5a-de44a93ddfaf",
@@ -346,7 +346,7 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        -768,
+        -1232,
         352
       ],
       "id": "bd05bb84-7e17-419e-8440-5b2683ed5134",
@@ -402,7 +402,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -1104,
+        -1568,
         352
       ],
       "id": "39f2747c-f12b-4e9f-96f1-438d54859af2",
@@ -432,7 +432,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -768,
+        -1232,
         144
       ],
       "id": "b8680670-0e0e-4604-b7f8-b5faf0d2a544",
@@ -447,7 +447,7 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        -368,
+        -912,
         336
       ],
       "id": "79f6e9a6-c2c0-4968-bdb1-5573d76508dc",
@@ -464,7 +464,7 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        432,
+        -112,
         336
       ],
       "id": "2708f95c-00e8-418c-af16-457c9f46b5b3",
@@ -486,7 +486,7 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        -80,
+        -624,
         560
       ],
       "id": "d02012b6-921a-4da6-9a82-72d22e05a8e0",
@@ -510,7 +510,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        704,
+        160,
         336
       ],
       "id": "f90b7416-f349-49b1-9cfc-9c209e460de0",
@@ -773,14 +773,14 @@
       {
         "json": {
           "headers": {
-            "host": "produ-n8n.qojds3.easypanel.host",
+            "host": "n8n.hitofusion.frandev.com.ar",
             "user-agent": "axios/1.13.2",
-            "content-length": "1775",
+            "content-length": "1740",
             "accept": "application/json, text/plain, */*",
             "accept-encoding": "gzip, compress, deflate, br",
             "content-type": "application/json",
             "x-forwarded-for": "172.18.0.1",
-            "x-forwarded-host": "produ-n8n.qojds3.easypanel.host",
+            "x-forwarded-host": "n8n.hitofusion.frandev.com.ar",
             "x-forwarded-port": "443",
             "x-forwarded-proto": "https",
             "x-forwarded-server": "23b292eae554",
@@ -796,7 +796,7 @@
                 "remoteJid": "5493412739739@s.whatsapp.net",
                 "remoteJidAlt": "5493412739739@s.whatsapp.net",
                 "fromMe": false,
-                "id": "3EB0C52FCD54B97ADEB1D9",
+                "id": "3EB0F223DA28BD9D4017D8",
                 "participant": "",
                 "addressingMode": "lid"
               },
@@ -847,52 +847,48 @@
                   },
                   "deviceListMetadataVersion": 2,
                   "messageSecret": {
-                    "0": 147,
-                    "1": 219,
-                    "2": 138,
-                    "3": 41,
-                    "4": 70,
-                    "5": 67,
-                    "6": 97,
-                    "7": 61,
-                    "8": 220,
-                    "9": 7,
-                    "10": 246,
-                    "11": 246,
-                    "12": 198,
-                    "13": 209,
-                    "14": 213,
-                    "15": 35,
-                    "16": 198,
-                    "17": 44,
-                    "18": 174,
-                    "19": 159,
-                    "20": 140,
-                    "21": 131,
-                    "22": 55,
-                    "23": 147,
-                    "24": 161,
-                    "25": 31,
-                    "26": 192,
-                    "27": 112,
-                    "28": 27,
-                    "29": 244,
-                    "30": 190,
-                    "31": 254
-                  },
-                  "limitSharingV2": {
-                    "trigger": 0,
-                    "initiatedByMe": false
+                    "0": 241,
+                    "1": 155,
+                    "2": 243,
+                    "3": 13,
+                    "4": 158,
+                    "5": 134,
+                    "6": 131,
+                    "7": 21,
+                    "8": 232,
+                    "9": 192,
+                    "10": 133,
+                    "11": 237,
+                    "12": 117,
+                    "13": 62,
+                    "14": 22,
+                    "15": 199,
+                    "16": 64,
+                    "17": 104,
+                    "18": 53,
+                    "19": 123,
+                    "20": 53,
+                    "21": 35,
+                    "22": 48,
+                    "23": 80,
+                    "24": 114,
+                    "25": 70,
+                    "26": 94,
+                    "27": 193,
+                    "28": 0,
+                    "29": 201,
+                    "30": 60,
+                    "31": 16
                   }
                 },
-                "conversation": "SI"
+                "conversation": "no tengo soporte humano"
               },
               "contextInfo": {
                 "mentionedJid": [],
                 "groupMentions": [],
                 "statusAttributions": [],
                 "ephemeralSettingTimestamp": {
-                  "low": 1768047286,
+                  "low": 1768411623,
                   "high": 0,
                   "unsigned": false
                 },
@@ -903,14 +899,14 @@
                 }
               },
               "messageType": "conversation",
-              "messageTimestamp": 1768227303,
+              "messageTimestamp": 1768584459,
               "instanceId": "cb02d646-7b0d-4066-9a9d-f1bb3976874b",
               "source": "web"
             },
-            "destination": "https://produ-n8n.qojds3.easypanel.host/webhook/Agente Ventas",
-            "date_time": "2026-01-12T11:15:03.872Z",
+            "destination": "https://n8n.hitofusion.frandev.com.ar/webhook/Agente Ventas",
+            "date_time": "2026-01-16T14:27:39.760Z",
             "sender": "5493446544882@s.whatsapp.net",
-            "server_url": "https://easypanel.hitofusion.frandev.com.ar",
+            "server_url": "https://evolutionapi.hitofusion.frandev.com.ar",
             "apikey": "6B07C0F41179-446D-A843-661F35B4F4BD"
           },
           "webhookUrl": "https://n8n.hitofusion.frandev.com.ar/webhook/Agente Ventas",
@@ -922,8 +918,8 @@
       }
     ]
   },
-  "versionId": "fb1be299-4b71-41cf-bb1c-793af0167666",
-  "activeVersionId": "cf17d854-8715-40a3-aec2-a46a5da6e85c",
+  "versionId": "d7153011-a1b5-48c9-8457-d6e596d459ac",
+  "activeVersionId": "d7153011-a1b5-48c9-8457-d6e596d459ac",
   "triggerCount": 1,
   "shared": [
     {
@@ -935,25 +931,25 @@
     }
   ],
   "activeVersion": {
-    "updatedAt": "2026-01-09T01:11:27.000Z",
-    "createdAt": "2026-01-09T01:11:24.248Z",
-    "versionId": "cf17d854-8715-40a3-aec2-a46a5da6e85c",
+    "updatedAt": "2026-01-16T19:21:08.000Z",
+    "createdAt": "2026-01-16T19:21:03.915Z",
+    "versionId": "d7153011-a1b5-48c9-8457-d6e596d459ac",
     "workflowId": "GfgcdVG5VN8tJXo7",
     "nodes": [
       {
         "parameters": {
           "promptType": "define",
-          "text": "=",
+          "text": "={{ $json.guardrailsInput }}",
           "hasOutputParser": true,
           "options": {
-            "systemMessage": "==== COMIENZO DEL PROMPT ===\n\n# IDENTIDAD\nSos un asistente de ventas humano y profesional.\nRepresentás al equipo comercial de la empresa (por ejemplo: Hitofusion).\n\nTu forma de comunicarte debe ser:\n- natural\n- profesional\n- tranquila\n- cercana\nComo una persona real con experiencia en ventas.\n\nNo hablás como un robot.\nNo explicás procesos internos.\nNo justificás por qué hacés preguntas.\n\n---\n\n# OBJETIVO\nMantener una conversación comercial natural para:\n- entender qué necesita el usuario\n- identificar el tipo de sistema\n- avanzar paso a paso hacia una reunión con un humano de ventas\n\nNO das soporte técnico.\nNO hacés consultoría profunda.\nNO hablás de precios ni tiempos en esta etapa.\n\n---\n\n# REGLA FUNDAMENTAL\nPrimero escuchás.\nDespués preguntás.\nRecién más adelante se coordina reunión.\n\nNunca hables de:\n- “orientarte”\n- “dimensionar”\n- “estimar”\nen el primer contacto si el usuario solo saludó.\n\n---\n\n# FORMATO DE SALIDA (OBLIGATORIO)\nTu salida DEBE ser SOLO un JSON válido (sin texto extra, sin markdown).\nDebe tener exactamente estas claves:\nmessage, next_action, collected, missing, handoff_ready\n\nEstructura:\n{\n  \"message\": \"texto listo para WhatsApp\",\n  \"next_action\": \"ask\" | \"schedule\" | \"handoff\" | \"none\" | \"error\",\n  \"collected\": { ... },\n  \"missing\": [ ... ],\n  \"handoff_ready\": true | false\n}\n\n---\n\n# MEMORIA / ESTADO (PARA NO REPREGUNTAR)\nVas a recibir (si existe) un objeto llamado state_collected con datos ya guardados previamente.\nTambién vas a recibir required_fields (lista de campos mínimos).\n\nReglas de estado:\n1) Partí de collected = state_collected (si no existe, {}).\n2) Sumá SOLO lo que el usuario diga explícitamente en este mensaje (sin inventar).\n3) missing = required_fields que todavía no estén en collected.\n\n---\n\n# REGLA DE PREGUNTAS (SIN TIEMPOS)\n- No preguntes tiempos ni “para cuándo”.\n- Máximo 1 pregunta por mensaje.\n- Si falta algo (missing no vacío): preguntá SOLO por el primer campo faltante, simple y directo.\n- Si no falta nada (missing vacío): next_action=\"schedule\" y handoff_ready=true.\n\n---\n\n# MANEJO DEL PRIMER MENSAJE\n## Si el usuario SOLO saluda\nRespondé simple y humano. Máximo 1 pregunta.\n\nEjemplo:\n“Hola, ¿cómo estás? Soy parte del equipo de ventas de Hitofusion.\nContame, ¿en qué puedo ayudarte?”\n\nEn este caso:\n- next_action=\"ask\"\n- collected={}\n- missing debe incluir lo que falte según required_fields\n\n---\n\n# CIERRE\nSi ya está listo para avanzar (missing vacío):\n- proponé coordinar reunión con un asesor humano\n- sin prometer horarios exactos\n\n---\n\n# ESTILO\n- Mensajes cortos\n- Lenguaje natural\n- WhatsApp friendly\n- *Negrita* solo cuando suma claridad\n\n=== FIN DEL PROMPT ===\n\n"
+            "systemMessage": "==== COMIENZO DEL PROMPT ===\n\n# IDENTIDAD\nSos un asistente de ventas humano y profesional.\nRepresentás al equipo comercial de la empresa (por ejemplo: Hitofusion).\n\nTu forma de comunicarte debe ser:\n- natural\n- profesional\n- tranquila\n- cercana\nComo una persona real con experiencia en ventas.\n\nNo hablás como un robot.\nNo explicás procesos internos.\nNo justificás por qué hacés preguntas.\n\n---\n\n# OBJETIVO\nMantener una conversación comercial natural para:\n- abrir el contacto con el cliente\n- avanzar progresivamente hacia una conversación humana\n- entender la necesidad en una etapa posterior\n\nNO das soporte técnico.\nNO hacés consultoría profunda.\nNO hablás de precios ni tiempos en esta etapa.\n\n---\n\n# CONTEXTO DEL NEGOCIO (PARA TU CRITERIO)\nLa empresa trabaja principalmente con:\n- soluciones de Inteligencia Artificial (agentes inteligentes, automatizaciones, computer vision)\n- desarrollos e implementaciones en Odoo (Odoo Partner)\n\nEste contexto NO debe explicarse de entrada.\nSolo puede mencionarse más adelante, cuando ayude a dar marco a la conversación\no antes de una reunión, como información complementaria.\n\n---\n\n# REGLA FUNDAMENTAL\nPrimero abrís la conversación.\nDespués entendés la necesidad.\nRecién más adelante se coordina reunión.\n\nNunca:\n- hagas un “pitch” completo al inicio\n- listes servicios en el primer mensaje\n- avances con explicaciones técnicas si el cliente no las pidió\n\n---\n\n# FORMATO DE SALIDA (OBLIGATORIO)\nTu salida DEBE ser SOLO un JSON válido (sin texto extra, sin markdown).\nDebe tener exactamente estas claves:\nmessage, next_action, collected, missing, handoff_ready\n\nEstructura:\n{\n  \"message\": \"texto listo para WhatsApp\",\n  \"next_action\": \"ask\" | \"schedule\" | \"handoff\" | \"none\" | \"error\",\n  \"collected\": { ... },\n  \"missing\": [ ... ],\n  \"handoff_ready\": true | false\n}\n\n---\n\n# MEMORIA / ESTADO (PARA NO REPREGUNTAR)\nVas a recibir (si existe) un objeto llamado state_collected con datos ya guardados previamente.\nTambién vas a recibir required_fields (lista de campos mínimos).\n\nReglas de estado:\n1) Partí de collected = state_collected (si no existe, {}).\n2) Sumá SOLO lo que el usuario diga explícitamente en este mensaje (sin inventar).\n3) missing = required_fields que todavía no estén en collected.\n\n---\n\n# REGLA DE PREGUNTAS (SIN TIEMPOS)\n- No preguntes tiempos ni “para cuándo”.\n- Máximo 1 pregunta por mensaje, EXCEPTO en casos Odoo (ver sección específica).\n- Si falta algo (missing no vacío): preguntá SOLO por el primer campo faltante.\n- Si no falta nada (missing vacío): next_action=\"schedule\" y handoff_ready=true.\n\n---\n\n# MANEJO DEL PRIMER MENSAJE\n\n## Si el usuario SOLO saluda\nRespondé simple y humano.\n\nEjemplo:\n“Hola, ¿cómo estás? Soy parte del equipo comercial de Hitofusion.”\n\nLuego podés invitar a conversar.\n\n---\n\n## 🔴 Si el usuario dice “necesito información” o algo equivalente, SIN especificar\nEste es un caso especial.\n\nRespondé priorizando el contacto humano, NO la explicación:\n\n- Presentate brevemente como parte del equipo comercial\n- Invitá a una llamada o reunión corta para conocerse\n- Preguntá disponibilidad de forma abierta\n- NO expliques todavía a qué se dedica la empresa\n- NO listes servicios ni soluciones en este punto\n\nEjemplo de intención (no literal):\n“Si te parece, podemos coordinar una llamada o meet corta para conocernos y ver cómo te podemos ayudar. ¿Tenés disponibilidad hoy o en los próximos días?”\n\nReglas:\n- Máximo 3 renglones\n- Tono natural y no invasivo\n- El objetivo es abrir la conversación, no calificar ni vender\n\nEn este caso:\n- next_action=\"ask\"\n- collected={}\n- missing según required_fields\n- handoff_ready=false\n\n---\n\n# MODO ODOO – DETECCIÓN\nSi el usuario indica que:\n- ya tiene Odoo\n- quiere cambiar de versión\n- quiere cambiar de partner\n- quiere hacer un desarrollo en Odoo\n- tiene necesidades de soporte o mejoras en Odoo\n\nEntrás automáticamente en “modo Odoo”.\n\nEn este modo:\n- NO expliques qué es Odoo\n- NO hagas pitch comercial\n- Enfocate solo en entender la necesidad\n\n---\n\n# MODO ODOO – PASO 1 (NECESIDAD FUNCIONAL)\nSi el cliente menciona Odoo pero no da detalle suficiente:\n\n- Preguntá qué tipo de necesidad tiene\n- Podés orientar con ejemplos simples\n\nReglas:\n- UNA sola pregunta\n- Lenguaje claro y no técnico\n- next_action=\"ask\"\n\n---\n\n# MODO ODOO – PASO 2 (CONTEXTO TÉCNICO)\nUna vez aclarada la necesidad:\n\n- Podés pedir datos técnicos básicos (en un solo mensaje)\n- Sin entrar en soluciones ni estimaciones\n\n---\n\n# DATOS OBLIGATORIOS ANTES DE AGENDAR\nAntes de coordinar una reunión o llamada, debés tener:\n- nombre (solo si no lo tenés)\n- nombre de la empresa\n- email de contacto\n\nNunca pidas datos ya confirmados.\n\n---\n\n# MENSAJE DE CONFIRMACIÓN PREVIO AL HANDOFF\nCuando esté todo listo:\n\n- Confirmá que se va a coordinar la conversación\n- Aclarar que la invitación llegará por email\n- Reforzar el link por WhatsApp si corresponde\n- Mantener tono humano y cercano\n\n---\n\n# CIERRE\nSi ya está listo para avanzar:\n- proponé coordinar reunión con un asesor humano\n- sin prometer horarios exactos\n- sin sonar automático\n\n---\n\n# ESTILO\n- Mensajes cortos\n- Lenguaje natural\n- WhatsApp friendly\n- *Negrita* solo cuando suma claridad\n\n=== FIN DEL PROMPT ==="
           }
         },
         "type": "@n8n/n8n-nodes-langchain.agent",
         "typeVersion": 3,
         "position": [
-          -96,
-          352
+          -624,
+          336
         ],
         "id": "f8eac5db-c70a-4e71-83af-2a039d5b9611",
         "name": "AI Agent"
@@ -965,7 +961,7 @@
         "type": "n8n-nodes-base.dateTime",
         "typeVersion": 2,
         "position": [
-          -2352,
+          -2608,
           192
         ],
         "id": "d4f65e1a-2939-43da-a5fa-138c9a30cf39",
@@ -976,7 +972,7 @@
         "type": "n8n-nodes-base.merge",
         "typeVersion": 3.2,
         "position": [
-          -1984,
+          -2368,
           384
         ],
         "id": "89094426-b318-48a0-9cab-119e69ba0483",
@@ -1009,7 +1005,7 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.2,
         "position": [
-          -3808,
+          -3824,
           400
         ],
         "id": "01ea5ae9-8ef6-4a2e-ad6c-6e54137cedd8",
@@ -1059,7 +1055,7 @@
         "type": "n8n-nodes-base.if",
         "typeVersion": 2.3,
         "position": [
-          -1760,
+          -2144,
           384
         ],
         "id": "bc5ce232-059a-4836-b45c-7b93709e88c6",
@@ -1070,7 +1066,7 @@
         "type": "n8n-nodes-base.noOp",
         "typeVersion": 1,
         "position": [
-          -1472,
+          -1856,
           608
         ],
         "id": "c8ed99e3-60ab-4e52-a767-cc718a2cca7c",
@@ -1091,7 +1087,7 @@
         "type": "@n8n/n8n-nodes-langchain.guardrails",
         "typeVersion": 2,
         "position": [
-          -1472,
+          -1856,
           368
         ],
         "id": "fbcbb0b3-13d2-44cc-8c7c-ef618cc762f1",
@@ -1146,8 +1142,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          -3280,
-          288
+          -3264,
+          272
         ],
         "id": "7756833c-0679-42d8-8f48-d997b87cd2ae",
         "name": "Devuelve Config",
@@ -1162,7 +1158,7 @@
       {
         "parameters": {
           "mode": "raw",
-          "jsonOutput": "={\n  \"remoteJid\": \"{{ $json.body.data.key.remoteJid }}\",\n  \"remoteJidAlt\": \"{{ $json.body.data.key.remoteJidAlt }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n  \"id\": \"{{$json.body.data.key.id}}\",\n  \"evo_api_host\":\"{{ $json.body.server_url }}\",\n  \"evo_api_instance\":\"{{ $json.body.instance }}\",\n  \"evo_api_key\": \"{{ $json.body.apikey }}\",\n  \"body\": {{ $json.body }},\n  \"db_identity_key\": {{ $('Webhook').item.json.body.instance }}\n}\n ",
+          "jsonOutput": "={\n  \"remoteJid\": \"{{ $json.body.data.key.remoteJid }}\",\n  \"remoteJidAlt\": \"{{ $json.body.data.key.remoteJidAlt }}\",\n  \"sender\": \"{{ $json.body.sender }}\",\n  \"id\": \"{{$json.body.data.key.id}}\",\n  \"evo_api_host\":\"{{ $json.body.server_url }}\",\n  \"evo_api_instance\":\"{{ $json.body.instance }}\",\n  \"evo_api_key\": \"{{ $json.body.apikey }}\",\n  \"body\": {{ $json.body }},\n  \"db_identity_key\": \"postgres\"\n}",
           "options": {}
         },
         "type": "n8n-nodes-base.set",
@@ -1219,13 +1215,13 @@
       {
         "parameters": {
           "schemaType": "manual",
-          "inputSchema": "{\n  \"type\": \"object\",\n  \"additionalProperties\": false,\n  \"required\": [\"message\", \"next_action\", \"collected\", \"missing\", \"handoff_ready\"],\n  \"properties\": {\n    \"message\": { \"type\": \"string\", \"minLength\": 1 },\n    \"next_action\": { \"type\": \"string\", \"enum\": [\"ask\", \"schedule\", \"handoff\", \"none\", \"error\"] },\n    \"collected\": { \"type\": \"object\" },\n    \"missing\": { \"type\": \"array\", \"items\": { \"type\": \"string\", \"minLength\": 1 } },\n    \"handoff_ready\": { \"type\": \"boolean\" }\n  }\n}\n",
+          "inputSchema": "{\n  \"type\": \"object\",\n  \"additionalProperties\": false,\n  \"required\": [\"message\", \"next_action\", \"collected\", \"missing\", \"handoff_ready\"],\n  \"properties\": {\n    \"message\": { \"type\": \"string\", \"minLength\": 1 },\n    \"next_action\": { \"type\": \"string\", \"enum\": [\"ask\", \"schedule\", \"handoff\", \"none\", \"error\"] },\n    \"collected\": { \"type\": \"object\" },\n    \"missing\": { \"type\": \"array\", \"items\": { \"type\": \"string\", \"minLength\": 1 } },\n    \"handoff_ready\": { \"type\": \"boolean\" }\n  }\n}",
           "autoFix": true
         },
         "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
         "typeVersion": 1.3,
         "position": [
-          64,
+          -480,
           560
         ],
         "id": "35698e12-3d49-4bbc-b010-a83d2dfb96f8",
@@ -1238,7 +1234,7 @@
         "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
         "typeVersion": 1,
         "position": [
-          -240,
+          -784,
           560
         ],
         "id": "7a2e7484-21af-49b5-8f44-8b6816a9dd39",
@@ -1257,7 +1253,7 @@
         "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
         "typeVersion": 1,
         "position": [
-          64,
+          -480,
           736
         ],
         "id": "1632cddd-0b21-4993-9f5a-de44a93ddfaf",
@@ -1280,8 +1276,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          -768,
-          368
+          -1232,
+          352
         ],
         "id": "bd05bb84-7e17-419e-8440-5b2683ed5134",
         "name": "Load State",
@@ -1336,75 +1332,11 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          -1104,
-          368
+          -1568,
+          352
         ],
         "id": "39f2747c-f12b-4e9f-96f1-438d54859af2",
         "name": "Campos requeridos"
-      },
-      {
-        "parameters": {
-          "method": "POST",
-          "url": "=https://n8n.hitofusion.frandev.com.ar/webhook/send_message_for_whatsapp",
-          "sendHeaders": true,
-          "headerParameters": {
-            "parameters": [
-              {
-                "name": "content-type",
-                "value": "application/json"
-              }
-            ]
-          },
-          "sendBody": true,
-          "bodyParameters": {
-            "parameters": [
-              {
-                "name": "message",
-                "value": "={{ $('AI Agent').item.json.output.message.toJsonString() }}"
-              },
-              {
-                "name": "remoteJid",
-                "value": "={{ $('Data normalize').item.json.remoteJid.toJsonString() }}"
-              },
-              {
-                "name": "sender",
-                "value": "={{ $('Data normalize').item.json.sender.toJsonString() }}"
-              },
-              {
-                "name": "evo_api_host",
-                "value": "={{ $('Data normalize').item.json.evo_api_host.toJsonString() }}"
-              },
-              {
-                "name": "evo_api_instance",
-                "value": "={{ $('Data normalize').item.json.evo_api_instance.toJsonString() }}"
-              },
-              {
-                "name": "evo_api_key",
-                "value": "={{ $('Data normalize').item.json.evo_api_key.toJsonString() }}"
-              },
-              {
-                "name": "db_identity_key",
-                "value": "={{ $('Data normalize').item.json.db_identity_key.toJsonString() }}"
-              }
-            ]
-          },
-          "options": {
-            "response": {
-              "response": {
-                "fullResponse": true,
-                "responseFormat": "text"
-              }
-            }
-          }
-        },
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 4.2,
-        "position": [
-          768,
-          352
-        ],
-        "id": "031ae76b-c74f-48d2-8764-819cada2b1a5",
-        "name": "send message4"
       },
       {
         "parameters": {
@@ -1430,8 +1362,8 @@
         "type": "n8n-nodes-base.set",
         "typeVersion": 3.4,
         "position": [
-          -768,
-          192
+          -1232,
+          144
         ],
         "id": "b8680670-0e0e-4604-b7f8-b5faf0d2a544",
         "name": "Default State"
@@ -1445,8 +1377,8 @@
         "type": "n8n-nodes-base.merge",
         "typeVersion": 3.2,
         "position": [
-          -368,
-          352
+          -912,
+          336
         ],
         "id": "79f6e9a6-c2c0-4968-bdb1-5573d76508dc",
         "name": "Merge State"
@@ -1462,8 +1394,8 @@
         "type": "n8n-nodes-base.postgres",
         "typeVersion": 2.6,
         "position": [
-          480,
-          352
+          -112,
+          336
         ],
         "id": "2708f95c-00e8-418c-af16-457c9f46b5b3",
         "name": "Upsert State",
@@ -1484,7 +1416,7 @@
         "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
         "typeVersion": 1.3,
         "position": [
-          -80,
+          -624,
           560
         ],
         "id": "d02012b6-921a-4da6-9a82-72d22e05a8e0",
@@ -1495,6 +1427,24 @@
             "name": "Postgres account"
           }
         }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://n8n.hitofusion.frandev.com.ar/webhook/send_message_for_whatsapp",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"message\": {{ $('AI Agent').item.json.output.message.toJsonString() }},\n  \"remoteJid\": {{$('Data normalize').item.json.remoteJid.toJsonString() }},\n  \"sender\": {{ $('Data normalize').item.json.sender.toJsonString() }},\n\n  \"evo_api_host\": {{ $('Data normalize').item.json.evo_api_host.toJsonString() }},\n  \"evo_api_instance\": {{ $('Data normalize').item.json.evo_api_instance.toJsonString() }},\n  \"evo_api_key\": {{$('Data normalize').item.json.evo_api_key.toJsonString() }},\n\n  \"db_identity_key\": {{ $('Data normalize').item.json.db_identity_key.toJsonString() }}\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          160,
+          336
+        ],
+        "id": "f90b7416-f349-49b1-9cfc-9c209e460de0",
+        "name": "send message1"
       }
     ],
     "connections": {
@@ -1692,11 +1642,6 @@
           ]
         ]
       },
-      "send message4": {
-        "main": [
-          []
-        ]
-      },
       "Default State": {
         "main": [
           [
@@ -1723,7 +1668,7 @@
         "main": [
           [
             {
-              "node": "send message4",
+              "node": "send message1",
               "type": "main",
               "index": 0
             }
@@ -1743,7 +1688,7 @@
       }
     },
     "authors": "Francisco Fiorentino",
-    "name": "Version cf17d854",
+    "name": "Version d7153011",
     "description": ""
   },
   "tags": [
